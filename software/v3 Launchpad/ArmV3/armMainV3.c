@@ -13,25 +13,23 @@
 #include "C:\StellarisWare\utils\softuart.c"
 #include "armMain.h"
 #include "dynamixel.h"
-#include "inc/lm4f120h5qr.h"
+//#include "inc/lm4f120h5qr.h"
 
 tSoftUART myUart;
-uint8_t rxBuffer[9] = {0,0,0,0,0,0,0,0,0};
+unsigned short rxBuffer[9] = {0,0,0,0,0,0,0,0,0};
 uint8_t txBuffer[9] = {0,0,0,0,0,0,0,0,0};
 //Program is mostly self explanatory. Motherboard sends us a RECIEVE_DATA_STRUCTURE that contains commands for what the arm's to do.
 //We read the struct that's received, whichever command variables are set we have the arm do by writing out to the motors through
 //the GPIO pins, and the dynamixel on the base through a UART line (which is also how the endefector and motherboard communicate with us)
 //
-void dynoMove(tSoftUART uart, uint8_t id);
 void Timer0AIntHandler(void);
 
 void main(void)
 {
-
 	//unsigned int last = 0;
 	struct RECEIVE_DATA_STRUCTURE receiveData;
 
-	resetStruct(&receiveData);
+	//resetStruct(&receiveData);
 	receiveData.wristUp = 0;
 	receiveData.wristDown = 0;
 	receiveData.wristClockWise = 0;
@@ -43,58 +41,42 @@ void main(void)
 	receiveData.actuatorForward = 0;
 	receiveData.actuatorReverse = 0;
 	receiveData.baseClockWise = 0;
-	receiveData.baseCounterClockWise = 1;
+	receiveData.baseCounterClockWise = 0;
 	receiveData.reset = 0;
 
-
-
 	initHardware();
-	dynoMove(myUart, 0x01);
-		while(1);
+
 	delay(DELAY);
-   while(1)
-   {
-	   //
-	   // Turn on the LED.
-	   //
-	   //GPIO_PORTF_DATA_R |= 0x08;
-	   //   resetStruct(&receiveData);
+	while(1)
+	{
+		if(receiveData.reset)
+			resetStruct(&receiveData);
+		else if(receiveData.wristUp)
+			wristUp();
+		else if(receiveData.wristDown)
+			wristDown();
+		else if(receiveData.wristClockWise)
+			wristClockWise();
+		else if(receiveData.wristCounterClockWise)
+			wristCounterClockWise();
+		else if(receiveData.elbowUp)
+			elbowUp();
+		else if(receiveData.elbowDown)
+			elbowDown();
+		else if(receiveData.elbowClockWise)
+			elbowClockWise();
+		else if(receiveData.elbowCounterClockWise)
+			elbowCounterClockWise();
+		else if(receiveData.actuatorForward)
+			actuatorForward();
+		else if(receiveData.actuatorReverse)
+			actuatorReverse();
+		else if(receiveData.baseClockWise)
+			baseClockWise();
+		else if(receiveData.baseCounterClockWise)
+			baseCounterClockWise();
 
-	   //if(recv_struct(UART3_BASE,&receiveData)){
-		   if(receiveData.reset)
-			  resetStruct(&receiveData);
-		  if(receiveData.wristUp)
-			   wristUp();
-		   if(receiveData.wristDown)
-			   wristDown();
-		   if(receiveData.wristClockWise)
-			   wristClockWise();
-		   if(receiveData.wristCounterClockWise)
-			   wristCounterClockWise();
-		   if(receiveData.elbowUp)
-			   elbowUp();
-		   if(receiveData.elbowDown)
-			   elbowDown();
-		   if(receiveData.elbowClockWise)
-			   elbowClockWise();
-		   if(receiveData.elbowCounterClockWise)
-			   elbowCounterClockWise();
-		   if(receiveData.actuatorForward)
-			   actuatorForward();
-		   if(receiveData.actuatorReverse)
-			   actuatorReverse();
-		   if(receiveData.baseClockWise)
-			   baseClockWise();
-		   if(receiveData.baseCounterClockWise)
-			   baseCounterClockWise();
-		   // resetStruct(&receiveData);
-
-		   //
-		   // Turn off the LED.
-		   //
-		   //GPIO_PORTF_DATA_R &= ~(0x08);
-		   delay(DELAY);
-	   //}
+		delay(DELAY);
 	}
 }
 
@@ -109,7 +91,6 @@ void wristClockWise(){
 	delay(DELAY);
   	setStop(GPIO_PORTD_BASE, GPIO_PIN_1, GPIO_PORTA_BASE, GPIO_PIN_2); //After a delay, resets to 0 so it doesnt stay high for the rest of the program
   	delay(1);
-  //last=1;
 }
 
 void wristCounterClockWise(){
@@ -117,7 +98,6 @@ void wristCounterClockWise(){
 	delay(DELAY);
 	setStop(GPIO_PORTD_BASE, GPIO_PIN_1, GPIO_PORTA_BASE, GPIO_PIN_2);
 	delay(1);
-	//last=2;
 }
 
 void wristUp(){
@@ -125,7 +105,6 @@ void wristUp(){
 	delay(DELAY);
 	setStop(GPIO_PORTD_BASE, GPIO_PIN_2, GPIO_PORTD_BASE, GPIO_PIN_3);
 	delay(1);
-	//last=3;
 }
 
 void wristDown(){
@@ -133,7 +112,6 @@ void wristDown(){
 	delay(DELAY);
 	setStop(GPIO_PORTD_BASE, GPIO_PIN_2, GPIO_PORTD_BASE, GPIO_PIN_3);
 	delay(1);
-	//last=4;
 }
 
 void elbowCounterClockWise(){
@@ -141,7 +119,6 @@ void elbowCounterClockWise(){
 	delay(DELAY);
 	setStop(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_PORTF_BASE, GPIO_PIN_0);
 	delay(1);
-	//last=5;
 }
 
 void elbowClockWise(){
@@ -149,7 +126,6 @@ void elbowClockWise(){
 	delay(DELAY);
 	setStop(GPIO_PORTE_BASE, GPIO_PIN_0, GPIO_PORTF_BASE, GPIO_PIN_0);
 	delay(1);
-	//last=6;
 }
 
 void elbowDown(){
@@ -157,7 +133,6 @@ void elbowDown(){
 	delay(DELAY);
 	setStop(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PORTF_BASE, GPIO_PIN_3);
 	delay(1);
-	//last=7;
 }
 
 void elbowUp(){
@@ -165,7 +140,6 @@ void elbowUp(){
 	delay(DELAY);
 	setStop(GPIO_PORTF_BASE, GPIO_PIN_2, GPIO_PORTF_BASE, GPIO_PIN_3);
 	delay(DELAY);
-	//last=8;
 }
 
 void actuatorForward(i){
@@ -173,7 +147,6 @@ void actuatorForward(i){
 	delay(DELAY);
 	setStop(GPIO_PORTA_BASE, GPIO_PIN_3, GPIO_PORTA_BASE, GPIO_PIN_4);
 	delay(1);
-	//last=9;
 }
 
 void actuatorReverse(){
@@ -181,15 +154,13 @@ void actuatorReverse(){
 	delay(DELAY);
 	setStop(GPIO_PORTA_BASE, GPIO_PIN_3, GPIO_PORTA_BASE, GPIO_PIN_4);
 	delay(1);
-	//last=10;
 }
 
 void baseClockWise(){
 	dynoSpeedSet(UART1_BASE, GLOBAL_ID, DYNO_CLOCKWISE);
 	delay(DELAY);
 	dynoSpeedSet(UART1_BASE, GLOBAL_ID, 1024); //1024 is the stop for the servo's clockwise motion in motor mode
-	delay(1);
-	//last=11;
+	delay(DELAY);
 }
 
 void baseCounterClockWise(){
@@ -197,7 +168,6 @@ void baseCounterClockWise(){
 	delay(DELAY);
 	dynoSpeedSet(UART1_BASE, GLOBAL_ID, 0);
 	delay(1);
-	//last=12;
 }
 
 //Initializes the hardware. Sets the clock, the 3 UART modules up with 115200 buad rates and 1 stop bit and no pariety, and initialize all of the pins that we use
@@ -247,7 +217,7 @@ void initHardware()
 
 	UARTConfigSetExpClk(UART1_BASE, SysCtlClockGet(), 57600, (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
 
-	//uart 2: endefucker
+	//uart 2: endeffector
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART2);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOD);
 	GPIOPinConfigure(GPIO_PD6_U2RX);
@@ -262,7 +232,6 @@ void initHardware()
 	GPIOPinConfigure(GPIO_PC7_U3TX);
 	GPIOPinTypeUART(GPIO_PORTC_BASE, GPIO_PIN_6 | GPIO_PIN_7);
 	UARTConfigSetExpClk(UART2_BASE, SysCtlClockGet(), 115200, (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
-
 
 	//initialize the rest of the GPIO sets we need and set up to output the one's that need to be output
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
@@ -284,8 +253,7 @@ void initHardware()
 	GPIOPinTypeGPIOOutput(GPIO_PORTB_BASE, GPIO_PIN_6); //motor controller actuator enable (only one device in this controller)
 	GPIOPinTypeGPIOOutput(GPIO_PORTA_BASE, GPIO_PIN_3); //motor controller actuator 1
 	GPIOPinTypeGPIOOutput(GPIO_PORTA_BASE, GPIO_PIN_4); //motor controller actuator 2
-
-	dynoWheelModeSet(UART1_BASE, GLOBAL_ID);
+	GPIOPinTypeGPIOOutput(GPIO_PORTB_BASE, GPIO_PIN_3); //MAX-485 Enable
 
 	//initialize the enables for the motor controllers
 	GPIOPinWrite(GPIO_PORTE_BASE, GPIO_PIN_1, GPIO_PIN_1);
@@ -294,7 +262,12 @@ void initHardware()
 	GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_2, GPIO_PIN_2);
 	GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_6, GPIO_PIN_6);
 
-	//set up the timer
+	//init MAX-485 Chip
+	GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, GPIO_PIN_3);
+	delay(DELAY);
+	dynoWheelModeSet(UART1_BASE, GLOBAL_ID);
+
+	/*//set up the timer
 	IntMasterEnable(); //enables interrupts
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
 	TimerIntEnable(TIMER0_BASE, TIMER_TIMA_TIMEOUT);
@@ -308,7 +281,7 @@ void initHardware()
 	SoftUARTTxGPIOSet(&myUart, GPIO_PORTC_BASE, GPIO_PIN_5);
 	SoftUARTRxGPIOSet(&myUart, GPIO_PORTC_BASE, GPIO_PIN_4);
 	SoftUARTTxBufferSet(&myUart, txBuffer, 16);
-	SoftUARTRxBufferSet(&myUart, rxBuffer, 16);
+	SoftUARTRxBufferSet(&myUart, rxBuffer, 16);*/
 }
 
 //resets all components to the struct.
@@ -334,7 +307,7 @@ void dynoWheelModeSet(uint32_t uart, uint8_t id)
     int i;
     p[0] = START_BYTE;
     p[1] = START_BYTE;
-    p[2] = id;
+    p[2] = 0x01;//id;
     p[3] = 0x07;
     p[4] = WRITE_DATA;
     p[5] = CW_ANGLE_LIMIT_L;
@@ -342,7 +315,7 @@ void dynoWheelModeSet(uint32_t uart, uint8_t id)
     p[7] = 0x00;
     p[8] = 0x00;
     p[9] = 0x00;
-    p[10] = ~(id + MOVE_LENGTH + WRITE_DATA + 0x00 + 0x00 + 0x00 + 0x00);
+    p[10] = ~(id + 0x07 + WRITE_DATA + 0x00 + 0x00 + 0x00 + 0x00 + CW_ANGLE_LIMIT_L);
 
     for(i = 0; i < 11; i++)
     {
@@ -371,16 +344,18 @@ For example, if it is set to 512, it means the output is controlled by 50% of th
 void dynoSpeedSet(uint32_t uart, uint8_t id, int16_t speed)
 {
     uint8_t p[9];
+    uint8_t speed_l = speed;
+    uint8_t speed_h = (speed >> 8);
     int i;
     p[0] = START_BYTE;
     p[1] = START_BYTE;
     p[2] = id;
-    p[3] = 0x05;
+    p[3] = MOVE_LENGTH;
     p[4] = WRITE_DATA;
     p[5] = MOVING_SPEED_L;
-    p[6] = ((uint8_t) speed);
-    p[7] = ((uint8_t)(speed << 8));
-    p[8] = ~(id + MOVE_LENGTH + WRITE_DATA + p[6] + p[7]);
+    p[6] = speed_l;
+    p[7] = speed_h;
+    p[8] = ~(id + MOVE_LENGTH + WRITE_DATA +p[6] + p[5] + p[7]);
 
     for(i = 0; i < 9; i++)
     {
@@ -398,16 +373,16 @@ void dynoSpeedSet(uint32_t uart, uint8_t id, int16_t speed)
     */
 }
 
-void dynoMove(tSoftUART uart, uint8_t id)
+/*void dynoMove(tSoftUART uart, uint8_t id)
 {
     uint8_t p[9];
     int i;
     p[0] = START_BYTE;
     p[1] = START_BYTE;
-    p[2] = id;
+    p[2] = 0x01;
     p[3] = 0x05;
     p[4] = WRITE_DATA;
-    p[5] = 30;
+    p[5] = 0x1E;
     p[6] = 0x00;
     p[7] = 0x00;
     p[8] = ~(id + 0x05 + WRITE_DATA +p[5]+ p[6] + p[7]);
@@ -420,16 +395,47 @@ void dynoMove(tSoftUART uart, uint8_t id)
 
     while(SoftUARTBusy(&uart)) {};
 
-    /*for(int i = 0; i < RETURN_PACKET_SIZE; i++)
+    for(i = 0; i < RETURN_PACKET_SIZE; i++)
     {
         UARTCharGet(p[i]); //recieves return status packet. Reason for no delay here is so we don't accidentally delay past it's sending us data, since the buffer
     }//only holds bytes and the dyno's return several bytes we could accidentally start reading halfway through
 
-    p[8] = ~(p[2] + p[3] + p[ERROR_SLOT]) //using p[8] as storage for checking off the checksum. p2 holds ID and p3 holds length, CS = ID + L + Error + parameters (none here)
-    if((p[ERROR_SLOT]) || (p[8] != p[6]))
-        printf("error");
-    */
-}
+    p[8] = ~(p[2] + p[3] + p[ERROR_SLOT]); //using p[8] as storage for checking off the checksum. p2 holds ID and p3 holds length, CS = ID + L + Error + parameters (none here)
+    //if((p[ERROR_SLOT]) || (p[8] != p[6]))
+      //  printf("error");
+
+}*/
+/*void moveDyno(uint8_t uart, uint8_t id, uint16_t pos)
+{
+	int i;
+    uint8_t p[8];
+    uint8_t posLow =((uint8_t)(pos & 0xFF)); //makes the 16 bits 00000000xxxxxxxx to get the lower byte. Then casts it as a single byte. Just in case
+    uint8_t posHigh = ((uint8_t)(pos >> 8));
+    p[0] = START_BYTE;
+    p[1] = START_BYTE;
+    p[2] = id;
+    p[3] = MOVE_LENGTH;
+    p[4] = WRITE_DATA;
+    p[5] = GOAL_POS_L;
+    p[6] = posLow;
+    p[7] = posHigh;
+    p[8] = ~(id + MOVE_LENGTH + WRITE_DATA + posLow + posHigh);
+    for(i = 0; i < 8; i++)
+    {
+        UARTCharPut(uart, p[i]); //send the data out
+    }
+
+   for(i = 0; i < RETURN_PACKET_SIZE; i++)
+    {
+        UARTCharGet(p[i]); //recieves return status packet. Reason for no delay here is so we don't accidentally delay past it's sending us data, since the buffer
+    }//only holds bytes and the dyno's return several bytes we could accidentally start reading halfway through
+
+    p[8] = ~(p[2] + p[3] + p[ERROR_SLOT]); //using p[8] as storage for checking off the checksum. p2 holds ID and p3 holds length, CS = ID + L + Error + parameters (none here)
+   // if((p[ERROR_SLOT]) || (p[8] != p[6]))
+     //   printf("error");
+
+}*/
+
 
 void setForward(uint32_t l1Base, uint8_t l1Pin, uint32_t l2Base, uint8_t l2Pin)
 {

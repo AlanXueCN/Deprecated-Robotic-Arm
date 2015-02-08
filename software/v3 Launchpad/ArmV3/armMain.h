@@ -27,8 +27,8 @@
 #define GPIO_PD7_U2TX           0x00031C01
 #define GPIO_PC6_U3RX           0x00021801
 #define GPIO_PC7_U3TX           0x00021C01
-const int FORWARD_CHARACTER = 1;
-const int REVERSE_CHARACTER = 1;
+const short FORWARD_CHARACTER = 1;
+const short REVERSE_CHARACTER = 1;
 const int DYNO_CLOCKWISE = 1536;
 const int DYNO_COUNTERCLOCKWISE = 512;
 

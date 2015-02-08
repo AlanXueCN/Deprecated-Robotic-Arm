@@ -129,7 +129,7 @@ all: ArmV3.out
 ArmV3.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM Linker'
-	"c:/ti/ccsv6/tools/compiler/arm_5.1.9/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me --preinclude="C:/StellarisWare/inc/hw_types.h" -g --gcc --define="ccs" --define=PART_LM4F210H5QR --display_error_number --diag_warning=225 --diag_wrap=off -z -m"ArmV3.map" --heap_size=0 --stack_size=512 -i"c:/ti/ccsv6/tools/compiler/arm_5.1.9/lib" -i"c:/ti/ccsv6/tools/compiler/arm_5.1.9/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="ArmV3_linkInfo.xml" --rom_model -o "ArmV3.out" $(ORDERED_OBJS)
+	"c:/ti/ccsv6/tools/compiler/arm_5.1.9/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -O4 --opt_for_speed=5 --preinclude="C:/StellarisWare/inc/hw_types.h" -g --gcc --define="ccs" --define=PART_LM4F210H5QR --display_error_number --diag_warning=225 --diag_wrap=off -z -m"ArmV3.map" --heap_size=0 --stack_size=512 -i"c:/ti/ccsv6/tools/compiler/arm_5.1.9/lib" -i"c:/ti/ccsv6/tools/compiler/arm_5.1.9/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="ArmV3_linkInfo.xml" --rom_model -o "ArmV3.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
