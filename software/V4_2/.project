@@ -24,6 +24,18 @@
 		<nature>org.eclipse.cdt.core.ccnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>dynamixel.c</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/V4/dynamixel.c</locationURI>
+		</link>
+		<link>
+			<name>dynamixel.h</name>
+			<type>1</type>
+			<locationURI>PARENT-1-PROJECT_LOC/V4/dynamixel.h</locationURI>
+		</link>
+	</linkedResources>
 	<variableList>
 		<variable>
 			<name>ORIGINAL_PROJECT_ROOT</name>

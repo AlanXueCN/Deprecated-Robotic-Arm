@@ -29,6 +29,7 @@
 #include "driverlib\uart.c"
 #include "driverlib\sysctl.c"
 #include "dynamixel.h"
+#include "dynamixel.c"
 //#include "inc/tm4c123gh6pm.h"
 #include <stdint.h>
 
@@ -61,7 +62,7 @@ extern void initHardware();
 extern void initDynos(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVertPos, int16_t * elbowHoriPos, int16_t * basePos);
 
 //resets the struct used to keep track of commands sent from motherboard
-extern void resetStruct(struct arm_data_struct * armData);
+extern void resetStruct(struct arm_control_struct * armData);
 
 extern void delay(int time); //delay is imprecise; ti's own delay function previously caused errors so this is a substitute.
 //Needs to be tweaked if more precision is needed
@@ -98,7 +99,6 @@ extern void setReverse(uint32_t l1Base, uint8_t l1Pin, uint32_t l2Base, uint8_t 
 
 //In order to stop the motors, you set both of the lines low
 extern void setStop(uint32_t l1Base, uint8_t l1Pin, uint32_t l2Base, uint8_t l2Pin);
-
 
 #endif /* ARMMAINV4_H_ */
 

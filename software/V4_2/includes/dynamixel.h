@@ -29,9 +29,11 @@
 #define POS_FALSE_READ				0xFFFF
 #define DELAY 						5
 
-#ifndef DYNO_CLOCKWISE //already declared in a couple previous versions, so guard against double declaration
+#ifndef DYNO_CLOCKWISE //already declared as ints in a couple previous versions, so guard against double declaration
 #define DYNO_CLOCKWISE 1536;  //input number to set the dynamixel moving clockwise at half of max speed while in wheel mode
 #endif
+
+int8_t error_byte; //byte used as error object
 
 #ifndef DYNO_COUNTERCLOCKWISE
 #define DYNO_COUNTERCLOCKWISE 512;

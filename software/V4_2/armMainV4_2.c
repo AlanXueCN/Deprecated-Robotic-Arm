@@ -41,22 +41,24 @@
 void main(void)
 {
 
-	struct arm_data_struct armData;
+	struct arm_control_struct armData;
 	struct gripper_control_struct gripperData;
 	struct drill_Controls drillData;
+	receiveStruct receiveData;
 
     int16_t wristVertPos, wristHoriPos, elbowVertPos, elbowHoriPos, basePos;
-    uint8_t device;
 	initHardware();
     initDynos(&wristVertPos, &wristHoriPos, &elbowVertPos, &elbowHoriPos, &basePos);
 	delay(DELAY);
 	while(1)
 	{
-		if(recv_struct(UART_MOTHER, &armData, &gripperData, &drillData, &device))
+		if(recv_struct(UART_MOTHER, &receiveData))
 		{
-			switch(device)
+			switch(receiveData.id)
 			{
-			case ROBOTIC_ARM:
+			case ARM_STRUCT_ID:
+				memcpy(&armData, &receiveData, receiveData.size);
+
 				if(armData.reset)
 					resetStruct(&armData);
 				else if(armData.wristUp)
@@ -83,21 +85,20 @@ void main(void)
 					baseClockWise(&basePos);
 				else if(armData.baseCounterClockWise)
 					baseCounterClockWise(&basePos);
+				delay(DELAY);
+				break;
 
+			case GRIPPER_STRUCT_ID:
+				memcpy(&gripperData, &receiveData, receiveData.size);
+				send_struct(UART_ENDE, &gripperData, INST_OTHER, GRIPPER_STRUCT_ID);
 				delay(DELAY);
 				break;
 
 
 
-			case GRIPPER:
-				send_struct(UART_ENDE, &gripperData, gripper);
-				delay(DELAY);
-				break;
-
-
-
-			case DRILL:
-				send_struct(UART_ENDE, &drillData, drill);
+			case DRILL_STRUCT_ID:
+				memcpy(&drillData, &receiveData, receiveData.size);
+				send_struct(UART_ENDE, &drillData, INST_OTHER, DRILL_STRUCT_ID);
 				delay(DELAY);
 				break;
 			}
@@ -266,7 +267,7 @@ void initHardware()
 }
 
 //resets all components to the struct.
-void resetStruct(struct arm_data_struct * armData){
+void resetStruct(struct arm_control_struct * armData){
   armData-> reset = 0;
   armData-> wristUp = 0;
   armData-> wristDown = 0;

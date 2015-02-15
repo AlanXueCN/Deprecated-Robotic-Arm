@@ -141,7 +141,6 @@ int16_t dynoReadPosition(uint32_t uart, uint8_t id)
 
 	uint8_t p[8], posLow, posHigh, incoming_byte, i, timer = 0;
 	int16_t pos = POS_FALSE_READ;
-	int16_t error_byte;
 	p[0] = START_BYTE;
 	p[1] = START_BYTE;
 	p[2] = id;
@@ -177,8 +176,9 @@ int16_t dynoReadPosition(uint32_t uart, uint8_t id)
 		UARTCharGet(uart);                              //  ID
 		UARTCharGet(uart);                             // Length
 		if((error_byte = UARTCharGet(uart)) != 0 )   // Error byte
-			return(POS_FALSE_READ); //todo:figure out what to do about the error byte
-
+		{
+			return(POS_FALSE_READ);
+		}
 		posLow = UARTCharGet(uart);            // Position Bytes
 		posHigh = UARTCharGet(uart);
 		pos = posHigh << 8;

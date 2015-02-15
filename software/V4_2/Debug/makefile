@@ -8,7 +8,7 @@ CG_TOOL_ROOT := c:/ti/ccsv6/tools/compiler/arm_5.1.6
 
 ORDERED_OBJS += \
 $(GEN_CMDS__FLAG) \
-"./armMainV4-2.obj" \
+"./armMainV4_2.obj" \
 "./dynamixel.obj" \
 "./startup_ccs.obj" \
 "./struct_xfer.obj" \
@@ -112,46 +112,46 @@ endif
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXE_OUTPUTS += \
-V4.2.out \
+V4_2.out \
 
 EXE_OUTPUTS__QUOTED += \
-"V4.2.out" \
+"V4_2.out" \
 
 BIN_OUTPUTS += \
-V4.2.hex \
+V4_2.hex \
 
 BIN_OUTPUTS__QUOTED += \
-"V4.2.hex" \
+"V4_2.hex" \
 
 
 # All Target
-all: V4.2.out
+all: V4_2.out
 
 # Tool invocations
-V4.2.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
+V4_2.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: ARM Linker'
-	"c:/ti/ccsv6/tools/compiler/arm_5.1.6/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -O2 --preinclude="stdint.h" --preinclude="stdbool.h" -g --gcc --define=ccs="ccs" --define=PART_TM4C123GH6PM --define=TARGET_IS_TM4C123_RB1 --display_error_number --diag_warning=225 --diag_wrap=off --gen_func_subsections=on --ual -z -m"project0_ccs.map" --heap_size=0 --stack_size=256 -i"c:/ti/ccsv6/tools/compiler/arm_5.1.6/lib" -i"c:/ti/ccsv6/tools/compiler/arm_5.1.6/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="V4.2_linkInfo.xml" --rom_model -o "V4.2.out" $(ORDERED_OBJS)
+	"c:/ti/ccsv6/tools/compiler/arm_5.1.6/bin/armcl" -mv7M4 --code_state=16 --float_support=FPv4SPD16 --abi=eabi -me -O2 --preinclude="stdint.h" --preinclude="stdbool.h" -g --gcc --define=ccs="ccs" --define=PART_TM4C123GH6PM --define=TARGET_IS_TM4C123_RB1 --display_error_number --diag_warning=225 --diag_wrap=off --gen_func_subsections=on --ual -z -m"project0_ccs.map" --heap_size=0 --stack_size=256 -i"c:/ti/ccsv6/tools/compiler/arm_5.1.6/lib" -i"c:/ti/ccsv6/tools/compiler/arm_5.1.6/include" --reread_libs --warn_sections --display_error_number --diag_wrap=off --xml_link_info="V4_2_linkInfo.xml" --rom_model -o "V4_2.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 	@$(MAKE) --no-print-directory post-build
 
-V4.2.hex: $(EXE_OUTPUTS)
+V4_2.hex: $(EXE_OUTPUTS)
 	@echo 'Invoking: ARM Hex Utility'
-	"c:/ti/ccsv6/tools/compiler/arm_5.1.6/bin/armhex"  -o "V4.2.hex" $(EXE_OUTPUTS__QUOTED)
+	"c:/ti/ccsv6/tools/compiler/arm_5.1.6/bin/armhex"  -o "V4_2.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
 	-$(RM) $(EXE_OUTPUTS__QUOTED)$(BIN_OUTPUTS__QUOTED)
-	-$(RM) "armMainV4-2.pp" "dynamixel.pp" "startup_ccs.pp" "struct_xfer.pp" 
-	-$(RM) "armMainV4-2.obj" "dynamixel.obj" "startup_ccs.obj" "struct_xfer.obj" 
+	-$(RM) "armMainV4_2.pp" "dynamixel.pp" "startup_ccs.pp" "struct_xfer.pp" 
+	-$(RM) "armMainV4_2.obj" "dynamixel.obj" "startup_ccs.obj" "struct_xfer.obj" 
 	-@echo 'Finished clean'
 	-@echo ' '
 
 post-build:
-	-"c:/ti/ccsv6/utils/tiobj2bin/tiobj2bin" "V4.2.out" "V4.2.bin" "c:/ti/ccsv6/tools/compiler/arm_5.1.6/bin/armofd" "c:/ti/ccsv6/tools/compiler/arm_5.1.6/bin/armhex" "c:/ti/ccsv6/utils/tiobj2bin/mkhex4bin"
+	-"c:/ti/ccsv6/utils/tiobj2bin/tiobj2bin" "V4_2.out" "V4_2.bin" "c:/ti/ccsv6/tools/compiler/arm_5.1.6/bin/armofd" "c:/ti/ccsv6/tools/compiler/arm_5.1.6/bin/armhex" "c:/ti/ccsv6/utils/tiobj2bin/mkhex4bin"
 	-@echo ' '
 
 .PHONY: all clean dependents
