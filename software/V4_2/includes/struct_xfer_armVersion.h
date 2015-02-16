@@ -14,6 +14,13 @@
  *and a general storage receive struct to ID what the struct is so the programmer, after receiving,
  *can put the data into its proper struct based on the ID value.
  *
+ * ARM VERSION UPDATES: This version has been heavily modified. Recv_struct now doesn't block and utilizes the uartRxBuff
+ * variable found in main, which is written into by a uart RX interrupt that reads for the start bytes and then puts the
+ * next few bytes in the uart RX FIFO buffer into the uartRxBuff as well, which is shared with recv_struct. Recv_struct
+ * waits until uartRxBuff[0] = start byte1, then the next 3 from it as well (the interrupt should have loaded them in)
+ * then goes about business like usual for the non arm version. Also, it no longer blocks. For more information about the
+ * interrupt process, pop over to armMainV4.h and see its description.
+ *
  *
  *Important notice for programmers attempting to update further:
  *current list of structs the function is set up to transmit are: gripper_control_struct,
@@ -27,8 +34,8 @@
  *at a time, which is the default UART transmit size. Larger words shall need to be split down.
  */
 
-#ifndef STRUCT_XFER_H_
-#define STRUCT_XFER_H_
+#ifndef STRUCT_XFER_ARMVERSION_H_
+#define STRUCT_XFER_ARMVERSION_H_
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -102,6 +109,9 @@ typedef struct
 	uint8_t size;
 } receiveStruct;
 
+#define STRUCT_START1 0x06
+#define STRUCT_START2 0X85
+
 //struct ID's:
 #define GRIPPER_STRUCT_ID	 0
 #define DRILL_STRUCT_ID		 1
@@ -125,8 +135,9 @@ typedef struct
 								  //doesn't use instruction sets, then use this.
 
 
-/* Waits until the processor detects that something had been transmitted to it through the uart
- * through the specified line. Note that it receives it into the struct receiveStruct, which is
+/* Function to read a struct from the specified uart line, works in conjuction with armMain's interrupts. It waits until
+ * the uart RX interrupt fills the uartRxBuff variable with the proper data, then after verifying the first few bytes are
+ * correct reads the rest and loads the resulting data into the myStruct structure, which is
  * a general version of the structures used by the rover. After the function is finished, the
  * programmer should then transfer the data into the structure of their choosing in main by
  * using the memcpy(*destination struct, * copying struct, size of data to be copied (which is
@@ -139,8 +150,7 @@ typedef struct
  * returns: 0 if the receiving failed (checksum didn't match up, size didn't meet excepted value, etc)
  *  		1 if receiving was successful
  *
- * warnings: The program forces the PC to wait in idle inside of the function until it receives
- * something, once called.
+ * Note: Unlike the other versions of recv_struct, the arm specific version is heavily modified and doesn't block.
  */
 extern bool recv_struct( uint32_t uart, receiveStruct* myStruct);
 

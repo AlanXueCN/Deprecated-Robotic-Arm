@@ -1,10 +1,12 @@
 //ArmMainV4-2.c
 //created by: parker, alec, drue
 //created on 2-11-15
-//updated: 2-13-15
+//updated: 2-16-15 by drue
 //
 //Update content: Added in content for endefector communication.
-//Changed struct_xfer so that we can now recieve 3 structs instead of 1.
+//Changed struct_xfer so that we can now recieve 3 structs instead of 1. Modified all of main so that it works with the
+//new struct_xfer and it can distribute the data structs meant for endefector to where it needs to go. Also, fixed delay
+//function so it now is a lot more precise.
 //RoveSoHard
 
 
@@ -104,10 +106,11 @@ void main(void)
 				delay(DELAY);
 				break;
 			}
-
-			handled = 0;
-			delay(DELAY);
 		}
+
+		handled = 0;
+		flushUart(UART_MOTHER);
+		delay(DELAY);
 	}
 }
 
@@ -331,24 +334,42 @@ void initDynos(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVe
 	dynoMultiModeSet(UART_DYNO, GLOBAL_ID); //sets them all to multi turn mode for now
 }
 
+
+//Int handler for the UART_MOTHER uart. The Arm data struct is so large that our FIFO's cannot handle it, so we use an
+//interrupt to clear out the first few before using the recv_struct function for the rest.
+//The interrupt can happen at any time when we're not actively in or responding to the
+//recv_struct function, and to deal with the possible near constant stream of data the protocol shall go as follows:
+//When we don't want the interrupt to change anything, the global variable handled shall be set to 1, meaning it should
+//exit as soon as it enters while clearing the interrupt (I could just temporarily disable the interrupt instead, but
+//frankly I'm terrified of any hidden consequences). When we're in our idle state, IE waiting for data, handled is set to 0
+//and the interrupt shall begin reading upon gaining 4 bytes of data. Should the first byte in the stream be the start signal,
+//then it loads up the next 3 bytes as well into the receive buffer and returns presumably to the recv_struct function to be
+//used while setting handled to 1 to keep it from reading until the main task returns to idle. If not, then it returns to main
+//task, which in its idle state will flush the uart FIFO so that it may read again (the interrupt ONLY fires when the fifo has 4
+//bytes, so if we didn't flush it it would probably never return to its proper levels and the whole thing would cease being able
+//to receive data.
 void UARTMotherIntHandler()
 {
 	UARTIntClear(UART_MOTHER, UART_INT_RX);
 	if(!(handled))
 	{
-		uint8_t i;
-		for(i = 0; i < 4; i++)
+		if((uartRxBuf[0] = UARTCharGetNonBlocking(UART_MOTHER)) == STRUCT_START1)
 		{
-			if(!(HWREG(UART_ENDE + UART_O_FR) & UART_FR_RXFE))//uartCharGetNonBlocking
+			uint8_t i;
+			for(i = 1; i < 4; i++)
 			{
-				uartRxBuf[i] = HWREG(UART3_BASE + UART_O_DR);
+				if(!(HWREG(UART_MOTHER + UART_O_FR) & UART_FR_RXFE))//uartCharGetNonBlocking
+				{
+					uartRxBuf[i] = HWREG(UART_MOTHER + UART_O_DR);
+				}
 			}
-		}
 
-		handled = 1;
+			handled = 1;
+		}
 	}
 }
 
+//Sets up the interrupts, including: Uart_Mother's RX interrupt at 4 bytes (throws an interrupt at 4 bytes being put into buffer)
 void IntSetup()
 {
 	UARTIntEnable(UART_MOTHER, UART_INT_RX); //must enable before registering the function dynamically
@@ -356,4 +377,10 @@ void IntSetup()
 	UARTFIFOLevelSet(UART_MOTHER, UART_FIFO_TX1_8, UART_FIFO_RX2_8); //dont worry about the tx, it's unused
 	IntMasterEnable();
 	handled = 0;
+}
+
+void flushUart(uint32_t uart)
+{
+	while(UARTCharsAvail(uart))
+		UARTCharGetNonBlocking(uart);
 }

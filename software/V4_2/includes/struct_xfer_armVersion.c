@@ -1,5 +1,5 @@
 /*
- * struct_xfer.c
+ * struct_xfer_armVersion.c
  *
  *  Created on: May 6, 2014
  *      Author: Zeus
@@ -7,7 +7,7 @@
  *  what do you call a snail that's a sailor? ...not a snailor, that'd be just a stupid joke.
  */
 
-#include "struct_xfer.h"
+#include "struct_xfer_armVersion.h"
 
 // Reads struct straight up from uart buffer
 bool recv_struct( uint32_t uart, receiveStruct* myStruct)
@@ -35,9 +35,8 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 
 
 	// Check for Start byte 1
-	do {
-
-	} while (uartRxBuf[0] != start_byte1 );
+	if(uartRxBuf[0] != start_byte1 )
+		return false;
 	uartRxBuf[0] = 0; //reset values so that the interrupt has to put them back in again
 
 
@@ -122,10 +121,6 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 
 
 	//check size:
-	while(HWREG(uart + UART_O_FR) & UART_FR_RXFE)
-	{
-		SysCtlDelay(1);
-	}
 	temp = HWREG(uart + UART_O_DR);
 
 	if(size != temp)
