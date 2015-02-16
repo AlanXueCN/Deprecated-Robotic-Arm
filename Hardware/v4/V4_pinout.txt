@@ -1,0 +1,14 @@
+Dynamixel: (All dynamixels are on the same data bus)
+	DATA - PB3
+
+Motor Controller:
+	EN_A - PD2
+IN_1_A - PD3
+
+End Effector:
+	Rx_3 - PC_6
+	Tx_3 - PC_7
+
+Rove Net:
+	Rx_2 - PD6
+	Tx_2 -  PD7
