@@ -46,14 +46,36 @@ void main(void)
 	struct drill_Controls drillData;
 	receiveStruct receiveData;
 
+	armData.reset = 1;
+	armData.wristUp = 0;
+	armData.wristDown = 0;
+	armData.wristClockWise = 0;
+	armData.wristCounterClockWise = 0;
+	armData.elbowUp = 0;
+	armData.elbowDown = 0;
+	armData.elbowClockWise = 0;
+	armData.elbowCounterClockWise = 0;
+	armData.actuatorForward = 0;
+	armData.actuatorReverse = 0;
+	armData.baseClockWise = 0;
+	armData.baseCounterClockWise = 0;
+
+	drillData.goalSpeed = 1;
+	drillData.direction = 0;
+	drillData.gasReadings = 0;
+	drillData.heaterPower = 1;
+	drillData.sensorPower = 0;
+	drillData.thermoReadings = 1;
+
     int16_t wristVertPos, wristHoriPos, elbowVertPos, elbowHoriPos, basePos;
 	initHardware();
     initDynos(&wristVertPos, &wristHoriPos, &elbowVertPos, &elbowHoriPos, &basePos);
-    delay(DELAY);
+	delay(DELAY);
+	send_struct(UART_ENDE, &armData, INST_OTHER, ARM_STRUCT_ID);
+	delay(DELAY);
 	while(1)
 	{
-
-		if(recv_struct(UART_MOTHER, &receiveData))
+		if(recv_struct(UART_ENDE, &receiveData))
 		{
 			delay(1);
 			switch(receiveData.id)
@@ -106,6 +128,7 @@ void main(void)
 			}
 
 			handled = 0;
+			send_struct(UART_ENDE, &drillData, INST_OTHER, DRILL_STRUCT_ID);
 			delay(DELAY);
 		}
 	}
@@ -314,7 +337,7 @@ void setStop(uint32_t l1Base, uint8_t l1Pin, uint32_t l2Base, uint8_t l2Pin)
 
 void initDynos(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVertPos, int16_t * elbowHoriPos, int16_t * basePos)
 {
-    //todo: initialize the dynos. Including initial positions
+    //initialize the dynos. Including initial positions
 	switchCom(TX_MODE);
 	*wristVertPos = WRISTV_START_POS;
 	*wristHoriPos = WRISTH_START_POS;
@@ -331,9 +354,9 @@ void initDynos(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVe
 	dynoMultiModeSet(UART_DYNO, GLOBAL_ID); //sets them all to multi turn mode for now
 }
 
-void UARTMotherIntHandler()
+void UARTMotherIntHandler()//values are all UART_ENDE for testing purposes
 {
-	UARTIntClear(UART_MOTHER, UART_INT_RX);
+	UARTIntClear(UART_ENDE, UART_INT_RX);
 	if(!(handled))
 	{
 		uint8_t i;
@@ -351,9 +374,9 @@ void UARTMotherIntHandler()
 
 void IntSetup()
 {
-	UARTIntEnable(UART_MOTHER, UART_INT_RX); //must enable before registering the function dynamically
-	UARTIntRegister(UART_MOTHER, UARTMotherIntHandler);
-	UARTFIFOLevelSet(UART_MOTHER, UART_FIFO_TX1_8, UART_FIFO_RX2_8); //dont worry about the tx, it's unused
+	UARTIntEnable(UART_ENDE, UART_INT_RX); //must enable before registering the function dynamically
+	UARTIntRegister(UART_ENDE, UARTMotherIntHandler);
+	UARTFIFOLevelSet(UART_ENDE, UART_FIFO_TX1_8, UART_FIFO_RX2_8); //dont worry about the tx, it's unused
 	IntMasterEnable();
 	handled = 0;
 }

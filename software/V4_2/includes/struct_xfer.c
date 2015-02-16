@@ -27,32 +27,31 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 	const int gripSize = sizeof(*((struct gripper_control_struct*)myStruct));
 	const int drillSize = sizeof(*((struct drill_Controls*)myStruct));
 	const int armSize = sizeof(*((struct arm_control_struct *)myStruct));
-	const int motorSize= sizeof(*((struct motor_struct*)myStruct));
-	const int scienceSize = sizeof(*((struct science_payload_control_struct*)myStruct));
-	const int lightingSize = sizeof(*((struct lighting_board_struct*)myStruct));
-	const int cameraSize = sizeof(*((struct camera_control_struct*)myStruct));
+	//const int motorSize= sizeof(*((struct motor_struct*)myStruct));
+	//const int scienceSize = sizeof(*((struct science_payload_control_struct*)myStruct));
+	//const int lightingSize = sizeof(*((struct lighting_board_struct*)myStruct));
+	//const int cameraSize = sizeof(*((struct camera_control_struct*)myStruct));
 	//If adding more structs, follow this format to calculate size
 
 
 	// Check for Start byte 1
 	do {
-		temp = UARTCharGet(uart);
-	} while ( temp != start_byte1 );
+
+	} while (uartRxBuf[0] != start_byte1 );
+	uartRxBuf[0] = 0; //reset values so that the interrupt has to put them back in again
 
 
-
-	// Check for Start byte 2
-	temp = UARTCharGet(uart);
-	if ( temp != start_byte2 )
+	if ( uartRxBuf[1] != start_byte2 )
 	{
 		// Kick out of function
 		return false;
 	}
+	uartRxBuf[1] = 0;
 
 
 
-	//get struct ID, and get proper size using it.
-	temp = UARTCharGet(uart);
+
+	temp = uartRxBuf[2];
 	id = temp;
 	if (temp == GRIPPER_STRUCT_ID)
 	{
@@ -66,7 +65,7 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 	{
 		size = armSize;
 	}
-	else if(temp == SCIENCE_STRUCT_ID)
+	/*else if(temp == SCIENCE_STRUCT_ID)
 	{
 		size = scienceSize;
 	}
@@ -81,18 +80,21 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 	else if(temp == MOTOR_STRUCT_ID)
 	{
 		size = motorSize;
-	}						//If adding on more structs, put in another else-if for them here
+	}*/						//If adding on more structs, put in another else-if for them here
 	else
 		return(false);//didn't match any known ID's. Cue the fail horn, fire some people
 
 
 
 	//getInstructionID
-	temp = UARTCharGet(uart);
+	temp = uartRxBuf[3];
 	instruction = temp;
 	if(temp == INST_IDENTITY_REQUEST)		//the if-else's are there as a check to make sure the data is somethign we'd recognize
 		instruction = INST_IDENTITY_REQUEST;//if you think it's unneccessary or want to save some cycles, just save temp directly
 											//into instruction
+	else if(temp == INST_OTHER)
+		instruction = INST_OTHER;
+
 	else if(temp == INST_IDENTITY_REPLY)
 		instruction = INST_IDENTITY_REPLY;
 
@@ -120,7 +122,11 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 
 
 	//check size:
-	temp = UARTCharGet(uart);
+	while(HWREG(uart + UART_O_FR) & UART_FR_RXFE)
+	{
+		SysCtlDelay(1);
+	}
+	temp = HWREG(uart + UART_O_DR);
 
 	if(size != temp)
 		return(false); //no bad joke this time. :(
@@ -130,7 +136,20 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 	// Read in data bytes
 	for ( i = 0 ; i <= size ; i++)
 	{
-		temp = UARTCharGet(uart);
+	 if(!(HWREG(uart + UART_O_FR) & UART_FR_RXFE))
+		{
+			//
+			// Read and return the next character.
+			//
+			temp = HWREG(uart + UART_O_DR);
+		}
+		else
+		{
+			//
+			// There are no characters, so return a failure.
+			//
+			return(-1);
+		}
 		rx_buffer[i] = temp;
 	}
 
@@ -153,11 +172,12 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 
 
 
-	// Copy buffer into struct, then pass in the instruction and size bytes
+	// Copy buffer into struct, then pass in the instruction and id and size bytes
 	memcpy (myStruct, rx_buffer, size);
 	myStruct -> id = id;
 	myStruct -> instruction = instruction;
 	myStruct -> size = size;
+	delay(2);
 
 	// Success
 	return(true);
@@ -172,9 +192,9 @@ void send_struct(uint32_t uart, void* my_struct, uint8_t instruction, uint8_t id
 
     switch(id)
     {
-        case MOTOR_STRUCT_ID:
-            size = sizeof(*((struct motor_struct*)my_struct));
-            break;
+     //   case MOTOR_STRUCT_ID:
+       //     size = sizeof(*((struct motor_struct*)my_struct));
+        //    break;
         case ARM_STRUCT_ID:
         	size = sizeof(*((struct arm_control_struct *)my_struct));
         	break;
@@ -184,15 +204,15 @@ void send_struct(uint32_t uart, void* my_struct, uint8_t instruction, uint8_t id
         case DRILL_STRUCT_ID:
         	size = sizeof(*((struct drill_Controls*)my_struct));
         	break;
-        case SCIENCE_STRUCT_ID:
-        	size =  sizeof(*((struct science_payload_control_struct*)my_struct));
-        	break;
-        case LIGHTING_STRUCT_ID:
-        	size =  sizeof(*((struct lighting_board_struct*)my_struct));
-        	break;
-        case CAMERA_STRUCT_ID:
-        	size =  sizeof(*((struct camera_control_struct*)my_struct));
-			break;
+      //  case SCIENCE_STRUCT_ID:
+        //	size =  sizeof(*((struct science_payload_control_struct*)my_struct));
+        //	break;
+    //    case LIGHTING_STRUCT_ID:
+      //  	size =  sizeof(*((struct lighting_board_struct*)my_struct));
+        //	break;
+   //     case CAMERA_STRUCT_ID:
+     //   	size =  sizeof(*((struct camera_control_struct*)my_struct));
+		//	break;
 
     }
 

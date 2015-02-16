@@ -29,7 +29,6 @@
 #include "driverlib\uart.c"
 #include "driverlib\sysctl.c"
 #include "dynamixel.h"
-#include "dynamixel.c"
 //#include "inc/tm4c123gh6pm.h"
 #include <stdint.h>
 
@@ -51,6 +50,8 @@
 #define ELBOWH_START_POS		0X7FF
 #define BASE_START_POS			0X7FF
 #define INCREMENT   			57 //56.81 units per 5 degrees, .088 unit per 1 degree
+
+uint8_t uartRxBuf[4], handled = 1;
 
 //Initializes the hardware. Sets the clock to 16 mhz, the 3 UART modules up -- motherboard and endefector with
 //115200 buad rates, dynomixel line with 57600 -- with 1 stop bit and no pariety, and initialize all of the pins that we use
@@ -87,8 +88,6 @@ extern void baseClockWise(int16_t * pos);
 extern void baseCounterClockWise(int16_t * pos);
 
 
-
-
 ////////////////motor control functions///////////////////////////////////////////////////////////////////
 
 //In order to move the motors forward, you set the first line high and the second line low
@@ -99,6 +98,12 @@ extern void setReverse(uint32_t l1Base, uint8_t l1Pin, uint32_t l2Base, uint8_t 
 
 //In order to stop the motors, you set both of the lines low
 extern void setStop(uint32_t l1Base, uint8_t l1Pin, uint32_t l2Base, uint8_t l2Pin);
+
+////////////////interrupts////////////
+extern void UARTMotherIntHandler();
+
+extern void IntSetup();
+
 
 #endif /* ARMMAINV4_H_ */
 

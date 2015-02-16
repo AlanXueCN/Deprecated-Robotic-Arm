@@ -34,7 +34,73 @@
 #include <stdint.h>
 #include "utils\uartstdio.h"
 #include "driverlib\UART.h"
-#include "structs.h"
+#include "inc/hw_ints.h"
+#include "inc/hw_memmap.h"
+#include "inc/hw_sysctl.h"
+#include "inc/hw_types.h"
+#include "inc/hw_uart.h"
+#include "driverlib/debug.h"
+#include "driverlib/sysctl.h"
+
+struct arm_control_struct
+{
+	uint8_t reset;
+	uint8_t wristUp;
+	uint8_t wristDown;
+	uint8_t wristClockWise;
+	uint8_t wristCounterClockWise;
+	uint8_t elbowUp;
+	uint8_t elbowDown;
+	uint8_t elbowClockWise;
+	uint8_t elbowCounterClockWise;
+	uint8_t actuatorForward;
+	uint8_t actuatorReverse;
+	uint8_t baseClockWise;
+	uint8_t baseCounterClockWise;
+};
+
+struct gripper_control_struct
+{
+	uint8_t grip_cmd;
+};
+
+struct drill_Controls
+{
+  //Drill Ctrl
+  uint8_t goalSpeed;
+  uint8_t direction;
+
+  //Thermo Ctrl
+  uint8_t heaterPower;
+  uint8_t thermoReadings;
+
+  //Gas Ctrl
+  uint8_t sensorPower;
+  uint8_t gasReadings; //Readings will only be updated when true
+};
+
+typedef struct
+{
+	uint8_t genParam1;
+	uint8_t genParam2;
+	uint8_t genParam3;
+	uint8_t genParam4;
+	uint8_t genParam5;
+	uint8_t genParam6;
+	uint8_t genParam7;
+	uint8_t genParam8;
+	uint8_t genParam9;
+	uint8_t genParam10;
+	uint8_t genParam11;
+	uint8_t genParam12;
+	uint8_t genParam13;
+	uint8_t genParam14;
+	uint8_t genParam15;
+	uint8_t genParam16;
+	uint8_t id;
+	uint8_t instruction;
+	uint8_t size;
+} receiveStruct;
 
 //struct ID's:
 #define GRIPPER_STRUCT_ID	 0
@@ -92,4 +158,9 @@ extern bool recv_struct( uint32_t uart, receiveStruct* myStruct);
  */
 extern void send_struct(uint32_t uart, void* my_struct, uint8_t instruction, uint8_t id);
 
+
+//specific to arm version
+extern uint8_t uartRxBuf[4];
+extern uint8_t handled;
+extern void delay(int time);
 #endif /* STRUCT_XFER_H_ */
