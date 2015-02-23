@@ -93,6 +93,9 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 	if(temp == INST_IDENTITY_REQUEST)		//the if-else's are there as a check to make sure the data is somethign we'd recognize
 		instruction = INST_IDENTITY_REQUEST;//if you think it's unneccessary or want to save some cycles, just save temp directly
 											//into instruction
+	else if(temp == INST_OTHER)
+		instruction = INST_OTHER;
+		
 	else if(temp == INST_IDENTITY_REPLY)
 		instruction = INST_IDENTITY_REPLY;
 
