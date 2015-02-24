@@ -39,15 +39,15 @@
 
 #include <stdbool.h>
 #include <stdint.h>
-#include "utils\uartstdio.h"
-#include "driverlib\UART.h"
-#include "inc/hw_ints.h"
-#include "inc/hw_memmap.h"
-#include "inc/hw_sysctl.h"
-#include "inc/hw_types.h"
-#include "inc/hw_uart.h"
-#include "driverlib/debug.h"
-#include "driverlib/sysctl.h"
+#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/utils/uartstdio.h"
+#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/UART.h"
+#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/inc/hw_ints.h"
+#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/inc/hw_memmap.h"
+#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/inc/hw_sysctl.h"
+#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/inc/hw_types.h"
+#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/inc/hw_uart.h"
+#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/debug.h"
+#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/sysctl.h"
 
 struct arm_control_struct
 {
