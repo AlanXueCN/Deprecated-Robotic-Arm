@@ -8,9 +8,9 @@
 #define DYNAMIXEL_H_
 
 #include <stdint.h>
-#include "driverlib\uart.h"
-#include "inc\hw_memmap.h"
-#include "driverlib\gpio.h"
+#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/uart.h"
+#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/inc/hw_memmap.h"
+#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/gpio.h"
 
 #define START_BYTE					0xFF
 #define MOVE_LENGTH 				0x05
@@ -50,11 +50,11 @@ extern void clearRxBuffer(uint32_t uart);
 #endif
 
 /*  write package: start, start, ID, length, instruction (which operation yon be doing), param 1: starting register address, other parameters...checksum
-*   CS for write is ~ ( ID + Length + Instruction + Parameter1 + … Parameter N )
+*   CS for write is ~ ( ID + Length + Instruction + Parameter1 + â€¦ Parameter N )
 *   length is N (amount of parameters) + 3
 *
 *  return package (when didn't ask dyno to return any specific value with read function): start, start, ID, length, errors, CS
-*  Check Sum = ~ ( ID + Length + Error + Parameter1 + … Parameter N )
+*  Check Sum = ~ ( ID + Length + Error + Parameter1 + â€¦ Parameter N )
 *  return package (from read function): S, S, ID, L, Errors, parameters (what the data you asked for is), CS
 *
 * return package is sent after most functions, unless you iniate the command to talk to all dyno's at once (use ID Of 0XFE)
