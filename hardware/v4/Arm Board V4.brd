@@ -164,7 +164,7 @@ Mike Miles
 </text>
 <wire x1="0" y1="50.8" x2="107.95" y2="50.8" width="0" layer="20"/>
 <wire x1="0" y1="0" x2="107.95" y2="0" width="0" layer="20"/>
-<text x="66.167" y="50.165" size="0.8128" layer="25" font="vector" rot="SR180" align="center">+ 12VIN -</text>
+<text x="66.548" y="50.165" size="0.8128" layer="21" font="vector" rot="SR0" align="center">+ 12VIN -</text>
 <rectangle x1="15.65275" y1="26.67" x2="18.19275" y2="29.21" layer="41"/>
 <text x="91.91625" y="43.65625" size="0.6096" layer="25" font="vector" rot="SR270" align="center">MX</text>
 <text x="97.63125" y="43.65625" size="0.6096" layer="25" font="vector" rot="SR270" align="center">MX</text>
