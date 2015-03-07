@@ -3937,7 +3937,7 @@ VINout</text>
 <part name="U1" library="74LS241" deviceset="SN74LS241DW" device=""/>
 <part name="GND18" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="U$4" library="MAX3077" deviceset="MAX3077" device=""/>
-<part name="R9" library="SparkFun-Passives" deviceset="RESISTOR" device="1206" value="1.5k"/>
+<part name="R9" library="SparkFun-Passives" deviceset="RESISTOR" device="1206" value="330"/>
 <part name="LED5" library="SparkFun-LED" deviceset="LED-RED" device="0603" value="RED"/>
 <part name="GND30" library="SparkFun" deviceset="GND" device=""/>
 <part name="S1" library="SparkFun-Electromechanical" deviceset="STANDOFF_ELECTRICAL" device=""/>
@@ -4074,19 +4074,6 @@ VINout</text>
 <pinref part="U$1" gate="G$1" pin="VIN"/>
 <wire x1="165.1" y1="2.54" x2="160.02" y2="2.54" width="0.1524" layer="91"/>
 </segment>
-</net>
-<net name="+5V" class="0">
-<segment>
-<pinref part="U1" gate="A" pin="VCC"/>
-<wire x1="58.42" y1="7.62" x2="53.34" y2="7.62" width="0.1524" layer="91"/>
-<label x="50.8" y="7.62" size="1.778" layer="95"/>
-</segment>
-<segment>
-<wire x1="226.06" y1="-25.4" x2="226.06" y2="-33.02" width="0.1524" layer="91"/>
-<pinref part="JP1" gate="G$1" pin="3"/>
-</segment>
-</net>
-<net name="14.8V" class="0">
 <segment>
 <pinref part="JP9" gate="G$1" pin="2"/>
 <wire x1="93.98" y1="43.18" x2="93.98" y2="35.56" width="0.1524" layer="91"/>
@@ -4108,7 +4095,16 @@ VINout</text>
 <pinref part="JP12" gate="G$1" pin="2"/>
 </segment>
 </net>
-<net name="VIN" class="0">
+<net name="+5V" class="0">
+<segment>
+<pinref part="U1" gate="A" pin="VCC"/>
+<wire x1="58.42" y1="7.62" x2="53.34" y2="7.62" width="0.1524" layer="91"/>
+<label x="50.8" y="7.62" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="226.06" y1="-25.4" x2="226.06" y2="-33.02" width="0.1524" layer="91"/>
+<pinref part="JP1" gate="G$1" pin="3"/>
+</segment>
 <segment>
 <wire x1="15.24" y1="-7.62" x2="15.24" y2="-10.16" width="0.1524" layer="91"/>
 <pinref part="R9" gate="G$1" pin="2"/>
