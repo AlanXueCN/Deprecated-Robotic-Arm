@@ -3907,7 +3907,6 @@ VINout</text>
 <part name="U$1" library="MRDT-RoboticArm" deviceset="TORXIS_BREAKOUT" device=""/>
 <part name="GND3" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND10" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="D1" library="SparkFun-LED" deviceset="LED-RED" device="0603" value="RED"/>
 </parts>
 <sheets>
 <sheet>
@@ -3941,7 +3940,6 @@ VINout</text>
 <instance part="U$1" gate="G$1" x="167.64" y="-2.54"/>
 <instance part="GND3" gate="1" x="198.12" y="17.78" rot="R90"/>
 <instance part="GND10" gate="1" x="162.56" y="7.62" rot="R270"/>
-<instance part="D1" gate="G$1" x="99.06" y="-12.7" rot="R90"/>
 </instances>
 <busses>
 </busses>
@@ -4078,9 +4076,15 @@ VINout</text>
 <wire x1="96.52" y1="43.18" x2="96.52" y2="40.64" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="D1" gate="G$1" pin="C"/>
-<wire x1="104.14" y1="-12.7" x2="106.68" y2="-12.7" width="0.1524" layer="91"/>
-<label x="104.14" y="-12.7" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="1A1"/>
+<wire x1="58.42" y1="-5.08" x2="53.34" y2="-5.08" width="0.1524" layer="91"/>
+<label x="48.26" y="-5.08" size="1.778" layer="95"/>
+<wire x1="58.42" y1="-5.08" x2="53.34" y2="-5.08" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="U1" gate="A" pin="2Y4"/>
+<wire x1="96.52" y1="-12.7" x2="93.98" y2="-12.7" width="0.1524" layer="91"/>
+<label x="83.82" y="-15.24" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="RX_1" class="0">
@@ -4143,20 +4147,6 @@ VINout</text>
 <segment>
 <pinref part="U$1" gate="G$1" pin="B"/>
 <wire x1="165.1" y1="17.78" x2="160.02" y2="17.78" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="DDATA_OUT" class="0">
-<segment>
-<pinref part="U1" gate="A" pin="2Y4"/>
-<pinref part="D1" gate="G$1" pin="A"/>
-<wire x1="96.52" y1="-12.7" x2="93.98" y2="-12.7" width="0.1524" layer="91"/>
-<label x="83.82" y="-15.24" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="U1" gate="A" pin="1A1"/>
-<wire x1="58.42" y1="-5.08" x2="53.34" y2="-5.08" width="0.1524" layer="91"/>
-<label x="48.26" y="-5.08" size="1.778" layer="95"/>
-<wire x1="58.42" y1="-5.08" x2="53.34" y2="-5.08" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
