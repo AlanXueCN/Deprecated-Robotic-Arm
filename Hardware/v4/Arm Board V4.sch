@@ -4266,7 +4266,6 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <part name="GND34" library="supply1" deviceset="GND" device=""/>
 <part name="U$1" library="MRDT-RoboticArm" deviceset="TORXIS_BREAKOUT" device=""/>
 <part name="GND3" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
-<part name="GND10" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="R1" library="SparkFun-Resistors" deviceset="RESISTOR" device="1206" value="1k"/>
 <part name="D1" library="SparkFun-LED" deviceset="LED-RED" device="0603" value="RED"/>
 <part name="SUPPLY1" library="SparkFun-Aesthetics" deviceset="5V" device=""/>
@@ -4275,7 +4274,6 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <sheet>
 <description>Power</description>
 <plain>
-<text x="160.02" y="2.54" size="1.778" layer="95">+12V</text>
 </plain>
 <instances>
 <instance part="JP9" gate="G$1" x="93.98" y="50.8" rot="R270"/>
@@ -4302,7 +4300,6 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <instance part="GND6" gate="1" x="228.6" y="-30.48"/>
 <instance part="U$1" gate="G$1" x="167.64" y="-2.54"/>
 <instance part="GND3" gate="1" x="198.12" y="17.78" rot="R90"/>
-<instance part="GND10" gate="1" x="162.56" y="7.62" rot="R270"/>
 <instance part="R1" gate="G$1" x="22.86" y="17.78" rot="R90"/>
 <instance part="D1" gate="G$1" x="22.86" y="10.16"/>
 <instance part="SUPPLY1" gate="G$1" x="203.2" y="15.24" rot="R270"/>
@@ -4364,20 +4361,12 @@ Basic schematic elements and footprints for 0603, 1206, and PTH resistors.</desc
 <pinref part="U$1" gate="G$1" pin="GND@4"/>
 <pinref part="GND3" gate="1" pin="GND"/>
 </segment>
-<segment>
-<pinref part="U$1" gate="G$1" pin="GND@1"/>
-<pinref part="GND10" gate="1" pin="GND"/>
-</segment>
 </net>
 <net name="+12V" class="0">
 <segment>
 <pinref part="U$7" gate="G$1" pin="L"/>
 <wire x1="121.92" y1="-10.16" x2="116.84" y2="-10.16" width="0.1524" layer="91"/>
 <label x="116.84" y="-10.16" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="U$1" gate="G$1" pin="VIN"/>
-<wire x1="165.1" y1="2.54" x2="160.02" y2="2.54" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="JP9" gate="G$1" pin="2"/>
