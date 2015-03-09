@@ -2637,8 +2637,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="-0.46" y1="0.17" x2="0" y2="0.17" width="0.2032" layer="21"/>
 <wire x1="0" y1="0.17" x2="0.2338" y2="-0.14" width="0.2032" layer="21"/>
 <wire x1="-0.0254" y1="0.1546" x2="-0.2184" y2="-0.14" width="0.2032" layer="21"/>
-<smd name="C" x="0" y="0.877" dx="1" dy="1" layer="1" roundness="30"/>
-<smd name="A" x="0" y="-0.877" dx="1" dy="1" layer="1" roundness="30"/>
+<smd name="C" x="0" y="0.75" dx="0.8" dy="0.8" layer="1"/>
+<smd name="A" x="0" y="-0.75" dx="0.8" dy="0.8" layer="1"/>
 <text x="-0.6985" y="-0.889" size="0.4064" layer="25" rot="R90">&gt;NAME</text>
 <text x="1.0795" y="-1.016" size="0.4064" layer="27" rot="R90">&gt;VALUE</text>
 </package>
@@ -2659,43 +2659,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <text x="-0.889" y="1.397" size="0.4064" layer="25">&gt;NAME</text>
 <text x="-1.016" y="-1.778" size="0.4064" layer="27">&gt;VALUE</text>
 </package>
-<package name="LED-1206-BOTTOM">
-<wire x1="-2" y1="0.4" x2="-2" y2="-0.4" width="0.127" layer="49"/>
-<wire x1="-2.4" y1="0" x2="-1.6" y2="0" width="0.127" layer="49"/>
-<wire x1="1.6" y1="0" x2="2.4" y2="0" width="0.127" layer="49"/>
-<wire x1="-1.27" y1="0" x2="-0.381" y2="0" width="0.127" layer="49"/>
-<wire x1="-0.381" y1="0" x2="-0.381" y2="0.635" width="0.127" layer="49"/>
-<wire x1="-0.381" y1="0.635" x2="0.254" y2="0" width="0.127" layer="49"/>
-<wire x1="0.254" y1="0" x2="-0.381" y2="-0.635" width="0.127" layer="49"/>
-<wire x1="-0.381" y1="-0.635" x2="-0.381" y2="0" width="0.127" layer="49"/>
-<wire x1="0.254" y1="0" x2="0.254" y2="0.635" width="0.127" layer="49"/>
-<wire x1="0.254" y1="0" x2="0.254" y2="-0.635" width="0.127" layer="49"/>
-<wire x1="0.254" y1="0" x2="1.27" y2="0" width="0.127" layer="49"/>
-<rectangle x1="-0.75" y1="-0.75" x2="0.75" y2="0.75" layer="51"/>
-<smd name="A" x="-1.8" y="0" dx="1.5" dy="1.6" layer="1"/>
-<smd name="C" x="1.8" y="0" dx="1.5" dy="1.6" layer="1"/>
-<hole x="0" y="0" drill="2.3"/>
-<polygon width="0" layer="51">
-<vertex x="1.1" y="-0.5"/>
-<vertex x="1.1" y="0.5"/>
-<vertex x="1.6" y="0.5"/>
-<vertex x="1.6" y="0.25" curve="90"/>
-<vertex x="1.4" y="0.05"/>
-<vertex x="1.4" y="-0.05" curve="90"/>
-<vertex x="1.6" y="-0.25"/>
-<vertex x="1.6" y="-0.5"/>
-</polygon>
-<polygon width="0" layer="51">
-<vertex x="-1.1" y="0.5"/>
-<vertex x="-1.1" y="-0.5"/>
-<vertex x="-1.6" y="-0.5"/>
-<vertex x="-1.6" y="-0.25" curve="90"/>
-<vertex x="-1.4" y="-0.05"/>
-<vertex x="-1.4" y="0.05" curve="90"/>
-<vertex x="-1.6" y="0.25"/>
-<vertex x="-1.6" y="0.5"/>
-</polygon>
-</package>
 </packages>
 <symbols>
 <symbol name="LED">
@@ -2705,6 +2668,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="0" y1="-2.54" x2="-1.27" y2="-2.54" width="0.254" layer="94"/>
 <wire x1="1.27" y1="0" x2="0" y2="0" width="0.254" layer="94"/>
 <wire x1="0" y1="0" x2="-1.27" y2="0" width="0.254" layer="94"/>
+<wire x1="0" y1="0" x2="0" y2="-2.54" width="0.1524" layer="94"/>
 <wire x1="-2.032" y1="-0.762" x2="-3.429" y2="-2.159" width="0.1524" layer="94"/>
 <wire x1="-1.905" y1="-1.905" x2="-3.302" y2="-3.302" width="0.1524" layer="94"/>
 <text x="3.556" y="-4.572" size="1.778" layer="95" rot="R90">&gt;NAME</text>
@@ -2725,8 +2689,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </symbols>
 <devicesets>
 <deviceset name="LED-GREEN" prefix="D" uservalue="yes">
-<description>&lt;B&gt;Various green LEDs&lt;br&gt;&lt;br&gt;&lt;/B&gt;
-Green LEDs used in SFE Production&lt;br&gt;&lt;br&gt;
+<description>Various green LEDs&lt;br&gt;
 0603- DIO-00821&lt;br&gt;
 LARGE- DIO-00862&lt;br&gt;
 LILYPAD- DIO-09910&lt;br&gt;</description>
@@ -2767,18 +2730,6 @@ LILYPAD- DIO-09910&lt;br&gt;</description>
 <technology name="">
 <attribute name="PROD_ID" value="DIO-00862" constant="no"/>
 <attribute name="VALUE" value="GREEN" constant="no"/>
-</technology>
-</technologies>
-</device>
-<device name="1206-BOTTOM" package="LED-1206-BOTTOM">
-<connects>
-<connect gate="G$1" pin="A" pad="A"/>
-<connect gate="G$1" pin="C" pad="C"/>
-</connects>
-<technologies>
-<technology name="">
-<attribute name="PROD_ID" value="DIO-11076" constant="no"/>
-<attribute name="VALUE" value="Green" constant="no"/>
 </technology>
 </technologies>
 </device>
@@ -3937,9 +3888,6 @@ VINout</text>
 <part name="U1" library="74LS241" deviceset="SN74LS241DW" device=""/>
 <part name="GND18" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="U$4" library="MAX3077" deviceset="MAX3077" device=""/>
-<part name="R9" library="SparkFun-Passives" deviceset="RESISTOR" device="1206" value="330"/>
-<part name="LED5" library="SparkFun-LED" deviceset="LED-RED" device="0603" value="RED"/>
-<part name="GND30" library="SparkFun" deviceset="GND" device=""/>
 <part name="S1" library="SparkFun-Electromechanical" deviceset="STANDOFF_ELECTRICAL" device=""/>
 <part name="S2" library="SparkFun-Electromechanical" deviceset="STANDOFF_ELECTRICAL" device=""/>
 <part name="S3" library="SparkFun-Electromechanical" deviceset="STANDOFF_ELECTRICAL" device=""/>
@@ -3959,6 +3907,7 @@ VINout</text>
 <part name="U$1" library="MRDT-RoboticArm" deviceset="TORXIS_BREAKOUT" device=""/>
 <part name="GND3" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 <part name="GND10" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
+<part name="D1" library="SparkFun-LED" deviceset="LED-RED" device="0603" value="RED"/>
 </parts>
 <sheets>
 <sheet>
@@ -3977,9 +3926,6 @@ VINout</text>
 <instance part="GND5" gate="1" x="144.78" y="38.1"/>
 <instance part="U1" gate="A" x="76.2" y="-7.62"/>
 <instance part="GND18" gate="1" x="55.88" y="-30.48" rot="R270"/>
-<instance part="R9" gate="G$1" x="15.24" y="-15.24" rot="R90"/>
-<instance part="LED5" gate="G$1" x="15.24" y="-25.4"/>
-<instance part="GND30" gate="1" x="15.24" y="-35.56"/>
 <instance part="S1" gate="G$1" x="25.4" y="58.42" rot="R270"/>
 <instance part="S2" gate="G$1" x="38.1" y="58.42" rot="R270"/>
 <instance part="S3" gate="G$1" x="50.8" y="58.42" rot="R270"/>
@@ -3995,6 +3941,7 @@ VINout</text>
 <instance part="U$1" gate="G$1" x="167.64" y="-2.54"/>
 <instance part="GND3" gate="1" x="198.12" y="17.78" rot="R90"/>
 <instance part="GND10" gate="1" x="162.56" y="7.62" rot="R270"/>
+<instance part="D1" gate="G$1" x="99.06" y="-12.7" rot="R90"/>
 </instances>
 <busses>
 </busses>
@@ -4023,11 +3970,6 @@ VINout</text>
 <segment>
 <pinref part="U1" gate="A" pin="GND"/>
 <pinref part="GND18" gate="1" pin="GND"/>
-</segment>
-<segment>
-<wire x1="15.24" y1="-30.48" x2="15.24" y2="-33.02" width="0.1524" layer="91"/>
-<pinref part="LED5" gate="G$1" pin="C"/>
-<pinref part="GND30" gate="1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="U$7" gate="G$1" pin="R"/>
@@ -4105,11 +4047,6 @@ VINout</text>
 <wire x1="226.06" y1="-25.4" x2="226.06" y2="-33.02" width="0.1524" layer="91"/>
 <pinref part="JP1" gate="G$1" pin="3"/>
 </segment>
-<segment>
-<wire x1="15.24" y1="-7.62" x2="15.24" y2="-10.16" width="0.1524" layer="91"/>
-<pinref part="R9" gate="G$1" pin="2"/>
-<label x="15.24" y="-7.62" size="1.778" layer="95"/>
-</segment>
 </net>
 <net name="DC_1" class="0">
 <segment>
@@ -4125,21 +4062,6 @@ VINout</text>
 </net>
 <net name="DDATA_1" class="0">
 <segment>
-<pinref part="U1" gate="A" pin="1A1"/>
-<wire x1="58.42" y1="-5.08" x2="53.34" y2="-5.08" width="0.1524" layer="91"/>
-<label x="48.26" y="-5.08" size="1.778" layer="95"/>
-<wire x1="58.42" y1="-5.08" x2="53.34" y2="-5.08" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="U1" gate="A" pin="2Y4"/>
-<wire x1="93.98" y1="-12.7" x2="99.06" y2="-12.7" width="0.1524" layer="91"/>
-<label x="93.98" y="-12.7" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="JP9" gate="G$1" pin="3"/>
-<wire x1="96.52" y1="43.18" x2="96.52" y2="38.1" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="JP10" gate="G$1" pin="3"/>
 <wire x1="114.3" y1="43.18" x2="114.3" y2="38.1" width="0.1524" layer="91"/>
 </segment>
@@ -4150,6 +4072,15 @@ VINout</text>
 <segment>
 <pinref part="JP12" gate="G$1" pin="3"/>
 <wire x1="149.86" y1="43.18" x2="149.86" y2="38.1" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="JP9" gate="G$1" pin="3"/>
+<wire x1="96.52" y1="43.18" x2="96.52" y2="40.64" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="D1" gate="G$1" pin="C"/>
+<wire x1="104.14" y1="-12.7" x2="106.68" y2="-12.7" width="0.1524" layer="91"/>
+<label x="104.14" y="-12.7" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="RX_1" class="0">
@@ -4164,13 +4095,6 @@ VINout</text>
 <pinref part="U1" gate="A" pin="2A4"/>
 <wire x1="58.42" y1="-25.4" x2="53.34" y2="-25.4" width="0.1524" layer="91"/>
 <label x="50.8" y="-25.4" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="N$14" class="0">
-<segment>
-<wire x1="15.24" y1="-22.86" x2="15.24" y2="-20.32" width="0.1524" layer="91"/>
-<pinref part="R9" gate="G$1" pin="1"/>
-<pinref part="LED5" gate="G$1" pin="A"/>
 </segment>
 </net>
 <net name="TX_3" class="0">
@@ -4219,6 +4143,20 @@ VINout</text>
 <segment>
 <pinref part="U$1" gate="G$1" pin="B"/>
 <wire x1="165.1" y1="17.78" x2="160.02" y2="17.78" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="DDATA_OUT" class="0">
+<segment>
+<pinref part="U1" gate="A" pin="2Y4"/>
+<pinref part="D1" gate="G$1" pin="A"/>
+<wire x1="96.52" y1="-12.7" x2="93.98" y2="-12.7" width="0.1524" layer="91"/>
+<label x="83.82" y="-15.24" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U1" gate="A" pin="1A1"/>
+<wire x1="58.42" y1="-5.08" x2="53.34" y2="-5.08" width="0.1524" layer="91"/>
+<label x="48.26" y="-5.08" size="1.778" layer="95"/>
+<wire x1="58.42" y1="-5.08" x2="53.34" y2="-5.08" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
