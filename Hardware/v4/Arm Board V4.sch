@@ -5516,7 +5516,7 @@ These are standard reverse protection diodes and small signal diodes. SMA packag
 <part name="C9" library="SparkFun-Passives" deviceset="CAP" device="1206" value="10nF"/>
 <part name="R15" library="SparkFun-Resistors" deviceset="RESISTOR" device="1206" value="100"/>
 <part name="U$6" library="MRDT-2015-PowerBoard" deviceset="H_WR-TBL_32*1*0002" device="VERT"/>
-<part name="C1" library="SparkFun-Capacitors" deviceset="CAP_POL" device="E"/>
+<part name="C1" library="SparkFun-Capacitors" deviceset="CAP_POL" device="E" value="330uF"/>
 <part name="GND3" library="SparkFun-Aesthetics" deviceset="GND" device=""/>
 </parts>
 <sheets>
@@ -5651,6 +5651,11 @@ These are standard reverse protection diodes and small signal diodes. SMA packag
 <wire x1="124.46" y1="-40.64" x2="119.38" y2="-40.64" width="0.1524" layer="91"/>
 <label x="124.46" y="-38.1" size="1.778" layer="95" rot="R180"/>
 </segment>
+<segment>
+<pinref part="R1" gate="G$1" pin="2"/>
+<wire x1="22.86" y1="22.86" x2="22.86" y2="25.4" width="0.1524" layer="91"/>
+<label x="22.86" y="25.4" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="+5V" class="0">
 <segment>
@@ -5661,10 +5666,6 @@ These are standard reverse protection diodes and small signal diodes. SMA packag
 <segment>
 <wire x1="226.06" y1="-25.4" x2="226.06" y2="-33.02" width="0.1524" layer="91"/>
 <pinref part="JP1" gate="G$1" pin="3"/>
-</segment>
-<segment>
-<pinref part="R1" gate="G$1" pin="2"/>
-<wire x1="22.86" y1="22.86" x2="22.86" y2="25.4" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="DC_1" class="0">
@@ -5710,6 +5711,7 @@ These are standard reverse protection diodes and small signal diodes. SMA packag
 <segment>
 <wire x1="22.86" y1="5.08" x2="22.86" y2="2.54" width="0.1524" layer="91"/>
 <pinref part="D1" gate="G$1" pin="C"/>
+<label x="22.86" y="0" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="RX_1" class="0">
