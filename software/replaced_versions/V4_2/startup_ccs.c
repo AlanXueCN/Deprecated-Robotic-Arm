@@ -291,6 +291,5 @@ IntDefaultHandler(void)
     //
     while(1)
     {
-    	break;
     }
 }

@@ -1,57 +1,65 @@
 /*
  * armMainV4.h
  * date of birth: 1-22-15
- * date of update: 2-16-15
+ * date of update: 4-11-15
  *
  * What do you call all the enemies of the mars rover?
- * Dead, that's what. #theRoverRemembers
+ * Dead, that's what. #theMartiansRemember
  */
 
 #ifndef ARMMAINV4_H_
 #define ARMMAINV4_H_
 
-#define UART_MOTHER UART2_BASE
-#define UART_ENDE	UART3_BASE
-#define UART_DYNO   UART1_BASE
+#include <stdbool.h>
+#include <stdint.h>
+
+#define UART_MOTHER	    UART2_BASE
+#define UART_ENDE		UART3_BASE
+#define UART_DYNAMIXEL  UART1_BASE
+#define UART_ACTUATOR 	UART7_BASE
 
 //.c's are included becuase often CCS wont know where to find source files when transferring projects
-#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/inc/hw_memmap.h"
-#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/inc/hw_types.h"
-#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/gpio.h"
-#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/gpio.c"
-#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/sysctl.h"
-#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/uart.h"
-#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/utils/uartstdio.h"
-#include "struct_xfer_armVersion.h"
-#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/pin_map.h"
-#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/interrupt.c"
-#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/cpu.c"
-#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/uart.c"
-#include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/sysctl.c"
+#include "/opt/ti/tirtos_tivac_2_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/inc/hw_memmap.h"
+#include "/opt/ti/tirtos_tivac_2_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/inc/hw_types.h"
+#include "/opt/ti/tirtos_tivac_2_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/gpio.h"
+#include "/opt/ti/tirtos_tivac_2_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/gpio.c"
+#include "/opt/ti/tirtos_tivac_2_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/sysctl.h"
+#include "/opt/ti/tirtos_tivac_2_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/uart.h"
+#include "/opt/ti/tirtos_tivac_2_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/utils/uartstdio.h"
+#include "/opt/ti/tirtos_tivac_2_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/pin_map.h"
+#include "/opt/ti/tirtos_tivac_2_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/interrupt.c"
+#include "/opt/ti/tirtos_tivac_2_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/cpu.c"
+#include "/opt/ti/tirtos_tivac_2_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/uart.c"
+#include "/opt/ti/tirtos_tivac_2_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/sysctl.c"
+#include "/opt/ti/tirtos_tivac_2_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/rom.h"
 #include "dynamixel.h"
-//#include "inc/tm4c123gh6pm.h"
+#include "struct_xfer_armVersion.h"
+
+
 #include <stdint.h>
 
 #define DELAY 5
-#define GPIO_PC4_U1RX           0x00021002 //for setting pin C4 to be uart1's RX pin in the hardware config function. 
-#define GPIO_PC5_U1TX           0x00021402 //and so on and so on with the rest
-#define GPIO_PD6_U2RX           0x00031801
-#define GPIO_PD7_U2TX           0x00031C01
-#define GPIO_PC6_U3RX           0x00021801
-#define GPIO_PC7_U3TX           0x00021C01
-#define WRIST_VERT_ID           0x01//todo: get all these values, current are placeholders
-#define WRIST_HORI_ID			0x01
-#define ELBOW_HORI_ID			0x01
-#define ELBOW_VERT_ID			0x01
-#define BASE_ID					0x01
+#define WRIST_VERT_ID           0x01
+#define WRIST_HORI_ID			0x02
+#define ELBOW_HORI_ID			0x03
+#define ELBOW_VERT_ID			0x04
+#define BASE_ID					0x05
+
 #define WRISTH_START_POS		0X7FF
 #define WRISTV_START_POS		0X7FF
 #define ELBOWV_START_POS		0X7FF
 #define ELBOWH_START_POS		0X7FF
 #define BASE_START_POS			0X7FF
-#define INCREMENT   			57 //56.81 units per 5 degrees, .088 unit per 1 degree
 
+#define ACTUATOR_START_POS		1600
+const short ACTUATOR_FORWARD_LIMIT = 1600;//limit of the values it can be set to on forward
+const short ACTUATOR_REVERSE_LIMIT = 2400;
+#define DYNAMIXEL_INC   		57 //56.81 units per 5 degrees, .088 unit per 1 degree
+#define ACTUATOR_INC			53//800 -- its Difference in limits -- divided into 15 increments
+#define DELAY 5
 
+#define ARM_STRUCT_SIZE			14
+#define RECEIVE_STRUCT_SIZE		18
 ////////////////////////////////global variables
 uint8_t uartRxBuf[4] = {0,0,0,0};
 uint8_t handled = 1;
@@ -70,7 +78,7 @@ extern void initHardware();
 extern void initDynos(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVertPos, int16_t * elbowHoriPos, int16_t * basePos);
 
 //resets the arm control struct
-extern void resetStruct(struct arm_control_struct * armData);
+extern void resetStruct(void * myStruct, int size);
 
 //delays about 1 millisecond * time
 extern void delay(int time);
@@ -95,17 +103,8 @@ extern void actuatorReverse();
 extern void baseClockWise(int16_t * pos);
 extern void baseCounterClockWise(int16_t * pos);
 
-
-////////////////motor control functions///////////////////////////////////////////////////////////////////
-
-//In order to move the motors forward, you set the first line high and the second line low
-extern void setForward(uint32_t l1Base, uint8_t l1Pin, uint32_t l2Base, uint8_t l2Pin);
-
-//In order to move the motors backward, you set the first line low and the second line high
-extern void setReverse(uint32_t l1Base, uint8_t l1Pin, uint32_t l2Base, uint8_t l2Pin);
-
-//In order to stop the motors, you set both of the lines low
-extern void setStop(uint32_t l1Base, uint8_t l1Pin, uint32_t l2Base, uint8_t l2Pin);
+////////////////motor control function//////
+void setMotor(uint32_t uart, uint16_t pos);
 
 ////////////////interrupts////////////
 
@@ -130,4 +129,3 @@ extern void IntSetup();
 
 
 #endif /* ARMMAINV4_H_ */
-

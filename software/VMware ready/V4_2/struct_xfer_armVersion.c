@@ -18,20 +18,9 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 	uint8_t start_byte2 = 0x85;
 	uint8_t size;
 	uint8_t id;
-	uint8_t instruction;
 	uint8_t calc_CS;	   //calculated Chacksum
-	uint8_t temp;
+	int16_t temp;
 	uint8_t rx_buffer[150];
-
-	//todo:Be a good idea to globalize sizes
-	const int gripSize = sizeof(*((struct gripper_control_struct*)myStruct));
-	const int drillSize = sizeof(*((struct drill_Controls*)myStruct));
-	const int armSize = sizeof(*((struct arm_control_struct *)myStruct));
-	//const int motorSize= sizeof(*((struct motor_struct*)myStruct));
-	//const int scienceSize = sizeof(*((struct science_payload_control_struct*)myStruct));
-	//const int lightingSize = sizeof(*((struct lighting_board_struct*)myStruct));
-	//const int cameraSize = sizeof(*((struct camera_control_struct*)myStruct));
-	//If adding more structs, follow this format to calculate size
 
 
 	// Check for Start byte 1
@@ -40,7 +29,7 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 	uartRxBuf[0] = 0; //reset values so that the interrupt has to put them back in again
 
 
-	if ( uartRxBuf[1] != start_byte2 )
+	if (uartRxBuf[1] != start_byte2 )
 	{
 		// Kick out of function
 		return false;
@@ -49,100 +38,15 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 
 
 
-
-	temp = uartRxBuf[2];
-	id = temp;
-	if (temp == GRIPPER_STRUCT_ID)
-	{
-		size = gripSize;
-	}
-	else if(temp == DRILL_STRUCT_ID)
-	{
-		size = drillSize;
-	}
-	else if(temp == ARM_STRUCT_ID)
-	{
-		size = armSize;
-	}
-	/*else if(temp == SCIENCE_STRUCT_ID)
-	{
-		size = scienceSize;
-	}
-	else if(temp == LIGHTING_STRUCT_ID)
-	{
-		size = lightingSize;
-	}
-	else if(temp == CAMERA_STRUCT_ID)
-	{
-		size = cameraSize;
-	}
-	else if(temp == MOTOR_STRUCT_ID)
-	{
-		size = motorSize;
-	}*/						//If adding on more structs, put in another else-if for them here
-	else
-		return(false);//didn't match any known ID's. Cue the fail horn, fire some people
-
-
-
-	//getInstructionID
-	temp = uartRxBuf[3];
-	instruction = temp;
-	if(temp == INST_IDENTITY_REQUEST)		//the if-else's are there as a check to make sure the data is somethign we'd recognize
-		instruction = INST_IDENTITY_REQUEST;//if you think it's unneccessary or want to save some cycles, just save temp directly
-											//into instruction
-	else if(temp == INST_OTHER)
-		instruction = INST_OTHER;
-
-	else if(temp == INST_IDENTITY_REPLY)
-		instruction = INST_IDENTITY_REPLY;
-
-	else if(temp == INST_OPSMODE_REQUEST)
-		instruction = INST_OPSMODE_REQUEST;
-
-	else if(temp == INST_OPSMODE_REPLY)
-		instruction = INST_OPSMODE_REPLY;
-
-	else if(temp == INST_TELEMETRY_REQUEST)
-		instruction = INST_TELEMETRY_REQUEST;
-
-	else if(temp == INST_TELEMETRY_REPLY)
-		instruction = INST_TELEMETRY_REPLY;
-
-	else if(temp == INST_COMMAND_REQUEST)
-		instruction = INST_COMMAND_REQUEST;
-
-	else if(temp == INST_COMMAND_REPLY)
-		instruction = INST_COMMAND_REPLY;
-
-	else
-		return(false); //fire all the people
-
-
-
-	//check size:
-	temp = HWREG(uart + UART_O_DR);
-
-	if(size != temp)
-		return(false); //no bad joke this time. :(
-
-
+	//get the size
+	size = uartRxBuf[2];
+	uartRxBuf[2] = 0;
 
 	// Read in data bytes
 	for ( i = 0 ; i <= size ; i++)
 	{
-	 if(!(HWREG(uart + UART_O_FR) & UART_FR_RXFE))
+	 if((temp = UARTCharGetNonBlocking(uart)) == -1)
 		{
-			//
-			// Read and return the next character.
-			//
-			temp = HWREG(uart + UART_O_DR);
-		}
-		else
-		{
-			//
-			// There are no characters, so return a failure.
-			//
 			return(-1);
 		}
 		rx_buffer[i] = temp;
@@ -165,12 +69,12 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 		return false;
 	}
 
-
+	//retrieve the id, which should be the first parameter in the incoming struct always (if it's not, complain about it)
+	id = rx_buffer[0];
 
 	// Copy buffer into struct, then pass in the instruction and id and size bytes
 	memcpy (myStruct, rx_buffer, size);
 	myStruct -> id = id;
-	myStruct -> instruction = instruction;
 	myStruct -> size = size;
 	delay(2);
 
@@ -218,7 +122,7 @@ void send_struct(uint32_t uart, void* my_struct, uint8_t instruction, uint8_t id
 
     UARTCharPut(uart, start_byte2);
 
-    UARTCharPut(uart, id); //todo:Figure out where to put these in protocol
+    UARTCharPut(uart, id);
 
     UARTCharPut(uart, instruction);
 

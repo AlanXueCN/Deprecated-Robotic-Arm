@@ -46,38 +46,19 @@ void main(void)
 	struct drill_Controls drillData;
 	receiveStruct receiveData;
 
-	armData.reset = 1;
-	armData.wristUp = 0;
-	armData.wristDown = 0;
-	armData.wristClockWise = 0;
-	armData.wristCounterClockWise = 0;
-	armData.elbowUp = 0;
-	armData.elbowDown = 0;
-	armData.elbowClockWise = 0;
-	armData.elbowCounterClockWise = 0;
-	armData.actuatorForward = 0;
-	armData.actuatorReverse = 0;
-	armData.baseClockWise = 0;
-	armData.baseCounterClockWise = 0;
-
-	drillData.goalSpeed = 1;
-	drillData.direction = 0;
-	drillData.gasReadings = 0;
-	drillData.heaterPower = 1;
-	drillData.sensorPower = 0;
-	drillData.thermoReadings = 1;
-
     int16_t wristVertPos, wristHoriPos, elbowVertPos, elbowHoriPos, basePos;
 	initHardware();
     initDynos(&wristVertPos, &wristHoriPos, &elbowVertPos, &elbowHoriPos, &basePos);
 	delay(DELAY);
-	send_struct(UART_ENDE, &armData, INST_OTHER, ARM_STRUCT_ID);
 	delay(DELAY);
+	while(1)
+	{
+		GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_6, GPIO_PIN_6);
+	}
 	while(1)
 	{
 		if(recv_struct(UART_ENDE, &receiveData))
 		{
-			delay(1);
 			switch(receiveData.id)
 			{
 			case ARM_STRUCT_ID:
@@ -126,17 +107,13 @@ void main(void)
 				delay(DELAY);
 				break;
 			}
-
-			handled = 0;
-			send_struct(UART_ENDE, &drillData, INST_OTHER, DRILL_STRUCT_ID);
-			delay(DELAY);
 		}
 	}
 }
 
 void delay(int time)
 {
-	SysCtlDelay(time * (SysCtlClockGet()/100));//1ms delay
+	SysCtlDelay((SysCtlClockGet()/3000));
 }
 
 void wristClockWise(int16_t * pos){
@@ -271,13 +248,13 @@ void initHardware()
 	UARTConfigSetExpClk(UART2_BASE, SysCtlClockGet(), 115200, (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
 
 	//uart 3: endefector
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART3);
+/*	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART3);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOC);
 	GPIOPinConfigure(GPIO_PC6_U3RX);
 	GPIOPinConfigure(GPIO_PC7_U3TX);
 	GPIOPinTypeUART(GPIO_PORTC_BASE, GPIO_PIN_6 | GPIO_PIN_7);
 	UARTConfigSetExpClk(UART3_BASE, SysCtlClockGet(), 115200, (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
-
+*/
 
 	//initialize the rest of the GPIO sets we need and set up to output the one's that need to be output
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
@@ -291,9 +268,6 @@ void initHardware()
 
 	//initialize the enable for the actuator
 	GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_6, GPIO_PIN_6);
-
-	//interrupt setups
-	IntSetup();
 }
 
 //resets all components to the struct.
@@ -337,7 +311,7 @@ void setStop(uint32_t l1Base, uint8_t l1Pin, uint32_t l2Base, uint8_t l2Pin)
 
 void initDynos(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVertPos, int16_t * elbowHoriPos, int16_t * basePos)
 {
-    //initialize the dynos. Including initial positions
+    //todo: initialize the dynos. Including initial positions
 	switchCom(TX_MODE);
 	*wristVertPos = WRISTV_START_POS;
 	*wristHoriPos = WRISTH_START_POS;
@@ -354,29 +328,3 @@ void initDynos(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVe
 	dynoMultiModeSet(UART_DYNO, GLOBAL_ID); //sets them all to multi turn mode for now
 }
 
-void UARTMotherIntHandler()//values are all UART_ENDE for testing purposes
-{
-	UARTIntClear(UART_ENDE, UART_INT_RX);
-	if(!(handled))
-	{
-		uint8_t i;
-		for(i = 0; i < 4; i++)
-		{
-			if(!(HWREG(UART_ENDE + UART_O_FR) & UART_FR_RXFE))//uartCharGetNonBlocking
-			{
-				uartRxBuf[i] = HWREG(UART3_BASE + UART_O_DR);
-			}
-		}
-
-		handled = 1;
-	}
-}
-
-void IntSetup()
-{
-	UARTIntEnable(UART_ENDE, UART_INT_RX); //must enable before registering the function dynamically
-	UARTIntRegister(UART_ENDE, UARTMotherIntHandler);
-	UARTFIFOLevelSet(UART_ENDE, UART_FIFO_TX1_8, UART_FIFO_RX2_8); //dont worry about the tx, it's unused
-	IntMasterEnable();
-	handled = 0;
-}

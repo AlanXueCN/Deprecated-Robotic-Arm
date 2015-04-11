@@ -7,39 +7,39 @@ CMD_SRCS += \
 ../project0_ccs.cmd 
 
 C_SRCS += \
-../armMainV4_2.c \
+../armMainV4_2Testing.c \
 ../dynamixel.c \
 ../startup_ccs.c \
-../struct_xfer_armVersion.c 
+../struct_xfer.c 
 
 OBJS += \
-./armMainV4_2.obj \
+./armMainV4_2Testing.obj \
 ./dynamixel.obj \
 ./startup_ccs.obj \
-./struct_xfer_armVersion.obj 
+./struct_xfer.obj 
 
 C_DEPS += \
-./armMainV4_2.pp \
+./armMainV4_2Testing.pp \
 ./dynamixel.pp \
 ./startup_ccs.pp \
-./struct_xfer_armVersion.pp 
+./struct_xfer.pp 
 
 C_DEPS__QUOTED += \
-"armMainV4_2.pp" \
+"armMainV4_2Testing.pp" \
 "dynamixel.pp" \
 "startup_ccs.pp" \
-"struct_xfer_armVersion.pp" 
+"struct_xfer.pp" 
 
 OBJS__QUOTED += \
-"armMainV4_2.obj" \
+"armMainV4_2Testing.obj" \
 "dynamixel.obj" \
 "startup_ccs.obj" \
-"struct_xfer_armVersion.obj" 
+"struct_xfer.obj" 
 
 C_SRCS__QUOTED += \
-"../armMainV4_2.c" \
+"../armMainV4_2Testing.c" \
 "../dynamixel.c" \
 "../startup_ccs.c" \
-"../struct_xfer_armVersion.c" 
+"../struct_xfer.c" 
 
 

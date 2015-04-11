@@ -1,44 +1,19 @@
 //ArmMainV4-2.c
 //created by: parker, alec, drue
 //created on 2-11-15
-//updated: 2-16-15 by drue
+//updated: 4-8-15 by drue
 //
 //Update content: Added in content for endefector communication.
-//Changed struct_xfer so that we can now recieve 3 structs instead of 1. Modified all of main so that it works with the
+//Changed struct_xfer so that we can now receive 3 structs instead of 1. Modified all of main so that it works with the
 //new struct_xfer and it can distribute the data structs meant for endefector to where it needs to go. Also, fixed delay
 //function so it now is a lot more precise.
+//
+//Update 4-8-15 -- added in constants for ID's and the actuator limits
 //RoveSoHard
 
 
 #include "armMainV4.h"
 
-/* Here we control the arm movement for the rover. The overhead process goes: our arm waits in place until the user pushes
- * a button/moves a joystick/ whatever or they want to move the endefector, which is directed through
- * the arm board. They send the signal to motherboard who then sends it to us in the form of
- * either the arm_data_control struct, found in struct_xfer.h, or the 2 endefector structs, gripper_control_struct
- * and drill_Controls struct. We stay in a loop where we constantly check with the
- * recv_struct function if motherboard is sending us any data; when they do, we read what struct they're sending
- * and, if it's an arm command, read what variables have been set. and have the arm move accordingly by calling the movement functions.
- * Simple enough; they command, we get commands, we have arm move accordingly. If it's an endefector command, we merely
- * pass it along.
- *
- * Inside the move functions themselves, we either a) move the actuator using the motor control functions, delay, and then
- * stop the movement and exit the function. The purpose of setting it up as such is so that it automatically stops itself
- * and we don't have to worry about checking to see if the command is no longer being sent to us and to then stop the motion,
- * saving us a few clock cycles. The actuator itself is slow enough to where the start-stopping doesn't seem to effect its
- * motion, and it continually will move into the move actuator functions so long as the command continues to be sent to us.
- *
- * b) Move the dynamixels. At the moment, this is done by using the dynoMove function as described in dynamixel.h to
- * command it to move to an incremented position. We do this by incrementing its position variable and then passing the
- * dynoMove function the newly incremented variable. The position variables are to keep track of the arm's position at all
- * times, and the arm's movement is based off of incrementing the position variables for every movement.
- *
- * Currently there is no usage for the dynamixel's closed loop abilities, though functions exist to read certain values from
- * them they are untested as of 2-11-15
- *
- * warnings: the program locks itself into an idle state while waiting for commands from the motherboard, and relocks itself
- * upon completing said commands until it recieves more.
- */
 
 void main(void)
 {
@@ -47,11 +22,47 @@ void main(void)
 	struct gripper_control_struct gripperData;
 	struct drill_Controls drillData;
 	receiveStruct receiveData;
+	int16_t wristVertPos, wristHoriPos, elbowVertPos, elbowHoriPos, basePos;
+	uint16_t actuatorPos;
 
-    int16_t wristVertPos, wristHoriPos, elbowVertPos, elbowHoriPos, basePos;
+	resetStruct(&receiveData, RECEIVE_STRUCT_SIZE);
 	initHardware();
-    initDynos(&wristVertPos, &wristHoriPos, &elbowVertPos, &elbowHoriPos, &basePos);
-    delay(DELAY);
+
+    //initPositions(&wristVertPos, &wristClockwisePos, &elbowVertPos, &elbowClockwisePose, &basePos, &actuatorPos);
+   // delay(DELAY);
+
+
+    //while(1)
+	//{
+		 /* UARTCharPut(UART_DYNAMIXEL, 0xFF);
+		  UARTCharPut(UART_DYNAMIXEL, 0xFF);
+		  UARTCharPut(UART_DYNAMIXEL, GLOBAL_ID); //id
+		  UARTCharPut(UART_DYNAMIXEL, 0x04); //Id_length
+		  UARTCharPut(UART_DYNAMIXEL, 0x03); //write data
+		  UARTCharPut(UART_DYNAMIXEL, 0x03); //ID_register
+		  UARTCharPut(UART_DYNAMIXEL, 0x04); //idEnd
+		  UARTCharPut(UART_DYNAMIXEL, ~(GLOBAL_ID + 0x04 + 0x03 + 0x03 + 0x04)&0xFF);
+    	  delay(10);*/
+    	//dynoSetID(UART_DYNAMIXEL, GLOBAL_ID, 0x08);
+        //dynoWheelModeSet(UART_DYNAMIXEL, GLOBAL_ID);
+    	//dynoSpeedSet(UART_DYNAMIXEL, GLOBAL_ID, 0x1000);
+    	//send_struct(UART_ENDE, &gripperData, INST_OTHER, GRIPPER_STRUCT_ID);
+		//dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 0x00);
+		//for(i = 0; i < 500000; i++);
+		//delay(25);
+		//dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 0x00);
+		//for(i = 0; i < 500000; i++);
+		//delay(25);
+		//delay(150);
+		/*dynoMove(UART_DYNAMIXEL, 2, 0x00);
+		delay(50);
+		dynoMove(UART_DYNAMIXEL, 2, 4000);
+		delay(50);
+		dynoMove(UART_DYNAMIXEL, 1, 0x00);
+		delay(50);
+		dynoMove(UART_DYNAMIXEL, 1, 4000);
+		delay(50);*/
+	//}
 	while(1)
 	{
 
@@ -64,7 +75,7 @@ void main(void)
 				memcpy(&armData, &receiveData, receiveData.size);
 
 				if(armData.reset)
-					resetStruct(&armData);
+					resetStruct(&armData, ARM_STRUCT_SIZE);
 				else if(armData.wristUp)
 					wristUp(&wristVertPos);
 				else if(armData.wristDown)
@@ -82,9 +93,9 @@ void main(void)
 				else if(armData.elbowCounterClockWise)
 					elbowCounterClockWise(&elbowHoriPos);
 				else if(armData.actuatorForward)
-					actuatorForward();
+					actuatorForward(&actuatorPos);
 				else if(armData.actuatorReverse)
-					actuatorReverse();
+					actuatorReverse(&actuatorPos);
 				else if(armData.baseClockWise)
 					baseClockWise(&basePos);
 				else if(armData.baseCounterClockWise)
@@ -94,7 +105,7 @@ void main(void)
 
 			case GRIPPER_STRUCT_ID:
 				memcpy(&gripperData, &receiveData, receiveData.size);
-				send_struct(UART_ENDE, &gripperData, INST_OTHER, GRIPPER_STRUCT_ID);
+				//send_struct(UART_ENDE, &gripperData, INST_OTHER, GRIPPER_STRUCT_ID);
 				delay(DELAY);
 				break;
 
@@ -102,7 +113,7 @@ void main(void)
 
 			case DRILL_STRUCT_ID:
 				memcpy(&drillData, &receiveData, receiveData.size);
-				send_struct(UART_ENDE, &drillData, INST_OTHER, DRILL_STRUCT_ID);
+				//send_struct(UART_ENDE, &drillData, INST_OTHER, DRILL_STRUCT_ID);
 				delay(DELAY);
 				break;
 			}
@@ -110,93 +121,113 @@ void main(void)
 
 		handled = 0;
 		flushUart(UART_MOTHER);
-		delay(DELAY);
+		delay(1);
 	}
 }
 
 void delay(int time)
 {
-	SysCtlDelay(time * (SysCtlClockGet()/100));//1ms delay
+	SysCtlDelay(time * (SysCtlClockGet()/1000));//1 time is 3/100 seconds
 }
 
 void wristClockWise(int16_t * pos){
-    *pos = *pos + INCREMENT;
-    dynoMove(UART_DYNO, WRIST_HORI_ID, *pos);
+    *pos = *pos + DYNAMIXEL_INC;
+    dynoMove(UART1_BASE, WRIST_HORI_ID, *pos);
     delay(DELAY);
 }
 
 void wristCounterClockWise(int16_t * pos){
-    *pos -= INCREMENT;
-    dynoMove(UART_DYNO, WRIST_HORI_ID, *pos);
+    *pos -= DYNAMIXEL_INC;
+    dynoMove(UART1_BASE, WRIST_HORI_ID, *pos);
 	delay(DELAY);
 }
 
 void wristUp(int16_t * pos){
-	*pos += INCREMENT;
-    dynoMove(UART_DYNO, WRIST_VERT_ID, *pos);
+	*pos += DYNAMIXEL_INC;
+    dynoMove(UART1_BASE, WRIST_VERT_ID, *pos);
 	delay(DELAY);
 }
 
 void wristDown(int16_t * pos){
-    *pos -= INCREMENT;
-    dynoMove(UART_DYNO, WRIST_VERT_ID, *pos);
+    *pos -= DYNAMIXEL_INC;
+    dynoMove(UART1_BASE, WRIST_VERT_ID, *pos);
 	delay(DELAY);
 }
 
 void elbowCounterClockWise(int16_t * pos){
-	*pos -= INCREMENT;
-    dynoMove(UART_DYNO, ELBOW_HORI_ID, *pos);
+	*pos -= DYNAMIXEL_INC;
+    dynoMove(UART1_BASE, ELBOW_HORI_ID, *pos);
 	delay(DELAY);
 }
 
 void elbowClockWise(int16_t * pos){
-	*pos += INCREMENT;
-    dynoMove(UART_DYNO, ELBOW_HORI_ID, *pos);
+	*pos += DYNAMIXEL_INC;
+    dynoMove(UART1_BASE, ELBOW_HORI_ID, *pos);
 	delay(DELAY);
 }
 
 void elbowDown(int16_t * pos){
-	*pos -= INCREMENT;
-    dynoMove(UART_DYNO, ELBOW_VERT_ID, *pos);
+	*pos -= DYNAMIXEL_INC;
+    dynoMove(UART1_BASE, ELBOW_VERT_ID, *pos);
 	delay(DELAY);
 }
 
 void elbowUp(int16_t * pos){
-	*pos += INCREMENT;
-    dynoMove(UART_DYNO, ELBOW_VERT_ID, *pos);
+	*pos += DYNAMIXEL_INC;
+    dynoMove(UART1_BASE, ELBOW_VERT_ID, *pos);
 	delay(DELAY);
 }
 
-void actuatorForward(){
-    setReverse(GPIO_PORTA_BASE, GPIO_PIN_3, GPIO_PORTA_BASE, GPIO_PIN_4);
-	delay(DELAY);
-	setStop(GPIO_PORTA_BASE, GPIO_PIN_3, GPIO_PORTA_BASE, GPIO_PIN_4);
-	delay(1);
+void actuatorForward(uint16_t *pos){
+	if(*pos >= (ACTUATOR_FORWARD_LIMIT + ACTUATOR_INC)) //The normal operation. If it's so that the next increment WONT push it beyond
+	{											//or put it right at the limit, proceed as normal
+		*pos -= ACTUATOR_INC;
+		setMotor(UART_ACTUATOR, *pos);
+		delay(DELAY);
+	}
+
+	else if(*pos > ACTUATOR_FORWARD_LIMIT) //if it turns out that our increments aren't a nice division of the limit and so it's below the limit but the next increment will
+	{									  //still push it beyond it, just set it equal to the limit
+		*pos = ACTUATOR_FORWARD_LIMIT;
+		setMotor(UART_ACTUATOR, *pos);
+		delay(DELAY);
+	}
+						//else, we're at the limit, no operation
 }
 
-void actuatorReverse(){
-	setForward(GPIO_PORTA_BASE, GPIO_PIN_3, GPIO_PORTA_BASE, GPIO_PIN_4);
-	delay(DELAY);
-	setStop(GPIO_PORTA_BASE, GPIO_PIN_3, GPIO_PORTA_BASE, GPIO_PIN_4);
-	delay(1);
+void actuatorReverse(uint16_t *pos){
+	if(*pos <= (ACTUATOR_REVERSE_LIMIT - ACTUATOR_INC)) //The normal operation. If it's so that the next increment WONT push it beyond
+	{											//or put it right at the limit, proceed as normal
+		*pos += ACTUATOR_INC;
+		setMotor(UART_ACTUATOR, *pos);
+		delay(DELAY);
+	}
+
+	else if(*pos < ACTUATOR_REVERSE_LIMIT) //if it turns out that our increments aren't a nice division of the limit and so it's below the limit but the next increment will
+	{									  //still push it beyond it, just set it equal to the limit
+		*pos = ACTUATOR_FORWARD_LIMIT;
+		setMotor(UART_ACTUATOR, *pos);
+		delay(DELAY);
+	}
+						//else, we're at the limit, no operation
 }
 
-void baseClockWise(int16_t * pos){
-	*pos += INCREMENT;
-    dynoMove(UART_DYNO, BASE_ID, *pos);
+void baseClockWise(int16_t *pos){
+	*pos += DYNAMIXEL_INC;
+    dynoMove(UART_DYNAMIXEL, BASE_ID, *pos);
 	delay(DELAY);
 }
 
-void baseCounterClockWise(int16_t * pos){
-	*pos -= INCREMENT;
-    dynoMove(UART_DYNO, BASE_ID, *pos);
+void baseCounterClockWise(int16_t *pos){
+	*pos -= DYNAMIXEL_INC;
+    dynoMove(UART_DYNAMIXEL, BASE_ID, *pos);
 	delay(DELAY);
 }
 
 
-//Initializes the hardware. Sets the clock to 16 mhz, the 3 UART modules up -- motherboard and endefector with 115200 buad rates,
-//dynomixel line with 57600 -- with 1 stop bit and no pariety, and initialize all of the pins that we use
-//and setup most to transmit to output, ones used for UART aside. Puts the base dynamixel into wheel mode
+//Initializes the hardware. Sets the clock to 16 mhz, the 4 UART modules up -- motherboard and actuator with 115200 buad rates,
+//dynamixel line with 57600, endetrucker with 9600 -- with 1 stop bit and no pariety, and initialize all of the pins that we use
+//and setup most to transmit to output, ones used for UART aside.
 void initHardware()
 {
 
@@ -256,98 +287,66 @@ void initHardware()
 	GPIOPinConfigure(GPIO_PC6_U3RX);
 	GPIOPinConfigure(GPIO_PC7_U3TX);
 	GPIOPinTypeUART(GPIO_PORTC_BASE, GPIO_PIN_6 | GPIO_PIN_7);
-	UARTConfigSetExpClk(UART3_BASE, SysCtlClockGet(), 115200, (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
+	UARTConfigSetExpClk(UART3_BASE, SysCtlClockGet(), 9600, (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
 
 
-	//initialize the rest of the GPIO sets we need and set up to output the one's that need to be output
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOA);
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
+	//Uart 7: motor controller
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART7);
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOE);
-	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF);
-	GPIOPinTypeGPIOOutput(GPIO_PORTB_BASE, GPIO_PIN_6); //actuator enable
-	GPIOPinTypeGPIOOutput(GPIO_PORTA_BASE, GPIO_PIN_3); //actuator 1
-	GPIOPinTypeGPIOOutput(GPIO_PORTA_BASE, GPIO_PIN_4); //actuator 2
+	GPIOPinConfigure(GPIO_PE0_U7RX);
+	GPIOPinConfigure(GPIO_PE1_U7TX);
+	GPIOPinTypeUART(GPIO_PORTE_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+	UARTConfigSetExpClk(UART7_BASE, SysCtlClockGet(), 115200, (UART_CONFIG_WLEN_8 | UART_CONFIG_STOP_ONE | UART_CONFIG_PAR_NONE));
 
-
-	//initialize the enable for the actuator
-	GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_6, GPIO_PIN_6);
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOB);
+	GPIOPinTypeGPIOOutput(GPIO_PORTB_BASE, GPIO_PIN_3); //tri-state-buffer enable
+	GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, GPIO_PIN_3);
 
 	//interrupt setups
 	IntSetup();
+
 }
 
-//resets all components to the struct.
-void resetStruct(struct arm_control_struct * armData){
-  armData-> reset = 0;
-  armData-> wristUp = 0;
-  armData-> wristDown = 0;
-  armData-> wristClockWise = 0;
-  armData-> wristCounterClockWise = 0;
-  armData-> elbowUp = 0;
-  armData-> elbowDown = 0;
-  armData-> elbowClockWise = 0;
-  armData-> elbowCounterClockWise = 0;
-  armData-> actuatorForward = 0;
-  armData-> actuatorReverse = 0;
-  armData-> baseClockWise = 0;
-  armData-> baseCounterClockWise = 0;
-}
+void resetStruct(void * myStruct, int size){
+	int i;
+	uint8_t * address = (uint8_t *)myStruct;
+	for(i = 0; i < size; i++)
+	{
+		*(address + i) = 0;
+	}//if this seems confusing: creates a pointer to the base address of struct, then increments the pointer up to
+}//the size of the struct, IE how many variables are in it IE how many memory blocks the struct encompasses and therefore
+//the blocks within its scope represent its variables...while setting them all to 0.
 
-
-//In order to move the motors forward, you set the first line high and the second line low
-void setForward(uint32_t l1Base, uint8_t l1Pin, uint32_t l2Base, uint8_t l2Pin)
+void setMotor(uint32_t uart, uint16_t pos)
 {
-	GPIOPinWrite(l1Base,l1Pin,l1Pin);
-	GPIOPinWrite(l2Base,l2Pin,0);
+	uint8_t highByte = ((pos >> 5) & 0b01111111);
+	uint8_t lowByte = ((uint8_t)pos & 0b00011111);
+	lowByte |= 0b11000000;
+	UARTCharPut(uart, lowByte);
+	UARTCharPut(uart, highByte);
 }
 
-//In order to move the motors backward, you set the first line low and the second line high
-void setReverse(uint32_t l1Base, uint8_t l1Pin, uint32_t l2Base, uint8_t l2Pin)
+void initPositions(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVertPos, int16_t * elbowHoriPos, int16_t * basePos, uint16_t * actuatorPos)
 {
-	GPIOPinWrite(l1Base,l1Pin,0);
-	GPIOPinWrite(l2Base,l2Pin,l2Pin);
-}
-
-//In order to stop the motors, you set both of the lines low
-void setStop(uint32_t l1Base, uint8_t l1Pin, uint32_t l2Base, uint8_t l2Pin)
-{
-	GPIOPinWrite(l1Base,l1Pin,0);
-	GPIOPinWrite(l2Base,l2Pin,0);
-}
-
-void initDynos(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVertPos, int16_t * elbowHoriPos, int16_t * basePos)
-{
-    //todo: initialize the dynos. Including initial positions
 	switchCom(TX_MODE);
 	*wristVertPos = WRISTV_START_POS;
 	*wristHoriPos = WRISTH_START_POS;
 	*elbowVertPos = ELBOWV_START_POS;
 	*elbowHoriPos = ELBOWH_START_POS;
 	*basePos = BASE_START_POS;
+	*actuatorPos = ACTUATOR_START_POS;
 
-	dynoMove(UART_DYNO, WRIST_VERT_ID, *wristVertPos);
-	dynoMove(UART_DYNO, WRIST_HORI_ID, *wristHoriPos);
-	dynoMove(UART_DYNO, ELBOW_HORI_ID, *elbowHoriPos);
-	dynoMove(UART_DYNO, ELBOW_VERT_ID, *elbowVertPos);
-	dynoMove(UART_DYNO, BASE_ID, *basePos);
+	dynoMove(UART_DYNAMIXEL, WRIST_VERT_ID, *wristVertPos);
+	dynoMove(UART_DYNAMIXEL, WRIST_HORI_ID, *wristHoriPos);
+	dynoMove(UART_DYNAMIXEL, ELBOW_HORI_ID, *elbowHoriPos);
+	dynoMove(UART_DYNAMIXEL, ELBOW_VERT_ID, *elbowVertPos);
+	dynoMove(UART_DYNAMIXEL, BASE_ID, *basePos);
 
-	dynoMultiModeSet(UART_DYNO, GLOBAL_ID); //sets them all to multi turn mode for now
+	dynoMultiModeSet(UART_DYNAMIXEL, GLOBAL_ID); //sets them all to multi turn mode for now
 }
 
 
-//Int handler for the UART_MOTHER uart. The Arm data struct is so large that our FIFO's cannot handle it, so we use an
-//interrupt to clear out the first few before using the recv_struct function for the rest.
-//The interrupt can happen at any time when we're not actively in or responding to the
-//recv_struct function, and to deal with the possible near constant stream of data the protocol shall go as follows:
-//When we don't want the interrupt to change anything, the global variable handled shall be set to 1, meaning it should
-//exit as soon as it enters while clearing the interrupt (I could just temporarily disable the interrupt instead, but
-//frankly I'm terrified of any hidden consequences). When we're in our idle state, IE waiting for data, handled is set to 0
-//and the interrupt shall begin reading upon gaining 4 bytes of data. Should the first byte in the stream be the start signal,
-//then it loads up the next 3 bytes as well into the receive buffer and returns presumably to the recv_struct function to be
-//used while setting handled to 1 to keep it from reading until the main task returns to idle. If not, then it returns to main
-//task, which in its idle state will flush the uart FIFO so that it may read again (the interrupt ONLY fires when the fifo has 4
-//bytes, so if we didn't flush it it would probably never return to its proper levels and the whole thing would cease being able
-//to receive data.
+
 void UARTMotherIntHandler()
 {
 	UARTIntClear(UART_MOTHER, UART_INT_RX);
@@ -356,7 +355,7 @@ void UARTMotherIntHandler()
 		if((uartRxBuf[0] = UARTCharGetNonBlocking(UART_MOTHER)) == STRUCT_START1)
 		{
 			uint8_t i;
-			for(i = 1; i < 4; i++)
+			for(i = 1; i < 3; i++)
 			{
 				if(!(HWREG(UART_MOTHER + UART_O_FR) & UART_FR_RXFE))//uartCharGetNonBlocking
 				{
@@ -369,7 +368,6 @@ void UARTMotherIntHandler()
 	}
 }
 
-//Sets up the interrupts, including: Uart_Mother's RX interrupt at 4 bytes (throws an interrupt at 4 bytes being put into buffer)
 void IntSetup()
 {
 	UARTIntEnable(UART_MOTHER, UART_INT_RX); //must enable before registering the function dynamically
