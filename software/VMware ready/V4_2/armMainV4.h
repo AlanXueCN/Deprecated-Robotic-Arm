@@ -1,7 +1,7 @@
 /*
  * armMainV4.h
  * date of birth: 1-22-15
- * date of update: 4-11-15
+ * date of update: 2-16-15
  *
  * What do you call all the enemies of the mars rover?
  * Dead, that's what. #theMartiansRemember
@@ -39,19 +39,25 @@
 #include <stdint.h>
 
 #define DELAY 5
-#define WRIST_VERT_ID           0x01
-#define WRIST_HORI_ID			0x02
+#define WRIST_DYNOA_ID          0x01
+#define WRIST_DYNOB_ID			0x02
+#define ELBOW_DYNOA_ID			0x03
+#define ELBOW_DYNOB_ID			0x04
+#define BASE_DYNO_ID			0x05
+
+#define WRIST_HORI_ID			0x01 //placeholders until the controls system is changed properly out
+#define WRIST_VERT_ID			0x02
 #define ELBOW_HORI_ID			0x03
 #define ELBOW_VERT_ID			0x04
 #define BASE_ID					0x05
 
-#define WRISTH_START_POS		0X7FF
-#define WRISTV_START_POS		0X7FF
-#define ELBOWV_START_POS		0X7FF
-#define ELBOWH_START_POS		0X7FF
-#define BASE_START_POS			0X7FF
+#define WRISTA_START_POS		0
+#define WRISTB_START_POS		0
+#define ELBOWA_START_POS		0
+#define ELBOWB_START_POS		0
+#define BASE_START_POS			0
 
-#define ACTUATOR_START_POS		1600
+#define ACTUATOR_START_POS		2400
 const short ACTUATOR_FORWARD_LIMIT = 1600;//limit of the values it can be set to on forward
 const short ACTUATOR_REVERSE_LIMIT = 2400;
 #define DYNAMIXEL_INC   		57 //56.81 units per 5 degrees, .088 unit per 1 degree

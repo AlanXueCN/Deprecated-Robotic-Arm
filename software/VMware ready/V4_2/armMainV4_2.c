@@ -9,6 +9,8 @@
 //function so it now is a lot more precise.
 //
 //Update 4-8-15 -- added in constants for ID's and the actuator limits
+//Update 4-15-15 -- set up ability for the arm and wrist to move up and down with dual dynamixel movement.
+//WARNING: CLOCKWISE/CC MOVEMENT IS NOT FUNCTIONAL! todo: get this working
 //RoveSoHard
 
 
@@ -26,14 +28,16 @@ void main(void)
 	uint16_t actuatorPos;
 
 	resetStruct(&receiveData, RECEIVE_STRUCT_SIZE);
+
 	initHardware();
 
+	actuatorPos = 2250;
     //initPositions(&wristVertPos, &wristClockwisePos, &elbowVertPos, &elbowClockwisePose, &basePos, &actuatorPos);
    // delay(DELAY);
 
 
-    //while(1)
-	//{
+    while(1)
+	{
 		 /* UARTCharPut(UART_DYNAMIXEL, 0xFF);
 		  UARTCharPut(UART_DYNAMIXEL, 0xFF);
 		  UARTCharPut(UART_DYNAMIXEL, GLOBAL_ID); //id
@@ -57,12 +61,15 @@ void main(void)
 		/*dynoMove(UART_DYNAMIXEL, 2, 0x00);
 		delay(50);
 		dynoMove(UART_DYNAMIXEL, 2, 4000);
-		delay(50);
-		dynoMove(UART_DYNAMIXEL, 1, 0x00);
-		delay(50);
-		dynoMove(UART_DYNAMIXEL, 1, 4000);
 		delay(50);*/
-	//}
+		dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 0x00);
+		delay(500);
+		dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 1000);
+		delay(500);
+    	//setMotor(UART_ACTUATOR, 2000);
+    	//actuatorForward(&actuatorPos);
+    	//delay(500);
+	}
 	while(1)
 	{
 
@@ -132,49 +139,53 @@ void delay(int time)
 
 void wristClockWise(int16_t * pos){
     *pos = *pos + DYNAMIXEL_INC;
-    dynoMove(UART1_BASE, WRIST_HORI_ID, *pos);
+    dynoMove(UART_DYNAMIXEL, WRIST_HORI_ID, *pos);
     delay(DELAY);
 }
 
 void wristCounterClockWise(int16_t * pos){
     *pos -= DYNAMIXEL_INC;
-    dynoMove(UART1_BASE, WRIST_HORI_ID, *pos);
+    dynoMove(UART_DYNAMIXEL, WRIST_HORI_ID, *pos);
 	delay(DELAY);
 }
 
 void wristUp(int16_t * pos){
 	*pos += DYNAMIXEL_INC;
-    dynoMove(UART1_BASE, WRIST_VERT_ID, *pos);
+    dynoMove(UART_DYNAMIXEL, WRIST_DYNOA_ID, *pos);
+    dynoMove(UART_DYNAMIXEL, WRIST_DYNOB_ID, (WRISTB_START_POS - *pos));
 	delay(DELAY);
 }
 
 void wristDown(int16_t * pos){
     *pos -= DYNAMIXEL_INC;
-    dynoMove(UART1_BASE, WRIST_VERT_ID, *pos);
+    dynoMove(UART_DYNAMIXEL, WRIST_DYNOA_ID, *pos);
+    dynoMove(UART_DYNAMIXEL, WRIST_DYNOB_ID, (WRISTB_START_POS - *pos));
 	delay(DELAY);
 }
 
 void elbowCounterClockWise(int16_t * pos){
 	*pos -= DYNAMIXEL_INC;
-    dynoMove(UART1_BASE, ELBOW_HORI_ID, *pos);
+    dynoMove(UART_DYNAMIXEL, ELBOW_HORI_ID, *pos);
 	delay(DELAY);
 }
 
 void elbowClockWise(int16_t * pos){
 	*pos += DYNAMIXEL_INC;
-    dynoMove(UART1_BASE, ELBOW_HORI_ID, *pos);
+    dynoMove(UART_DYNAMIXEL, ELBOW_HORI_ID, *pos);
 	delay(DELAY);
 }
 
 void elbowDown(int16_t * pos){
-	*pos -= DYNAMIXEL_INC;
-    dynoMove(UART1_BASE, ELBOW_VERT_ID, *pos);
+	*pos += DYNAMIXEL_INC;
+	dynoMove(UART_DYNAMIXEL, ELBOW_DYNOA_ID, *pos);
+	dynoMove(UART_DYNAMIXEL, ELBOW_DYNOB_ID, (ELBOWB_START_POS - *pos));
 	delay(DELAY);
 }
 
 void elbowUp(int16_t * pos){
-	*pos += DYNAMIXEL_INC;
-    dynoMove(UART1_BASE, ELBOW_VERT_ID, *pos);
+	*pos -= DYNAMIXEL_INC;
+	dynoMove(UART_DYNAMIXEL, ELBOW_DYNOA_ID, *pos);
+	dynoMove(UART_DYNAMIXEL, ELBOW_DYNOB_ID, (ELBOWB_START_POS - *pos));
 	delay(DELAY);
 }
 
@@ -205,7 +216,7 @@ void actuatorReverse(uint16_t *pos){
 
 	else if(*pos < ACTUATOR_REVERSE_LIMIT) //if it turns out that our increments aren't a nice division of the limit and so it's below the limit but the next increment will
 	{									  //still push it beyond it, just set it equal to the limit
-		*pos = ACTUATOR_FORWARD_LIMIT;
+		*pos = ACTUATOR_REVERSE_LIMIT;
 		setMotor(UART_ACTUATOR, *pos);
 		delay(DELAY);
 	}
@@ -213,13 +224,13 @@ void actuatorReverse(uint16_t *pos){
 }
 
 void baseClockWise(int16_t *pos){
-	*pos += DYNAMIXEL_INC;
+	*pos -= DYNAMIXEL_INC;
     dynoMove(UART_DYNAMIXEL, BASE_ID, *pos);
 	delay(DELAY);
 }
 
 void baseCounterClockWise(int16_t *pos){
-	*pos -= DYNAMIXEL_INC;
+	*pos += DYNAMIXEL_INC;
     dynoMove(UART_DYNAMIXEL, BASE_ID, *pos);
 	delay(DELAY);
 }
@@ -329,12 +340,13 @@ void setMotor(uint32_t uart, uint16_t pos)
 void initPositions(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVertPos, int16_t * elbowHoriPos, int16_t * basePos, uint16_t * actuatorPos)
 {
 	switchCom(TX_MODE);
-	*wristVertPos = WRISTV_START_POS;
-	*wristHoriPos = WRISTH_START_POS;
-	*elbowVertPos = ELBOWV_START_POS;
-	*elbowHoriPos = ELBOWH_START_POS;
+	*wristVertPos = WRISTA_START_POS;
+	*wristHoriPos = WRISTB_START_POS;
+	*elbowVertPos = ELBOWA_START_POS;
+	*elbowHoriPos = ELBOWB_START_POS;
 	*basePos = BASE_START_POS;
 	*actuatorPos = ACTUATOR_START_POS;
+	setMotor(UART_ACTUATOR, *actuatorPos);
 
 	dynoMove(UART_DYNAMIXEL, WRIST_VERT_ID, *wristVertPos);
 	dynoMove(UART_DYNAMIXEL, WRIST_HORI_ID, *wristHoriPos);

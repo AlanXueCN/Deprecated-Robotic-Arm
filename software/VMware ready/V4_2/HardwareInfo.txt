@@ -1,0 +1,36 @@
+Equipment: 
+
+Pololu jrk motor controller
+
+2 dynamixel MX-28
+
+3 dynamixel MX-64
+
+Generic 12V linear actuator
+
+
+
+
+Equipment setup and movement notes:
+
+Linear actuator reversed in code. Dynamixel's rotate counterclockwise for positive incrementation
+
+MX-28's control wrist movement
+
+MX-64's control the elbow and the arm base. 2 on elbow, 1 on base.
+
+the elbow dynamixels, ELBOW_DYNOA_ID, and ELBOW_DYNOB_ID, are situated as follows: standing behind the arm, A is the one on your left, B is the one on your right. The physical location
+of the wrist dynamixel's unfortunately vary, so if someone changes their ID's out or loses their labels then you'll need to test in software to determine which is which. Or just 
+look at it and see which one rotates in which direction to the arm -- to move the wrist up, wrist_dynoa moves in the CC direction, while wrist_dynob moves in the C direction
+
+Wrist up motion: wrist_dynoa moves in CC motion, dynob in C motion. Reversed for wrist down.
+Elbow up motion: Elbow_dynoa moves in C motion, dynob in CC motion. Reversed for elbow down.
+Base follows direction of movement of base dynamixel (move it CC for CC arm motion).
+
+
+
+Dynamixel datasheets and comm info:
+http://support.robotis.com/en/product/dxl_main.htm
+
+Motor controller user guide:
+https://www.pololu.com/docs/0J38
