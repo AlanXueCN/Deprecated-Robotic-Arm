@@ -83,7 +83,7 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 }
 
 
-void send_struct(uint32_t uart, void* my_struct, uint8_t instruction, uint8_t id)
+void send_struct(uint32_t uart, void* my_struct, uint8_t id)
 {
     uint8_t size;
     uint8_t start_byte1 = 0x06;
@@ -96,12 +96,18 @@ void send_struct(uint32_t uart, void* my_struct, uint8_t instruction, uint8_t id
         //    break;
         case ARM_STRUCT_ID:
         	size = sizeof(*((struct arm_control_struct *)my_struct));
+        	struct arm_control_struct * armPoint = my_struct;
+        	armPoint -> struct_id = ARM_STRUCT_ID;
         	break;
         case GRIPPER_STRUCT_ID:
         	size = sizeof(*((struct gripper_control_struct*)my_struct));
+        	struct gripper_control_struct * gripPoint = my_struct;
+        	gripPoint -> struct_id = GRIPPER_STRUCT_ID;
         	break;
         case DRILL_STRUCT_ID:
         	size = sizeof(*((struct drill_Controls*)my_struct));
+        	struct drill_Controls * drillPoint = my_struct;
+        	drillPoint -> struct_id = DRILL_STRUCT_ID;
         	break;
       //  case SCIENCE_STRUCT_ID:
         //	size =  sizeof(*((struct science_payload_control_struct*)my_struct));
@@ -121,10 +127,6 @@ void send_struct(uint32_t uart, void* my_struct, uint8_t instruction, uint8_t id
     UARTCharPut(uart, start_byte1);
 
     UARTCharPut(uart, start_byte2);
-
-    UARTCharPut(uart, id);
-
-    UARTCharPut(uart, instruction);
 
     UARTCharPut(uart, size);
 

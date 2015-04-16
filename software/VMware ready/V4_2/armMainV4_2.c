@@ -32,12 +32,14 @@ void main(void)
 	initHardware();
 
 	actuatorPos = 2250;
-    //initPositions(&wristVertPos, &wristClockwisePos, &elbowVertPos, &elbowClockwisePose, &basePos, &actuatorPos);
+    //initPositions(&wristVertPos, &wristHoriPos, &elbowVertPos, &elbowHoriPos, &basePos, &actuatorPos);
+	dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 0);
+	elbowVertPos = 0;
    // delay(DELAY);
 
 
-    while(1)
-	{
+    //while(1)
+	//{
 		 /* UARTCharPut(UART_DYNAMIXEL, 0xFF);
 		  UARTCharPut(UART_DYNAMIXEL, 0xFF);
 		  UARTCharPut(UART_DYNAMIXEL, GLOBAL_ID); //id
@@ -62,14 +64,15 @@ void main(void)
 		delay(50);
 		dynoMove(UART_DYNAMIXEL, 2, 4000);
 		delay(50);*/
-		dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 0x00);
-		delay(500);
-		dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 1000);
-		delay(500);
+    	//dynoSetID(UART_DYNAMIXEL, 1, 3);
+		//elbowDown(&wristVertPos);
+		//delay(500);
+		//dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 1000);
+		//delay(500);
     	//setMotor(UART_ACTUATOR, 2000);
     	//actuatorForward(&actuatorPos);
     	//delay(500);
-	}
+	//}
 	while(1)
 	{
 

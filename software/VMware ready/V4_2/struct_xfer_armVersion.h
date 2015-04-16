@@ -49,8 +49,17 @@
 #include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/debug.h"
 #include "/opt/ti/tirtos_tivac_10_01_38/products/TivaWare_C_Series-2.1.0.12573c/driverlib/sysctl.h"
 
+#define STRUCT_START1 0x06
+#define STRUCT_START2 0X85
+
+//struct ID's:
+#define GRIPPER_STRUCT_ID	 202
+#define DRILL_STRUCT_ID		 203
+#define ARM_STRUCT_ID 		 201
+
 struct arm_control_struct
 {
+	uint8_t struct_id;
 	uint8_t reset;
 	uint8_t wristUp;
 	uint8_t wristDown;
@@ -68,11 +77,13 @@ struct arm_control_struct
 
 struct gripper_control_struct
 {
+	uint8_t struct_id;
 	uint8_t grip_cmd;
 };
 
 struct drill_Controls
 {
+  uint8_t struct_id;
   //Drill Ctrl
   uint8_t goalSpeed;
   uint8_t direction;
@@ -105,34 +116,8 @@ typedef struct
 	uint8_t genParam15;
 	uint8_t genParam16;
 	uint8_t id;
-	uint8_t instruction;
 	uint8_t size;
 } receiveStruct;
-
-#define STRUCT_START1 0x06
-#define STRUCT_START2 0X85
-
-//struct ID's:
-#define GRIPPER_STRUCT_ID	 0
-#define DRILL_STRUCT_ID		 1
-#define ARM_STRUCT_ID 		 2
-#define SCIENCE_STRUCT_ID 	 3
-#define LIGHTING_STRUCT_ID 	 4
-#define CAMERA_STRUCT_ID 	 5
-#define	MOTOR_STRUCT_ID 	 6
-
-//instruction ID's:
-#define INST_IDENTITY_REQUEST	0
-#define INST_IDENTITY_REPLY		1
-#define INST_OPSMODE_REQUEST	2
-#define INST_OPSMODE_REPLY		3
-#define INST_TELEMETRY_REQUEST	4
-#define	INST_TELEMETRY_REPLY	5
-#define INST_COMMAND_REQUEST	6
-#define INST_COMMAND_REPLY		7
-#define INST_OTHER				8 //mostly for purposes of being a placeholding inst until the
-								  //instruction set is finalized. If rover communication currently
-								  //doesn't use instruction sets, then use this.
 
 
 /* Function to read a struct from the specified uart line, works in conjuction with armMain's interrupts. It waits until
@@ -166,7 +151,7 @@ extern bool recv_struct( uint32_t uart, receiveStruct* myStruct);
  * warnings: blocks program until space in the transmit FIFO opens, though for most this wont be
  * a problem.
  */
-extern void send_struct(uint32_t uart, void* my_struct, uint8_t instruction, uint8_t id);
+extern void send_struct(uint32_t uart, void* my_struct, uint8_t id);
 
 
 //specific to arm version

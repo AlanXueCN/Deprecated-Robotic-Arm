@@ -81,7 +81,7 @@ extern void initHardware();
 
 //Initializes the dynamixels. Moves them to their initial positions, initializes the position variables. Sets them to
 //multi turn mode for now. Arguments are the position variables for the dynamixel's, declared in main
-extern void initDynos(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVertPos, int16_t * elbowHoriPos, int16_t * basePos);
+extern void initPositions(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVertPos, int16_t * elbowHoriPos, int16_t * basePos, uint16_t * actuatorPos);
 
 //resets the arm control struct
 extern void resetStruct(void * myStruct, int size);
