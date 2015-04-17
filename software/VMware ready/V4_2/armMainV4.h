@@ -38,6 +38,7 @@
 
 #include <stdint.h>
 
+
 #define DELAY 5
 #define WRIST_DYNOA_ID          0x01
 #define WRIST_DYNOB_ID			0x02
@@ -57,10 +58,10 @@
 #define ELBOWB_START_POS		0
 #define BASE_START_POS			0
 
-#define ACTUATOR_START_POS		2400
+#define ACTUATOR_START_POS		ACTUATOR_REVERSE_LIMIT
 const short ACTUATOR_FORWARD_LIMIT = 1600;//limit of the values it can be set to on forward
-const short ACTUATOR_REVERSE_LIMIT = 2400;
-#define DYNAMIXEL_INC   		57 //56.81 units per 5 degrees, .088 unit per 1 degree
+const short ACTUATOR_REVERSE_LIMIT = 2350;
+#define DYNAMIXEL_INC   		10 //56.81 units per 5 degrees, .088 unit per 1 degree
 #define ACTUATOR_INC			53//800 -- its Difference in limits -- divided into 15 increments
 #define DELAY 5
 
@@ -106,8 +107,8 @@ extern void elbowDown(int16_t * pos);
 extern void elbowUp(int16_t * pos);
 extern void actuatorForward();
 extern void actuatorReverse();
-extern void baseClockWise(int16_t * pos);
-extern void baseCounterClockWise(int16_t * pos);
+extern void baseClockwise(int16_t * pos);
+extern void baseCounterClockwise(int16_t * pos);
 
 ////////////////motor control function//////
 void setMotor(uint32_t uart, uint16_t pos);

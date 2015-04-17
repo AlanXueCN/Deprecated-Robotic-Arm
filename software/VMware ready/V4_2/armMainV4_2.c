@@ -17,7 +17,7 @@
 #include "armMainV4.h"
 
 
-void main(void)
+void main()
 {
 
 	struct arm_control_struct armData;
@@ -31,11 +31,8 @@ void main(void)
 
 	initHardware();
 
-	actuatorPos = 2250;
-    //initPositions(&wristVertPos, &wristHoriPos, &elbowVertPos, &elbowHoriPos, &basePos, &actuatorPos);
-	dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 0);
-	elbowVertPos = 0;
-   // delay(DELAY);
+    initPositions(&wristVertPos, &wristHoriPos, &elbowVertPos, &elbowHoriPos, &basePos, &actuatorPos);
+    delay(DELAY);
 
 
     //while(1)
@@ -64,14 +61,16 @@ void main(void)
 		delay(50);
 		dynoMove(UART_DYNAMIXEL, 2, 4000);
 		delay(50);*/
-    	//dynoSetID(UART_DYNAMIXEL, 1, 3);
-		//elbowDown(&wristVertPos);
-		//delay(500);
+    	//actuatorReverse(&actuatorPos);
+    	//delay(500);
+    	//dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 0);
+		//baseCounterClockwise(&basePos);
+    	//dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 1000);
 		//dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 1000);
-		//delay(500);
-    	//setMotor(UART_ACTUATOR, 2000);
+		//dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 1000);
     	//actuatorForward(&actuatorPos);
     	//delay(500);
+    	//setMotor(UART_ACTUATOR, 318);
 	//}
 	while(1)
 	{
@@ -107,9 +106,9 @@ void main(void)
 				else if(armData.actuatorReverse)
 					actuatorReverse(&actuatorPos);
 				else if(armData.baseClockWise)
-					baseClockWise(&basePos);
+					baseClockwise(&basePos);
 				else if(armData.baseCounterClockWise)
-					baseCounterClockWise(&basePos);
+					baseCounterClockwise(&basePos);
 				delay(DELAY);
 				break;
 
@@ -155,6 +154,7 @@ void wristCounterClockWise(int16_t * pos){
 void wristUp(int16_t * pos){
 	*pos += DYNAMIXEL_INC;
     dynoMove(UART_DYNAMIXEL, WRIST_DYNOA_ID, *pos);
+    delay(DELAY);
     dynoMove(UART_DYNAMIXEL, WRIST_DYNOB_ID, (WRISTB_START_POS - *pos));
 	delay(DELAY);
 }
@@ -162,6 +162,7 @@ void wristUp(int16_t * pos){
 void wristDown(int16_t * pos){
     *pos -= DYNAMIXEL_INC;
     dynoMove(UART_DYNAMIXEL, WRIST_DYNOA_ID, *pos);
+    delay(DELAY);
     dynoMove(UART_DYNAMIXEL, WRIST_DYNOB_ID, (WRISTB_START_POS - *pos));
 	delay(DELAY);
 }
@@ -181,6 +182,7 @@ void elbowClockWise(int16_t * pos){
 void elbowDown(int16_t * pos){
 	*pos += DYNAMIXEL_INC;
 	dynoMove(UART_DYNAMIXEL, ELBOW_DYNOA_ID, *pos);
+	delay(DELAY);
 	dynoMove(UART_DYNAMIXEL, ELBOW_DYNOB_ID, (ELBOWB_START_POS - *pos));
 	delay(DELAY);
 }
@@ -188,6 +190,7 @@ void elbowDown(int16_t * pos){
 void elbowUp(int16_t * pos){
 	*pos -= DYNAMIXEL_INC;
 	dynoMove(UART_DYNAMIXEL, ELBOW_DYNOA_ID, *pos);
+	delay(DELAY);
 	dynoMove(UART_DYNAMIXEL, ELBOW_DYNOB_ID, (ELBOWB_START_POS - *pos));
 	delay(DELAY);
 }
@@ -226,13 +229,13 @@ void actuatorReverse(uint16_t *pos){
 						//else, we're at the limit, no operation
 }
 
-void baseClockWise(int16_t *pos){
+void baseClockwise(int16_t *pos){
 	*pos -= DYNAMIXEL_INC;
     dynoMove(UART_DYNAMIXEL, BASE_ID, *pos);
 	delay(DELAY);
 }
 
-void baseCounterClockWise(int16_t *pos){
+void baseCounterClockwise(int16_t *pos){
 	*pos += DYNAMIXEL_INC;
     dynoMove(UART_DYNAMIXEL, BASE_ID, *pos);
 	delay(DELAY);
@@ -240,7 +243,7 @@ void baseCounterClockWise(int16_t *pos){
 
 
 //Initializes the hardware. Sets the clock to 16 mhz, the 4 UART modules up -- motherboard and actuator with 115200 buad rates,
-//dynamixel line with 57600, endetrucker with 9600 -- with 1 stop bit and no pariety, and initialize all of the pins that we use
+//dynamixel line with 57600, endetrucker with 9600 -- with 1 stop bit and no parity, and initialize all of the pins that we use
 //and setup most to transmit to output, ones used for UART aside.
 void initHardware()
 {
@@ -279,7 +282,7 @@ void initHardware()
 	GPIOPinTypeUART(GPIO_PORTC_BASE, GPIO_PIN_4 | GPIO_PIN_5);
 
 	//
-	// Configure the UART for 115,200, 8-N-1 operation.
+	// Configure the UART for 57600, 8-N-1 operation.
 	// This function uses SysCtlClockGet() to get the system clock
 	// frequency.  This could be also be a variable or hard coded value
 	// instead of a function call.
@@ -350,13 +353,17 @@ void initPositions(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elb
 	*basePos = BASE_START_POS;
 	*actuatorPos = ACTUATOR_START_POS;
 	setMotor(UART_ACTUATOR, *actuatorPos);
-
+	delay(DELAY);
 	dynoMove(UART_DYNAMIXEL, WRIST_VERT_ID, *wristVertPos);
+	delay(DELAY);
 	dynoMove(UART_DYNAMIXEL, WRIST_HORI_ID, *wristHoriPos);
+	delay(DELAY);
 	dynoMove(UART_DYNAMIXEL, ELBOW_HORI_ID, *elbowHoriPos);
+	delay(DELAY);
 	dynoMove(UART_DYNAMIXEL, ELBOW_VERT_ID, *elbowVertPos);
+	delay(DELAY);
 	dynoMove(UART_DYNAMIXEL, BASE_ID, *basePos);
-
+	delay(DELAY);
 	dynoMultiModeSet(UART_DYNAMIXEL, GLOBAL_ID); //sets them all to multi turn mode for now
 }
 
