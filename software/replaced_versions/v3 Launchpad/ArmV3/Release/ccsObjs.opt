@@ -1,1 +1,0 @@
-"./lm4f210h5qr_startup_ccs.obj" "./main.obj" "./struct_xfer.obj" "../lm4f120h5qr.cmd" -l"libc.a" 
