@@ -83,12 +83,9 @@ void main()
 			case ARM_STRUCT_ID:
 				memcpy(&armData, &receiveData, receiveData.size);
 
-				if(armData.reset){
+				if(armData.reset)
 					resetStruct(&armData, ARM_STRUCT_SIZE);
-					while(!recv_struct(UART_MOTHER, &receiveData));
-					//stop movement here
-					thisfunctionintentionallyleftforerror();
-				}
+				
 				else if(armData.wristUp){
 					wristUp(&wristVertPos);
 					while(!recv_struct(UART_MOTHER, &receiveData));
