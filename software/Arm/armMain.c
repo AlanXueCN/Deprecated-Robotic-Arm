@@ -83,32 +83,84 @@ void main()
 			case ARM_STRUCT_ID:
 				memcpy(&armData, &receiveData, receiveData.size);
 
-				if(armData.reset)
+				if(armData.reset){
 					resetStruct(&armData, ARM_STRUCT_SIZE);
-				else if(armData.wristUp)
+					while(!recv_struct(UART_MOTHER, &receiveData));
+					//stop movement here
+					thisfunctionintentionallyleftforerror();
+				}
+				else if(armData.wristUp){
 					wristUp(&wristVertPos);
-				else if(armData.wristDown)
+					while(!recv_struct(UART_MOTHER, &receiveData));
+					//stop movement here
+					thisfunctionintentionallyleftforerror();
+				}
+				else if(armData.wristDown){
 					wristDown(&wristVertPos);
-				else if(armData.wristClockWise)
+					while(!recv_struct(UART_MOTHER, &receiveData));
+					//stop movement here
+					thisfunctionintentionallyleftforerror();
+				}
+				else if(armData.wristClockWise){
 					wristClockWise(&wristHoriPos);
-				else if(armData.wristCounterClockWise)
+					while(!recv_struct(UART_MOTHER, &receiveData));
+					//stop movement here
+					thisfunctionintentionallyleftforerror();
+				}
+				else if(armData.wristCounterClockWise){
 					wristCounterClockWise(&wristHoriPos);
-				else if(armData.elbowUp)
+					while(!recv_struct(UART_MOTHER, &receiveData));
+					//stop movement here
+					thisfunctionintentionallyleftforerror();
+				}
+				else if(armData.elbowUp){
 					elbowUp(&elbowVertPos);
-				else if(armData.elbowDown)
+					while(!recv_struct(UART_MOTHER, &receiveData));
+					//stop movement here
+					thisfunctionintentionallyleftforerror();
+				}
+				else if(armData.elbowDown){
 					elbowDown(&elbowVertPos);
-				else if(armData.elbowClockWise)
+					while(!recv_struct(UART_MOTHER, &receiveData));
+					//stop movement here
+					thisfunctionintentionallyleftforerror();
+				}
+				else if(armData.elbowClockWise){}
 					elbowClockWise(&elbowHoriPos);
-				else if(armData.elbowCounterClockWise)
+					while(!recv_struct(UART_MOTHER, &receiveData));
+					//stop movement here
+					thisfunctionintentionallyleftforerror();
+				}
+				else if(armData.elbowCounterClockWise){}
 					elbowCounterClockWise(&elbowHoriPos);
-				else if(armData.actuatorForward)
+					while(!recv_struct(UART_MOTHER, &receiveData));
+					//stop movement here
+					thisfunctionintentionallyleftforerror();
+				}
+				else if(armData.actuatorForward){
 					actuatorForward(&actuatorPos);
-				else if(armData.actuatorReverse)
+					while(!recv_struct(UART_MOTHER, &receiveData));
+					//stop movement here
+					thisfunctionintentionallyleftforerror();
+				}
+				else if(armData.actuatorReverse){
 					actuatorReverse(&actuatorPos);
-				else if(armData.baseClockWise)
+					while(!recv_struct(UART_MOTHER, &receiveData));
+					//stop movement here
+					thisfunctionintentionallyleftforerror();
+				}
+				else if(armData.baseClockWise){
 					baseClockwise(&basePos);
-				else if(armData.baseCounterClockWise)
+					while(!recv_struct(UART_MOTHER, &receiveData));
+					//stop movement here
+					thisfunctionintentionallyleftforerror();
+				}
+				else if(armData.baseCounterClockWise){
 					baseCounterClockwise(&basePos);
+					while(!recv_struct(UART_MOTHER, &receiveData));
+					//stop movement here
+					thisfunctionintentionallyleftforerror();
+				}
 				delay(DELAY);
 				break;
 
@@ -138,6 +190,15 @@ void delay(int time)
 {
 	SysCtlDelay(time * (SysCtlClockGet()/1000));//1 time is 3/100 seconds
 }
+
+/************************************************************************************
+Hey, look at me
+Yes, you
+Try using dynoTurn here instead of dynoMove
+It will probably work a lot better
+!!!!!!!Do not forget to stop the movement after the while loop conditions are met
+Or you're gonna have a bad time!!!!!!!!!!!!!!!!!!!!!!!!!
+************************************************************************************/
 
 void wristClockWise(int16_t * pos){
     *pos = *pos + DYNAMIXEL_INC;

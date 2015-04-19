@@ -44,6 +44,8 @@ extern void dynoMultiModeSet(uint32_t uart, uint8_t id);
 extern void dynoSpeedSet(uint32_t uart, uint8_t id, uint16_t speed);
 extern void dynoMove(uint32_t uart, uint8_t id, int16_t pos);
 extern int16_t dynoReadPosition(uint32_t uart, uint8_t id);
+/*v Servomotor rotates to the right or left and the speed indicated only if in continuous rotation mode. v*/
+extern void dynoTurn(uint32_t uart, uint8_t id, bool side, uint16_t Speed);
 extern void switchCom(bool i);
 extern void delay(int time);
 extern void clearRxBuffer(uint32_t uart);
