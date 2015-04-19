@@ -198,6 +198,8 @@ Try using dynoTurn here instead of dynoMove
 It will probably work a lot better
 !!!!!!!Do not forget to stop the movement after the while loop conditions are met
 Or you're gonna have a bad time!!!!!!!!!!!!!!!!!!!!!!!!!
+These probably need to be re-prototyped to take speed input so you can use the same
+function for moving and stopping.
 ************************************************************************************/
 
 void wristClockWise(int16_t * pos){
