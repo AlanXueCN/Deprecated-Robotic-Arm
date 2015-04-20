@@ -176,8 +176,8 @@ int16_t dynoReadPosition(uint32_t uart, uint8_t id) {
 }
 
 void dynoTurn(uint32_t uart, uint8_t id, bool side, uint16_t Speed){
-	uint8 p[9];
-	if(SIDE == 0){
+	uint8_t p[9], i;
+	if(side == 0){
 		uint8_t Speed_H = Speed >> 8;
 		uint8_t Speed_L = Speed;
 		p[0] = START_BYTE;
@@ -188,7 +188,7 @@ void dynoTurn(uint32_t uart, uint8_t id, bool side, uint16_t Speed){
 		p[5] = MOVING_SPEED_L;
 		p[6] = Speed_H;
 		p[7] = Speed_L;
-		p[8] = (~(id + 0x05 + WRITE_DATA + MOVING_SPEED_L + speedLow + speedHigh))&0xFF;	
+		p[8] = (~(id + 0x05 + WRITE_DATA + MOVING_SPEED_L + Speed_L + Speed_H))&0xFF;
 	}
 	else{
 		uint8_t Speed_H = (Speed >> 8)+4;
@@ -201,7 +201,7 @@ void dynoTurn(uint32_t uart, uint8_t id, bool side, uint16_t Speed){
 		p[5] = MOVING_SPEED_L;
 		p[6] = Speed_L;
 		p[7] = Speed_H;
-		p[8] = (~(id + 0x05 + WRITE_DATA + MOVING_SPEED_L + speedLow + speedHigh))&0xFF;	
+		p[8] = (~(id + 0x05 + WRITE_DATA + MOVING_SPEED_L + Speed_L + Speed_H))&0xFF;
 	}
 
 	for (i = 0; i < 9; i++) {

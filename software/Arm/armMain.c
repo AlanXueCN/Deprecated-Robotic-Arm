@@ -1,7 +1,7 @@
 //ArmMainV4-2.c
 //created by: parker, alec, drue
 //created on 2-11-15
-//updated: 4-8-15 by drue
+//updated: 4-20-15 alec (blaze it)
 //
 //Update content: Added in content for endefector communication.
 //Changed struct_xfer so that we can now receive 3 structs instead of 1. Modified all of main so that it works with the
@@ -24,14 +24,14 @@ void main()
 	struct gripper_control_struct gripperData;
 	struct drill_Controls drillData;
 	receiveStruct receiveData;
-	int16_t wristVertPos, wristHoriPos, elbowVertPos, elbowHoriPos, basePos;
+	//int16_t wristVertPos, wristHoriPos, elbowVertPos, elbowHoriPos, basePos;
 	uint16_t actuatorPos;
 
 	resetStruct(&receiveData, RECEIVE_STRUCT_SIZE);
 
 	initHardware();
 
-    initPositions(&wristVertPos, &wristHoriPos, &elbowVertPos, &elbowHoriPos, &basePos, &actuatorPos);
+    //initPositions(&wristVertPos, &wristHoriPos, &elbowVertPos, &elbowHoriPos, &basePos, &actuatorPos);
     delay(DELAY);
 
 
@@ -50,24 +50,24 @@ void main()
         //dynoWheelModeSet(UART_DYNAMIXEL, GLOBAL_ID);
     	//dynoSpeedSet(UART_DYNAMIXEL, GLOBAL_ID, 0x1000);
     	//send_struct(UART_ENDE, &gripperData, INST_OTHER, GRIPPER_STRUCT_ID);
-		//dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 0x00);
+		//dynoTurn(UART_DYNAMIXEL, GLOBAL_ID, 0x00);
 		//for(i = 0; i < 500000; i++);
 		//delay(25);
-		//dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 0x00);
+		//dynoTurn(UART_DYNAMIXEL, GLOBAL_ID, 0x00);
 		//for(i = 0; i < 500000; i++);
 		//delay(25);
 		//delay(150);
-		/*dynoMove(UART_DYNAMIXEL, 2, 0x00);
+		/*dynoTurn(UART_DYNAMIXEL, 2, 0x00);
 		delay(50);
-		dynoMove(UART_DYNAMIXEL, 2, 4000);
+		dynoTurn(UART_DYNAMIXEL, 2, 4000);
 		delay(50);*/
     	//actuatorReverse(&actuatorPos);
     	//delay(500);
-    	//dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 0);
+    	//dynoTurn(UART_DYNAMIXEL, GLOBAL_ID, 0);
 		//baseCounterClockwise(&basePos);
-    	//dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 1000);
-		//dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 1000);
-		//dynoMove(UART_DYNAMIXEL, GLOBAL_ID, 1000);
+    	//dynoTurn(UART_DYNAMIXEL, GLOBAL_ID, 1000);
+		//dynoTurn(UART_DYNAMIXEL, GLOBAL_ID, 1000);
+		//dynoTurn(UART_DYNAMIXEL, GLOBAL_ID, 1000);
     	//actuatorForward(&actuatorPos);
     	//delay(500);
     	//setMotor(UART_ACTUATOR, 318);
@@ -87,76 +87,74 @@ void main()
 					resetStruct(&armData, ARM_STRUCT_SIZE);
 				
 				else if(armData.wristUp){
-					wristUp(&wristVertPos);
+					wristUp(256);
 					while(!recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
-					thisfunctionintentionallyleftforerror();
+					wristUp(0);
 				}
 				else if(armData.wristDown){
-					wristDown(&wristVertPos);
+					wristDown(256);
 					while(!recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
-					thisfunctionintentionallyleftforerror();
+					wristDown(0);
 				}
 				else if(armData.wristClockWise){
-					wristClockWise(&wristHoriPos);
+					wristClockWise(256);
 					while(!recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
-					thisfunctionintentionallyleftforerror();
+					wristClockWise(0);
 				}
 				else if(armData.wristCounterClockWise){
-					wristCounterClockWise(&wristHoriPos);
+					wristCounterClockWise(256);
 					while(!recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
-					thisfunctionintentionallyleftforerror();
+					wristCounterClockWise(0);
 				}
 				else if(armData.elbowUp){
-					elbowUp(&elbowVertPos);
+					elbowUp(256);
 					while(!recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
-					thisfunctionintentionallyleftforerror();
+					elbowUp(0);
 				}
 				else if(armData.elbowDown){
-					elbowDown(&elbowVertPos);
+					elbowDown(256);
 					while(!recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
-					thisfunctionintentionallyleftforerror();
+					elbowDown(0);
 				}
-				else if(armData.elbowClockWise){}
-					elbowClockWise(&elbowHoriPos);
+				else if(armData.elbowClockWise){
+					elbowClockWise(256);
 					while(!recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
-					thisfunctionintentionallyleftforerror();
+					elbowClockWise(0);
 				}
-				else if(armData.elbowCounterClockWise){}
-					elbowCounterClockWise(&elbowHoriPos);
+				else if(armData.elbowCounterClockWise){
+					elbowCounterClockWise(256);
 					while(!recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
-					thisfunctionintentionallyleftforerror();
+					elbowCounterClockWise(0);
 				}
 				else if(armData.actuatorForward){
 					actuatorForward(&actuatorPos);
 					while(!recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
-					thisfunctionintentionallyleftforerror();
 				}
 				else if(armData.actuatorReverse){
 					actuatorReverse(&actuatorPos);
 					while(!recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
-					thisfunctionintentionallyleftforerror();
 				}
 				else if(armData.baseClockWise){
-					baseClockwise(&basePos);
+					baseClockwise(256);
 					while(!recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
-					thisfunctionintentionallyleftforerror();
+					baseClockwise(0);
 				}
 				else if(armData.baseCounterClockWise){
-					baseCounterClockwise(&basePos);
+					baseCounterClockwise(256);
 					while(!recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
-					thisfunctionintentionallyleftforerror();
+					baseCounterClockwise(0);
 				}
 				delay(DELAY);
 				break;
@@ -191,7 +189,7 @@ void delay(int time)
 /************************************************************************************
 Hey, look at me
 Yes, you
-Try using dynoTurn here instead of dynoMove
+Try using dynoTurn here instead of dynoTurn
 It will probably work a lot better
 !!!!!!!Do not forget to stop the movement after the while loop conditions are met
 Or you're gonna have a bad time!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -199,59 +197,51 @@ These probably need to be re-prototyped to take speed input so you can use the s
 function for moving and stopping.
 ************************************************************************************/
 
-void wristClockWise(int16_t * pos){
-    *pos = *pos + DYNAMIXEL_INC;
-    dynoMove(UART_DYNAMIXEL, WRIST_HORI_ID, *pos);
+void wristClockWise(int16_t speed){
+    dynoTurn(UART_DYNAMIXEL, WRIST_HORI_ID, 1, speed);
     delay(DELAY);
 }
 
-void wristCounterClockWise(int16_t * pos){
-    *pos -= DYNAMIXEL_INC;
-    dynoMove(UART_DYNAMIXEL, WRIST_HORI_ID, *pos);
+void wristCounterClockWise(int16_t speed){
+	dynoTurn(UART_DYNAMIXEL, WRIST_HORI_ID, 0, speed);
 	delay(DELAY);
 }
 
-void wristUp(int16_t * pos){
-	*pos += DYNAMIXEL_INC;
-    dynoMove(UART_DYNAMIXEL, WRIST_DYNOA_ID, *pos);
+void wristUp(int16_t speed){
+    dynoTurn(UART_DYNAMIXEL, WRIST_DYNOA_ID, 0, speed);
     delay(DELAY);
-    dynoMove(UART_DYNAMIXEL, WRIST_DYNOB_ID, (WRISTB_START_POS - *pos));
+    dynoTurn(UART_DYNAMIXEL, WRIST_DYNOB_ID, 1, speed);
 	delay(DELAY);
 }
 
-void wristDown(int16_t * pos){
-    *pos -= DYNAMIXEL_INC;
-    dynoMove(UART_DYNAMIXEL, WRIST_DYNOA_ID, *pos);
+void wristDown(int16_t speed){
+    dynoTurn(UART_DYNAMIXEL, WRIST_DYNOA_ID, 1, speed);
     delay(DELAY);
-    dynoMove(UART_DYNAMIXEL, WRIST_DYNOB_ID, (WRISTB_START_POS - *pos));
+    dynoTurn(UART_DYNAMIXEL, WRIST_DYNOB_ID, 0, speed);
 	delay(DELAY);
 }
 
-void elbowCounterClockWise(int16_t * pos){
-	*pos -= DYNAMIXEL_INC;
-    dynoMove(UART_DYNAMIXEL, ELBOW_HORI_ID, *pos);
+void elbowCounterClockWise(int16_t speed){
+    dynoTurn(UART_DYNAMIXEL, ELBOW_HORI_ID, 1, speed);
 	delay(DELAY);
 }
 
-void elbowClockWise(int16_t * pos){
-	*pos += DYNAMIXEL_INC;
-    dynoMove(UART_DYNAMIXEL, ELBOW_HORI_ID, *pos);
+void elbowClockWise(int16_t speed){
+    dynoTurn(UART_DYNAMIXEL, ELBOW_HORI_ID, 0, speed);
 	delay(DELAY);
 }
 
-void elbowDown(int16_t * pos){
-	*pos += DYNAMIXEL_INC;
-	dynoMove(UART_DYNAMIXEL, ELBOW_DYNOA_ID, *pos);
+void elbowDown(int16_t speed){
+	dynoTurn(UART_DYNAMIXEL, ELBOW_DYNOA_ID, 1, speed);
 	delay(DELAY);
-	dynoMove(UART_DYNAMIXEL, ELBOW_DYNOB_ID, (ELBOWB_START_POS - *pos));
+	dynoTurn(UART_DYNAMIXEL, ELBOW_DYNOB_ID, 0, speed);
 	delay(DELAY);
 }
 
-void elbowUp(int16_t * pos){
-	*pos -= DYNAMIXEL_INC;
-	dynoMove(UART_DYNAMIXEL, ELBOW_DYNOA_ID, *pos);
+void elbowUp(int16_t speed){
+	dynoTurn(UART_DYNAMIXEL, ELBOW_DYNOA_ID, 0, speed);
 	delay(DELAY);
-	dynoMove(UART_DYNAMIXEL, ELBOW_DYNOB_ID, (ELBOWB_START_POS - *pos));
+	dynoTurn(UART_DYNAMIXEL, ELBOW_DYNOB_ID, 1, speed);
 	delay(DELAY);
 }
 
@@ -289,15 +279,13 @@ void actuatorReverse(uint16_t *pos){
 						//else, we're at the limit, no operation
 }
 
-void baseClockwise(int16_t *pos){
-	*pos -= DYNAMIXEL_INC;
-    dynoMove(UART_DYNAMIXEL, BASE_ID, *pos);
+void baseClockwise(int16_t speed){
+    dynoTurn(UART_DYNAMIXEL, BASE_ID, 0, speed);
 	delay(DELAY);
 }
 
-void baseCounterClockwise(int16_t *pos){
-	*pos += DYNAMIXEL_INC;
-    dynoMove(UART_DYNAMIXEL, BASE_ID, *pos);
+void baseCounterClockwise(int16_t speed){
+    dynoTurn(UART_DYNAMIXEL, BASE_ID, 1, speed);
 	delay(DELAY);
 }
 
@@ -403,7 +391,7 @@ void setMotor(uint32_t uart, uint16_t pos)
 	UARTCharPut(uart, highByte);
 }
 
-void initPositions(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVertPos, int16_t * elbowHoriPos, int16_t * basePos, uint16_t * actuatorPos)
+/*void initPositions(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVertPos, int16_t * elbowHoriPos, int16_t * basePos, uint16_t * actuatorPos)
 {
 	switchCom(TX_MODE);
 	*wristVertPos = WRISTA_START_POS;
@@ -414,19 +402,19 @@ void initPositions(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elb
 	*actuatorPos = ACTUATOR_START_POS;
 	setMotor(UART_ACTUATOR, *actuatorPos);
 	delay(DELAY);
-	dynoMove(UART_DYNAMIXEL, WRIST_VERT_ID, *wristVertPos);
+	dynoTurn(UART_DYNAMIXEL, WRIST_VERT_ID, *wristVertPos);
 	delay(DELAY);
-	dynoMove(UART_DYNAMIXEL, WRIST_HORI_ID, *wristHoriPos);
+	dynoTurn(UART_DYNAMIXEL, WRIST_HORI_ID, *wristHoriPos);
 	delay(DELAY);
-	dynoMove(UART_DYNAMIXEL, ELBOW_HORI_ID, *elbowHoriPos);
+	dynoTurn(UART_DYNAMIXEL, ELBOW_HORI_ID, *elbowHoriPos);
 	delay(DELAY);
-	dynoMove(UART_DYNAMIXEL, ELBOW_VERT_ID, *elbowVertPos);
+	dynoTurn(UART_DYNAMIXEL, ELBOW_VERT_ID, *elbowVertPos);
 	delay(DELAY);
-	dynoMove(UART_DYNAMIXEL, BASE_ID, *basePos);
+	dynoTurn(UART_DYNAMIXEL, BASE_ID, *basePos);
 	delay(DELAY);
 	dynoMultiModeSet(UART_DYNAMIXEL, GLOBAL_ID); //sets them all to multi turn mode for now
 }
-
+*/
 
 
 void UARTMotherIntHandler()
