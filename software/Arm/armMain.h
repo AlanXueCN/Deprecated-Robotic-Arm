@@ -84,7 +84,7 @@ extern void initHardware();
 //multi turn mode for now. Arguments are the position variables for the dynamixel's, declared in main
 //extern void initPositions(int16_t * wristVertPos, int16_t * wristHoriPos, int16_t * elbowVertPos, int16_t * elbowHoriPos, int16_t * basePos, uint16_t * actuatorPos);
 
-//resets the arm control struct
+//resets any struct passed in and its struct size.
 extern void resetStruct(void * myStruct, int size);
 
 //delays about 1 millisecond * time
@@ -93,16 +93,18 @@ extern void delay(int time);
 //clears the RX buffer. uint32_t uart is the base address of the uart peripheral to be flushed
 extern void flushUart(uint32_t uart);
 
+extern void armStructCompare(struct arm_control_struct *arm, receiveStruct *received);
+
 
 ///////////////main movement call functions///////////////////////////////////////////////////////////////
 //move wrist clockwise, and so on for the rest...self explanatory names are wonderful aren't they
 
-extern void wristClockWise(int16_t speed);
-extern void wristCounterClockWise(int16_t speed);
+extern void wristClockwise(int16_t speed);
+extern void wristCounterClockwise(int16_t speed);
 extern void wristUp(int16_t speed);
 extern void wristDown(int16_t speed);
-extern void elbowCounterClockWise(int16_t speed);
-extern void elbowClockWise(int16_t speed);
+extern void elbowCounterClockwise(int16_t speed);
+extern void elbowClockwise(int16_t speed);
 extern void elbowDown(int16_t speed);
 extern void elbowUp(int16_t speed);
 extern void actuatorForward();

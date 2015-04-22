@@ -175,8 +175,15 @@ int16_t dynoReadPosition(uint32_t uart, uint8_t id) {
 
 }
 
+/*0~2047( 0X7FF) can be used, the unit is about 0.1%.
+ If a value in the range of 0~1023 is used, it is stopped by setting to 0 while rotating to CCW direction.
+ If a value in the range of 1024~2047 is used, it is stopped by setting to 1024 while rotating to CW direction.
+ That is, the 10th bit becomes the direction bit to control the direction.
+ In Wheel Mode, only the output control is possible, not speed.*/
 void dynoTurn(uint32_t uart, uint8_t id, bool side, uint16_t Speed){
 	uint8_t p[9], i;
+	if(Speed > 1023)
+		Speed = 1023;
 	if(side == 0){
 		uint8_t Speed_H = Speed >> 8;
 		uint8_t Speed_L = Speed;

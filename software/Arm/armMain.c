@@ -81,6 +81,7 @@ void main()
 			switch(receiveData.id)
 			{
 			case ARM_STRUCT_ID:
+				armStructCompare(&armData, &receiveData);
 				memcpy(&armData, &receiveData, receiveData.size);
 
 				if(armData.reset)
@@ -88,145 +89,39 @@ void main()
 				
 				else if(armData.wristUp){
 					wristUp(256);
-					do
-					{
-						delay(50);
-						flushUart(UART_MOTHER);
-						handled = 0;
-					}
-					while(recv_struct(UART_MOTHER, &receiveData));
-					//stop movement here
-					wristUp(0);
 				}
 				else if(armData.wristDown){
 					wristDown(256);
-					do
-					{
-						delay(50);
-						flushUart(UART_MOTHER);
-						handled = 0;
-					}
-					while(recv_struct(UART_MOTHER, &receiveData));
-					//stop movement here
-					wristDown(0);
 				}
-				else if(armData.wristClockWise){
-					wristClockWise(256);
-					do
-					{
-						delay(50);
-						flushUart(UART_MOTHER);
-						handled = 0;
-					}
-					while(recv_struct(UART_MOTHER, &receiveData));
-					//stop movement here
-					wristClockWise(0);
+				else if(armData.wristClockwise){
+					wristClockwise(256);
 				}
-				else if(armData.wristCounterClockWise){
-					wristCounterClockWise(256);
-					do
-					{
-						delay(50);
-						flushUart(UART_MOTHER);
-						handled = 0;
-					}
-					while(recv_struct(UART_MOTHER, &receiveData));
-					//stop movement here
-					wristCounterClockWise(0);
+				else if(armData.wristCounterClockwise){
+					wristCounterClockwise(256);
 				}
 				else if(armData.elbowUp){
 					elbowUp(256);
-					do
-					{
-						delay(50);
-						flushUart(UART_MOTHER);
-						handled = 0;
-					}
-					while(recv_struct(UART_MOTHER, &receiveData));
-					//stop movement here
-					elbowUp(0);
 				}
 				else if(armData.elbowDown){
 					elbowDown(256);
-					do
-					{
-						delay(50);
-						flushUart(UART_MOTHER);
-						handled = 0;
-					}
-					while(recv_struct(UART_MOTHER, &receiveData));
-					//stop movement here
-					elbowDown(0);
 				}
-				else if(armData.elbowClockWise){
-					elbowClockWise(256);
-					do
-					{
-						delay(50);
-						flushUart(UART_MOTHER);
-						handled = 0;
-					}
-					while(recv_struct(UART_MOTHER, &receiveData));
-					//stop movement here
-					elbowClockWise(0);
+				else if(armData.elbowClockwise){
+					elbowClockwise(256);
 				}
-				else if(armData.elbowCounterClockWise){
-					elbowCounterClockWise(256);
-					do
-					{
-						delay(50);
-						flushUart(UART_MOTHER);
-						handled = 0;
-					}
-					while(recv_struct(UART_MOTHER, &receiveData));
-					//stop movement here
-					elbowCounterClockWise(0);
+				else if(armData.elbowCounterClockwise){
+					elbowCounterClockwise(256);
 				}
 				else if(armData.actuatorForward){
 					actuatorForward(&actuatorPos);
-					do
-					{
-						delay(50);
-						flushUart(UART_MOTHER);
-						handled = 0;
-					}
-					while(recv_struct(UART_MOTHER, &receiveData));
-					//stop movement here
 				}
 				else if(armData.actuatorReverse){
 					actuatorReverse(&actuatorPos);
-					do
-					{
-						delay(50);
-						flushUart(UART_MOTHER);
-						handled = 0;
-					}
-					while(recv_struct(UART_MOTHER, &receiveData));
-					//stop movement here
 				}
-				else if(armData.baseClockWise){
+				else if(armData.baseClockwise){
 					baseClockwise(256);
-					do
-					{
-						delay(50);
-						flushUart(UART_MOTHER);
-						handled = 0;
-					}
-					while(recv_struct(UART_MOTHER, &receiveData));
-					//stop movement here
-					baseClockwise(0);
 				}
-				else if(armData.baseCounterClockWise){
+				else if(armData.baseCounterClockwise){
 					baseCounterClockwise(256);
-					do
-					{
-						delay(50);
-						flushUart(UART_MOTHER);
-						handled = 0;
-					}
-					while(recv_struct(UART_MOTHER, &receiveData));
-					//stop movement here
-					baseCounterClockwise(0);
 				}
 				delay(DELAY);
 				break;
@@ -269,12 +164,12 @@ These probably need to be re-prototyped to take speed input so you can use the s
 function for moving and stopping.
 ************************************************************************************/
 
-void wristClockWise(int16_t speed){
+void wristClockwise(int16_t speed){
     dynoTurn(UART_DYNAMIXEL, WRIST_HORI_ID, 1, speed);
     delay(DELAY);
 }
 
-void wristCounterClockWise(int16_t speed){
+void wristCounterClockwise(int16_t speed){
 	dynoTurn(UART_DYNAMIXEL, WRIST_HORI_ID, 0, speed);
 	delay(DELAY);
 }
@@ -293,12 +188,12 @@ void wristDown(int16_t speed){
 	delay(DELAY);
 }
 
-void elbowCounterClockWise(int16_t speed){
+void elbowCounterClockwise(int16_t speed){
     dynoTurn(UART_DYNAMIXEL, ELBOW_HORI_ID, 1, speed);
 	delay(DELAY);
 }
 
-void elbowClockWise(int16_t speed){
+void elbowClockwise(int16_t speed){
     dynoTurn(UART_DYNAMIXEL, ELBOW_HORI_ID, 0, speed);
 	delay(DELAY);
 }
@@ -359,6 +254,36 @@ void baseClockwise(int16_t speed){
 void baseCounterClockwise(int16_t speed){
     dynoTurn(UART_DYNAMIXEL, BASE_ID, 1, speed);
 	delay(DELAY);
+}
+
+//compares the values with arm -- which contains data still from last transmission -- and receive
+// -- which is the new commands. If it is found that the previous struct arm has a variable set that
+//received does not have set, it means that function should no longer move in the new command and
+//calls a function for that movement to stop.
+void armStructCompare(struct arm_control_struct *arm, receiveStruct *received)
+{
+	//if((received -> genParam1 == 0) && (arm -> reset == 1))
+		//do fudge all
+	if((received -> genParam2 == 0) && (arm -> wristUp == 1))
+		wristUp(0);
+	else if((received -> genParam3 == 0) && (arm -> wristDown == 1))
+		wristDown(0);
+	else if((received -> genParam4 == 0) && (arm -> wristClockwise == 1))
+		wristClockwise(0);
+	else if((received -> genParam5 == 0) && (arm -> wristCounterClockwise == 1))
+		wristCounterClockwise(0);
+	else if((received -> genParam6 == 0) && (arm -> elbowUp == 1))
+		elbowUp(0);
+	else if((received -> genParam7 == 0) && (arm -> elbowDown == 1))
+		elbowDown(0);
+	else if((received -> genParam8 == 0) && (arm -> elbowClockwise == 1))
+		elbowClockwise(0);
+	else if((received -> genParam9 == 0) && (arm -> elbowCounterClockwise == 1))
+		wristCounterClockwise(0);
+	else if((received -> genParam12 == 0) && (arm -> baseClockwise == 1))
+		baseClockwise(0);
+	else if((received -> genParam13 == 0) && (arm -> baseCounterClockwise == 1))
+		wristCounterClockwise(0);
 }
 
 

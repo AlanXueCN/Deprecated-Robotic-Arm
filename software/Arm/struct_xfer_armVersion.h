@@ -63,16 +63,16 @@ struct arm_control_struct
 	uint8_t reset;
 	uint8_t wristUp;
 	uint8_t wristDown;
-	uint8_t wristClockWise;
-	uint8_t wristCounterClockWise;
+	uint8_t wristClockwise;
+	uint8_t wristCounterClockwise;
 	uint8_t elbowUp;
 	uint8_t elbowDown;
-	uint8_t elbowClockWise;
-	uint8_t elbowCounterClockWise;
+	uint8_t elbowClockwise;
+	uint8_t elbowCounterClockwise;
 	uint8_t actuatorForward;
 	uint8_t actuatorReverse;
-	uint8_t baseClockWise;
-	uint8_t baseCounterClockWise;
+	uint8_t baseClockwise;
+	uint8_t baseCounterClockwise;
 };
 
 struct gripper_control_struct
@@ -99,6 +99,7 @@ struct drill_Controls
 
 typedef struct
 {
+	uint8_t id;
 	uint8_t genParam1;
 	uint8_t genParam2;
 	uint8_t genParam3;
@@ -115,7 +116,6 @@ typedef struct
 	uint8_t genParam14;
 	uint8_t genParam15;
 	uint8_t genParam16;
-	uint8_t id;
 	uint8_t size;
 } receiveStruct;
 
