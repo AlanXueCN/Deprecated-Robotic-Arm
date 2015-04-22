@@ -77,7 +77,6 @@ void main()
 
 		if(recv_struct(UART_MOTHER, &receiveData))
 		{
-			flushUart(UART_MOTHER);
 			delay(1);
 			switch(receiveData.id)
 			{
