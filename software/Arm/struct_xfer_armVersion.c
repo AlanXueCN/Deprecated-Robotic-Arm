@@ -51,9 +51,8 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 		}
 		rx_buffer[i] = temp;
 	}
-	
-	rx_buffer[size] = UARTCharGetNonBlocking(uart)//get the checksum
 
+	rx_buffer[size] = UARTCharGetNonBlocking(uart); //get the checksum
 
 
 	// calculate checksum
@@ -79,7 +78,7 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 	myStruct -> id = id;
 	myStruct -> size = size;
 	delay(2);
-
+	handled = 0;
 	// Success
 	return(true);
 }

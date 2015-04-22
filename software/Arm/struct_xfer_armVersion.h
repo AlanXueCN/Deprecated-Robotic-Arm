@@ -119,6 +119,7 @@ typedef struct
 	uint8_t size;
 } receiveStruct;
 
+extern uint8_t handled;
 
 /* Function to read a struct from the specified uart line, works in conjuction with armMain's interrupts. It waits until
  * the uart RX interrupt fills the uartRxBuff variable with the proper data, then after verifying the first few bytes are

@@ -77,6 +77,7 @@ void main()
 
 		if(recv_struct(UART_MOTHER, &receiveData))
 		{
+			flushUart(UART_MOTHER);
 			delay(1);
 			switch(receiveData.id)
 			{
@@ -88,71 +89,143 @@ void main()
 				
 				else if(armData.wristUp){
 					wristUp(256);
-					while(!recv_struct(UART_MOTHER, &receiveData));
+					do
+					{
+						delay(50);
+						flushUart(UART_MOTHER);
+						handled = 0;
+					}
+					while(recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
 					wristUp(0);
 				}
 				else if(armData.wristDown){
 					wristDown(256);
-					while(!recv_struct(UART_MOTHER, &receiveData));
+					do
+					{
+						delay(50);
+						flushUart(UART_MOTHER);
+						handled = 0;
+					}
+					while(recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
 					wristDown(0);
 				}
 				else if(armData.wristClockWise){
 					wristClockWise(256);
-					while(!recv_struct(UART_MOTHER, &receiveData));
+					do
+					{
+						delay(50);
+						flushUart(UART_MOTHER);
+						handled = 0;
+					}
+					while(recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
 					wristClockWise(0);
 				}
 				else if(armData.wristCounterClockWise){
 					wristCounterClockWise(256);
-					while(!recv_struct(UART_MOTHER, &receiveData));
+					do
+					{
+						delay(50);
+						flushUart(UART_MOTHER);
+						handled = 0;
+					}
+					while(recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
 					wristCounterClockWise(0);
 				}
 				else if(armData.elbowUp){
 					elbowUp(256);
-					while(!recv_struct(UART_MOTHER, &receiveData));
+					do
+					{
+						delay(50);
+						flushUart(UART_MOTHER);
+						handled = 0;
+					}
+					while(recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
 					elbowUp(0);
 				}
 				else if(armData.elbowDown){
 					elbowDown(256);
-					while(!recv_struct(UART_MOTHER, &receiveData));
+					do
+					{
+						delay(50);
+						flushUart(UART_MOTHER);
+						handled = 0;
+					}
+					while(recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
 					elbowDown(0);
 				}
 				else if(armData.elbowClockWise){
 					elbowClockWise(256);
-					while(!recv_struct(UART_MOTHER, &receiveData));
+					do
+					{
+						delay(50);
+						flushUart(UART_MOTHER);
+						handled = 0;
+					}
+					while(recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
 					elbowClockWise(0);
 				}
 				else if(armData.elbowCounterClockWise){
 					elbowCounterClockWise(256);
-					while(!recv_struct(UART_MOTHER, &receiveData));
+					do
+					{
+						delay(50);
+						flushUart(UART_MOTHER);
+						handled = 0;
+					}
+					while(recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
 					elbowCounterClockWise(0);
 				}
 				else if(armData.actuatorForward){
 					actuatorForward(&actuatorPos);
-					while(!recv_struct(UART_MOTHER, &receiveData));
+					do
+					{
+						delay(50);
+						flushUart(UART_MOTHER);
+						handled = 0;
+					}
+					while(recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
 				}
 				else if(armData.actuatorReverse){
 					actuatorReverse(&actuatorPos);
-					while(!recv_struct(UART_MOTHER, &receiveData));
+					do
+					{
+						delay(50);
+						flushUart(UART_MOTHER);
+						handled = 0;
+					}
+					while(recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
 				}
 				else if(armData.baseClockWise){
 					baseClockwise(256);
-					while(!recv_struct(UART_MOTHER, &receiveData));
+					do
+					{
+						delay(50);
+						flushUart(UART_MOTHER);
+						handled = 0;
+					}
+					while(recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
 					baseClockwise(0);
 				}
 				else if(armData.baseCounterClockWise){
 					baseCounterClockwise(256);
-					while(!recv_struct(UART_MOTHER, &receiveData));
+					do
+					{
+						delay(50);
+						flushUart(UART_MOTHER);
+						handled = 0;
+					}
+					while(recv_struct(UART_MOTHER, &receiveData));
 					//stop movement here
 					baseCounterClockwise(0);
 				}
@@ -422,7 +495,8 @@ void UARTMotherIntHandler()
 	UARTIntClear(UART_MOTHER, UART_INT_RX);
 	if(!(handled))
 	{
-		if((uartRxBuf[0] = UARTCharGetNonBlocking(UART_MOTHER)) == STRUCT_START1)
+		uartRxBuf[0] = UARTCharGetNonBlocking(UART_MOTHER);
+		if(uartRxBuf[0] == STRUCT_START1)
 		{
 			uint8_t i;
 			for(i = 1; i < 3; i++)
