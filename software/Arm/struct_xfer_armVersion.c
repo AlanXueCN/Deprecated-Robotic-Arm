@@ -51,6 +51,8 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 		}
 		rx_buffer[i] = temp;
 	}
+	
+	rx_buffer[size] = UARTCharGetNonBlocking(uart)//get the checksum
 
 
 
@@ -63,11 +65,11 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 	}
 
 	// Does checksum match?
-	if ( calc_CS != rx_buffer[size] )
+	/*if ( calc_CS != rx_buffer[size])
 	{
 		// Checksum does not match
 		return false;
-	}
+	}*/
 
 	//retrieve the id, which should be the first parameter in the incoming struct always (if it's not, complain about it)
 	id = rx_buffer[0];
