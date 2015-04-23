@@ -362,7 +362,7 @@ void initPositions(uint16_t * actuatorPos)
 	*elbowVertPos = ELBOWA_START_POS;
 	*elbowHoriPos = ELBOWB_START_POS;
 	*basePos = BASE_START_POS;*/
-	actuatorPos = ACTUATOR_START_POS;
+	*actuatorPos = ACTUATOR_START_POS;
 	setMotor(UART_ACTUATOR, *actuatorPos);
 	delay(DELAY);
 	/*dynoTurn(UART_DYNAMIXEL, WRIST_VERT_ID, *wristVertPos);

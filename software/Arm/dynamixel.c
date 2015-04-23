@@ -18,11 +18,11 @@ void dynoMove(uint32_t uart, uint8_t id, int16_t pos) {
 	p[1] = START_BYTE;
 	p[2] = id;
 	p[3] = MOVE_LENGTH;
-	p[4] = WRITE_DATA;
+	p[4] = INST_WRITE_DATA;
 	p[5] = GOAL_POS_L;
 	p[6] = posLow;
 	p[7] = posHigh;
-	p[8] = ~(id + MOVE_LENGTH + WRITE_DATA + GOAL_POS_L + posLow + posHigh);
+	p[8] = ~(id + MOVE_LENGTH + INST_WRITE_DATA + GOAL_POS_L + posLow + posHigh);
 	switchCom(TX_MODE);
 
 	for (i = 0; i < 9; i++) {
@@ -58,11 +58,11 @@ void dynoSpeedSet(uint32_t uart, uint8_t id, uint16_t speed) {
 	p[1] = START_BYTE;
 	p[2] = id;
 	p[3] = 0x05;
-	p[4] = WRITE_DATA;
+	p[4] = INST_WRITE_DATA;
 	p[5] = MOVING_SPEED_L;
 	p[6] = speedLow;
 	p[7] = speedHigh;
-	p[8] = ~(id + 0x05 + WRITE_DATA + MOVING_SPEED_L + speedLow + speedHigh);
+	p[8] = ~(id + 0x05 + INST_WRITE_DATA + MOVING_SPEED_L + speedLow + speedHigh);
 
 	for (i = 0; i < 9; i++) {
 		UARTCharPut(uart, p[i]); //send the data out
@@ -78,13 +78,13 @@ void dynoMultiModeSet(uint32_t uart, uint8_t id) {
 	p[1] = START_BYTE;
 	p[2] = id;
 	p[3] = 0x07;
-	p[4] = WRITE_DATA;
+	p[4] = INST_WRITE_DATA;
 	p[5] = CW_ANGLE_LIMIT_L;
 	p[6] = 0xFF;
 	p[7] = 0x0F;
 	p[8] = 0xFF;
 	p[9] = 0x0F;
-	p[10] = ~(id + 0x07 + WRITE_DATA + 0xFF + 0x0F + 0xFF + 0x0F
+	p[10] = ~(id + 0x07 + INST_WRITE_DATA + 0xFF + 0x0F + 0xFF + 0x0F
 			+ CW_ANGLE_LIMIT_L);
 
 	for (i = 0; i < 11; i++) {
@@ -101,13 +101,13 @@ void dynoWheelModeSet(uint32_t uart, uint8_t id) {
 	p[1] = START_BYTE;
 	p[2] = id;
 	p[3] = 0x07;
-	p[4] = WRITE_DATA;
+	p[4] = INST_WRITE_DATA;
 	p[5] = CW_ANGLE_LIMIT_L;
 	p[6] = 0x00;
 	p[7] = 0x00;
 	p[8] = 0x00;
 	p[9] = 0x00;
-	p[10] = ~(id + 0x07 + WRITE_DATA + 0x00 + 0x00 + 0x00 + 0x00
+	p[10] = ~(id + 0x07 + INST_WRITE_DATA + 0x00 + 0x00 + 0x00 + 0x00
 			+ CW_ANGLE_LIMIT_L);
 
 	for (i = 0; i < 11; i++) {
@@ -134,10 +134,10 @@ int16_t dynoReadPosition(uint32_t uart, uint8_t id) {
 	p[1] = START_BYTE;
 	p[2] = id;
 	p[3] = READ_LEN;
-	p[4] = READ_DATA;
-	p[5] = CURRENT_POSITION_L;
+	p[4] = INST_READ_DATA;
+	p[5] = PRESENT_POSITION_L;
 	p[6] = 0x02; //read 2 bytes
-	p[7] = ~(id + READ_LEN + READ_DATA + CURRENT_POSITION_L + 0x02);
+	p[7] = ~(id + READ_LEN + INST_READ_DATA + PRESENT_POSITION_L + 0x02);
 
 	for (i = 0; i < 8; i++) {
 		UARTCharPut(uart, p[i]); //send the data out
@@ -191,11 +191,11 @@ void dynoTurn(uint32_t uart, uint8_t id, bool side, uint16_t Speed){
 		p[1] = START_BYTE;
 		p[2] = id;
 		p[3] = 0x05; //0x05 == SPEED_LENGTH
-		p[4] = WRITE_DATA;
+		p[4] = INST_WRITE_DATA;
 		p[5] = MOVING_SPEED_L;
 		p[6] = Speed_L;
 		p[7] = Speed_H;
-		p[8] = (~(id + 0x05 + WRITE_DATA + MOVING_SPEED_L + Speed_L + Speed_H))&0xFF;
+		p[8] = (~(id + 0x05 + INST_WRITE_DATA + MOVING_SPEED_L + Speed_L + Speed_H));
 	}
 	else{
 		uint8_t Speed_H = (Speed >> 8)+4;
@@ -204,11 +204,11 @@ void dynoTurn(uint32_t uart, uint8_t id, bool side, uint16_t Speed){
 		p[1] = START_BYTE;
 		p[2] = id;
 		p[3] = 0x05;
-		p[4] = WRITE_DATA;
+		p[4] = INST_WRITE_DATA;
 		p[5] = MOVING_SPEED_L;
 		p[6] = Speed_L;
 		p[7] = Speed_H;
-		p[8] = (~(id + 0x05 + WRITE_DATA + MOVING_SPEED_L + Speed_L + Speed_H))&0xFF;
+		p[8] = (~(id + 0x05 + INST_WRITE_DATA + MOVING_SPEED_L + Speed_L + Speed_H));
 	}
 
 	for (i = 0; i < 9; i++) {
@@ -218,5 +218,76 @@ void dynoTurn(uint32_t uart, uint8_t id, bool side, uint16_t Speed){
 
 void clearRxBuffer(uint32_t uart) {
 	while (UARTCharGetNonBlocking(uart)) {
+	}
+}
+
+void dynoReset(uint32_t uart, uint8_t id)
+{
+	uint8_t p[6];
+	int i;
+	p[0] = START_BYTE;
+	p[1] = START_BYTE;
+	p[2] = id;
+	p[3] = RESET_LENGTH;
+	p[4] = INST_RESET;
+	p[5] = (~(id + RESET_LENGTH + INST_RESET));
+	switchCom(TX_MODE);
+	for (i = 0; i < 6; i++) {
+		UARTCharPut(uart, p[i]); //send the data out
+	}
+}
+
+void dynoPing(uint32_t uart, uint8_t id)
+{
+	uint8_t p[6];
+	int i;
+	p[0] = START_BYTE;
+	p[1] = START_BYTE;
+	p[2] = id;
+	p[3] = PING_LENGTH;
+	p[4] = INST_PING;
+	p[5] = (~(id + PING_LENGTH + INST_PING));
+	switchCom(TX_MODE);
+	for (i = 0; i < 6; i++) {
+		UARTCharPut(uart, p[i]); //send the data out
+	}
+}
+
+void dynoSetID(uint32_t uart, uint8_t idStart, uint8_t idEnd)
+{
+	uint8_t p[8];
+	int i;
+	p[0] = START_BYTE;
+	p[1] = START_BYTE;
+	p[2] = idStart;
+	p[3] = ID_LENGTH;
+	p[4] = INST_WRITE_DATA;
+	p[5] = ID_REGISTER;
+	p[6] = idEnd;
+	p[7] = (~(idStart + ID_LENGTH + INST_WRITE_DATA + ID_REGISTER + idEnd));
+	switchCom(TX_MODE);
+	for (i = 0; i < 8; i++) {
+		UARTCharPut(uart, p[i]); //send the data out
+	}
+}
+
+void dynoJointModeSet(uint32_t uart, uint8_t id)
+{
+	uint8_t p[11];
+	int i;
+	p[0] = START_BYTE;
+	p[1] = START_BYTE;
+	p[2] = id;
+	p[3] = 0x07;
+	p[4] = INST_WRITE_DATA;
+	p[5] = CW_ANGLE_LIMIT_L;
+	p[6] = 0x00;
+	p[7] = 0x00;
+	p[8] = 0xFF;
+	p[9] = 0x0F;
+	p[10] = (~(id + 0x07 + INST_WRITE_DATA + 0x00 + 0x00 + 0xFF + 0x0F + CW_ANGLE_LIMIT_L));
+	switchCom(TX_MODE);
+	for (i = 0; i < 11; i++) {
+		UARTCharPut(uart, p[i]); //send the data out
 	}
 }

@@ -59,8 +59,8 @@
 #define BASE_START_POS			0
 
 #define ACTUATOR_START_POS		ACTUATOR_REVERSE_LIMIT
-const short ACTUATOR_FORWARD_LIMIT = 1600;//limit of the values it can be set to on forward
-const short ACTUATOR_REVERSE_LIMIT = 2350;
+const uint16_t ACTUATOR_FORWARD_LIMIT = 1600;//limit of the values it can be set to on forward
+const uint16_t ACTUATOR_REVERSE_LIMIT = 2350;
 #define DYNAMIXEL_INC   		10 //56.81 units per 5 degrees, .088 unit per 1 degree
 #define ACTUATOR_INC			53//800 -- its Difference in limits -- divided into 15 increments
 #define DELAY 5
