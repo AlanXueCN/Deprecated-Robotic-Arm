@@ -33,6 +33,9 @@
 #define DYNO_CLOCKWISE 1536;  //input number to set the dynamixel moving clockwise at half of max speed while in wheel mode
 #endif
 
+#define TURN_CLOCKWISE 1
+#define TURN_COUNTERCLOCKWISE 0
+
 int8_t error_byte; //byte used as error object
 
 #ifndef DYNO_COUNTERCLOCKWISE

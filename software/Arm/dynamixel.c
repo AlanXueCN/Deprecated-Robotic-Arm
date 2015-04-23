@@ -193,8 +193,8 @@ void dynoTurn(uint32_t uart, uint8_t id, bool side, uint16_t Speed){
 		p[3] = 0x05; //0x05 == SPEED_LENGTH
 		p[4] = WRITE_DATA;
 		p[5] = MOVING_SPEED_L;
-		p[6] = Speed_H;
-		p[7] = Speed_L;
+		p[6] = Speed_L;
+		p[7] = Speed_H;
 		p[8] = (~(id + 0x05 + WRITE_DATA + MOVING_SPEED_L + Speed_L + Speed_H))&0xFF;
 	}
 	else{
