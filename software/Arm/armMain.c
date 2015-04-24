@@ -27,7 +27,7 @@ void main()
 	uint16_t actuatorPos;
 
 	resetStruct(&receiveData, RECEIVE_STRUCT_SIZE);
-
+	initHardware();
     initPositions(&actuatorPos);
     delay(DELAY);
 	while(1)

@@ -1,17 +1,17 @@
 ******************************************************************************
                   TI ARM Linker Unix v5.1.6                    
 ******************************************************************************
->> Linked Wed Apr 22 21:33:55 2015
+>> Linked Fri Apr 24 18:55:10 2015
 
 OUTPUT FILE NAME:   <Arm.out>
-ENTRY POINT SYMBOL: "_c_int00"  address: 000038dd
+ENTRY POINT SYMBOL: "_c_int00"  address: 000038e1
 
 
 MEMORY CONFIGURATION
 
          name            origin    length      used     unused   attr    fill
 ----------------------  --------  ---------  --------  --------  ----  --------
-  FLASH                 00000000   00040000  00003fcc  0003c034  R  X
+  FLASH                 00000000   00040000  00003fd0  0003c030  R  X
   SRAM                  20000000   00008000  00000489  00007b77  RW X
 
 
@@ -21,8 +21,8 @@ run origin  load origin   length   init length attrs members
 ----------  ----------- ---------- ----------- ----- -------
 00000000    00000000    00003fd0   00003fd0    r-x
   00000000    00000000    0000026c   0000026c    r-- .intvecs
-  0000026c    0000026c    000037a4   000037a4    r-x .text
-  00003a10    00003a10    00000574   00000574    r-- .const
+  0000026c    0000026c    000037a8   000037a8    r-x .text
+  00003a14    00003a14    00000574   00000574    r-- .const
   00003f88    00003f88    00000048   00000048    r-- .cinit
 20000000    20000000    00000489   00000000    rw-
   20000000    20000000    0000026c   00000000    rw- .vtable
@@ -42,36 +42,36 @@ section   page    origin      length       input sections
 .init_array 
 *          0    00000000    00000000     UNINITIALIZED
 
-.text      0    0000026c    000037a4     
-                  0000026c    00002c4c     armMain.obj (.text)
-                  00002eb8    000006a0     dynamixel.obj (.text)
-                  00003558    000001f4     struct_xfer_armVersion.obj (.text)
-                  0000374c    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.obj (.text)
-                  000037e8    00000094                                   : auto_init.obj (.text)
-                  0000387c    0000005e                                   : copy_decompress_rle.obj (.text)
-                  000038da    00000002     --HOLE-- [fill = 0]
-                  000038dc    00000048                                   : boot.obj (.text)
-                  00003924    00000044                                   : cpy_tbl.obj (.text)
-                  00003968    00000044                                   : exit.obj (.text)
-                  000039ac    00000018                                   : args_main.obj (.text)
-                  000039c4    00000014                                   : _lock.obj (.text)
-                  000039d8    00000012                                   : copy_zero_init.obj (.text:decompress:ZI)
-                  000039ea    0000000e                                   : copy_decompress_none.obj (.text:decompress:none)
-                  000039f8    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
-                  00003a04    00000006     armMain.obj (.text:SysCtlDelay)
-                  00003a0a    00000006     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_rle.obj (.text:decompress:rle24)
+.text      0    0000026c    000037a8     
+                  0000026c    00002c50     armMain.obj (.text)
+                  00002ebc    000006a0     dynamixel.obj (.text)
+                  0000355c    000001f4     struct_xfer_armVersion.obj (.text)
+                  00003750    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.obj (.text)
+                  000037ec    00000094                                   : auto_init.obj (.text)
+                  00003880    0000005e                                   : copy_decompress_rle.obj (.text)
+                  000038de    00000002     --HOLE-- [fill = 0]
+                  000038e0    00000048                                   : boot.obj (.text)
+                  00003928    00000044                                   : cpy_tbl.obj (.text)
+                  0000396c    00000044                                   : exit.obj (.text)
+                  000039b0    00000018                                   : args_main.obj (.text)
+                  000039c8    00000014                                   : _lock.obj (.text)
+                  000039dc    00000012                                   : copy_zero_init.obj (.text:decompress:ZI)
+                  000039ee    0000000e                                   : copy_decompress_none.obj (.text:decompress:none)
+                  000039fc    0000000c     tm4c123gh6pm_startup_ccs.obj (.text)
+                  00003a08    00000006     armMain.obj (.text:SysCtlDelay)
+                  00003a0e    00000006     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_decompress_rle.obj (.text:decompress:rle24)
 
-.const     0    00003a10    00000574     
-                  00003a10    00000120     armMain.obj (.const:g_pppui32XTALtoVCO)
-                  00003b30    000000c0     armMain.obj (.const:g_ppui32GPIOIntMapBlizzard)
-                  00003bf0    000000c0     armMain.obj (.const:g_ppui32GPIOIntMapSnowflake)
-                  00003cb0    0000009c     armMain.obj (.const:g_pui32Regs)
-                  00003d4c    00000090     armMain.obj (.const:g_pui32GPIOBaseAddrs)
-                  00003ddc    0000008c     armMain.obj (.const)
-                  00003e68    0000006c     armMain.obj (.const:g_pui32Xtals)
-                  00003ed4    00000040     armMain.obj (.const:g_ppui32UARTIntMap)
-                  00003f14    00000040     armMain.obj (.const:g_ppui32UARTIntMapSnowflake)
-                  00003f54    00000030     armMain.obj (.const:g_sXTALtoMEMTIM)
+.const     0    00003a14    00000574     
+                  00003a14    00000120     armMain.obj (.const:g_pppui32XTALtoVCO)
+                  00003b34    000000c0     armMain.obj (.const:g_ppui32GPIOIntMapBlizzard)
+                  00003bf4    000000c0     armMain.obj (.const:g_ppui32GPIOIntMapSnowflake)
+                  00003cb4    0000009c     armMain.obj (.const:g_pui32Regs)
+                  00003d50    00000090     armMain.obj (.const:g_pui32GPIOBaseAddrs)
+                  00003de0    0000008c     armMain.obj (.const)
+                  00003e6c    0000006c     armMain.obj (.const:g_pui32Xtals)
+                  00003ed8    00000040     armMain.obj (.const:g_ppui32UARTIntMap)
+                  00003f18    00000040     armMain.obj (.const:g_ppui32UARTIntMapSnowflake)
+                  00003f58    00000030     armMain.obj (.const:g_sXTALtoMEMTIM)
 
 .cinit     0    00003f88    00000048     
                   00003f88    00000013     (.cinit..data.load) [load image, compression = rle]
@@ -118,9 +118,9 @@ GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name
 
 address    name
 --------   ----
-00003e64   ACTUATOR_FORWARD_LIMIT
-00003e66   ACTUATOR_REVERSE_LIMIT
-00003969   C$$EXIT
+00003e68   ACTUATOR_FORWARD_LIMIT
+00003e6a   ACTUATOR_REVERSE_LIMIT
+0000396d   C$$EXIT
 000011d9   CPUbasepriGet
 000011cb   CPUbasepriSet
 000011a1   CPUcpsid
@@ -189,10 +189,10 @@ address    name
 0000117b   IntPriorityMaskSet
 00000ed7   IntPrioritySet
 00000e1f   IntRegister
-00002dff   IntSetup
+00002e03   IntSetup
 0000118f   IntTrigger
 00000e71   IntUnregister
-000039f9   ResetISR
+000039fd   ResetISR
 UNDEFED    SHT$$INIT_ARRAY$$Base
 UNDEFED    SHT$$INIT_ARRAY$$Limit
 000026cf   SysCtlAltClkConfig
@@ -204,7 +204,7 @@ UNDEFED    SHT$$INIT_ARRAY$$Limit
 00002555   SysCtlDeepSleepClockConfigSet
 00002539   SysCtlDeepSleepClockSet
 00001d7d   SysCtlDeepSleepPowerSet
-00003a05   SysCtlDelay
+00003a09   SysCtlDelay
 00001927   SysCtlFlashSectorSizeGet
 000018fb   SysCtlFlashSizeGet
 0000262b   SysCtlGPIOAHBDisable
@@ -287,7 +287,7 @@ UNDEFED    SHT$$INIT_ARRAY$$Limit
 00001509   UARTModemControlGet
 000014a3   UARTModemControlSet
 0000151b   UARTModemStatusGet
-00002da1   UARTMotherIntHandler
+00002da5   UARTMotherIntHandler
 0000126f   UARTParityModeGet
 00001253   UARTParityModeSet
 00001761   UARTRxErrorClear
@@ -305,71 +305,71 @@ UNDEFED    SHT$$INIT_ARRAY$$Limit
 00003f9c   __TI_Handler_Table_Base
 00003fa8   __TI_Handler_Table_Limit
 00000001   __TI_args_main
-000037e9   __TI_auto_init
+000037ed   __TI_auto_init
 20000474   __TI_cleanup_ptr
-000039eb   __TI_decompress_none
-00003a0b   __TI_decompress_rle24
+000039ef   __TI_decompress_none
+00003a0f   __TI_decompress_rle24
 20000478   __TI_dtors_ptr
 00000000   __TI_static_base__
-000039d9   __TI_zero_init
-0000374d   __aeabi_memcpy
-0000374d   __aeabi_memcpy4
-0000374d   __aeabi_memcpy8
+000039dd   __TI_zero_init
+00003751   __aeabi_memcpy
+00003751   __aeabi_memcpy4
+00003751   __aeabi_memcpy8
 ffffffff   __binit__
 ffffffff   __c_args__
 2000026c   __stack
-000039ad   _args_main
-000038dd   _c_int00
+000039b1   _args_main
+000038e1   _c_int00
 2000046c   _lock
-000039d3   _nop
-000039cb   _register_lock
-000039c5   _register_unlock
+000039d7   _nop
+000039cf   _register_lock
+000039c9   _register_unlock
 20000470   _unlock
-0000396d   abort
-00002a3d   actuatorForward
-00002a8f   actuatorReverse
-00002b21   armStructCompare
-00002ae1   baseClockwise
-00002afd   baseCounterClockwise
+00003971   abort
+00002a41   actuatorForward
+00002a93   actuatorReverse
+00002b25   armStructCompare
+00002ae5   baseClockwise
+00002b01   baseCounterClockwise
 ffffffff   binit
-00003377   clearRxBuffer
-00003925   copy_in
-00002881   delay
-000034d1   dynoJointModeSet
-00002eb9   dynoMove
-00002feb   dynoMultiModeSet
-000033f1   dynoPing
-00003109   dynoReadPosition
-00003387   dynoReset
-00003455   dynoSetID
-00002f55   dynoSpeedSet
-00003251   dynoTurn
-00003069   dynoWheelModeSet
-0000299d   elbowClockwise
-00002969   elbowCounterClockwise
-000029d5   elbowDown
-00002a09   elbowUp
+0000337b   clearRxBuffer
+00003929   copy_in
+00002885   delay
+000034d5   dynoJointModeSet
+00002ebd   dynoMove
+00002fef   dynoMultiModeSet
+000033f5   dynoPing
+0000310d   dynoReadPosition
+0000338b   dynoReset
+00003459   dynoSetID
+00002f59   dynoSpeedSet
+00003255   dynoTurn
+0000306d   dynoWheelModeSet
+000029a5   elbowClockwise
+0000296d   elbowCounterClockwise
+000029d9   elbowDown
+00002a0d   elbowUp
 20000488   error_byte
-00003975   exit
-00002e27   flushUart
+00003979   exit
+00002e2b   flushUart
 20000000   g_pfnRAMVectors
 00000000   g_pfnVectors
 20000480   handled
-00002c03   initHardware
-00002d75   initPositions
+00002c07   initHardware
+00002d79   initPositions
 00002715   main
 20000484   main_func_sp
-0000374d   memcpy
-00003559   recv_struct
-00002cf1   resetStruct
-00003665   send_struct
-00002d2d   setMotor
-000030e5   switchCom
+00003751   memcpy
+0000355d   recv_struct
+00002cf5   resetStruct
+00003669   send_struct
+00002d31   setMotor
+000030e9   switchCom
 2000047c   uartRxBuf
-0000289b   wristClockwise
-000028cb   wristCounterClockwise
-00002935   wristDown
-00002901   wristUp
+0000289f   wristClockwise
+000028cf   wristCounterClockwise
+00002939   wristDown
+00002905   wristUp
 
 
 GLOBAL SYMBOLS: SORTED BY Symbol Address 
@@ -551,62 +551,62 @@ address    name
 000026b3   SysCtlClockOutConfig
 000026cf   SysCtlAltClkConfig
 00002715   main
-00002881   delay
-0000289b   wristClockwise
-000028cb   wristCounterClockwise
-00002901   wristUp
-00002935   wristDown
-00002969   elbowCounterClockwise
-0000299d   elbowClockwise
-000029d5   elbowDown
-00002a09   elbowUp
-00002a3d   actuatorForward
-00002a8f   actuatorReverse
-00002ae1   baseClockwise
-00002afd   baseCounterClockwise
-00002b21   armStructCompare
-00002c03   initHardware
-00002cf1   resetStruct
-00002d2d   setMotor
-00002d75   initPositions
-00002da1   UARTMotherIntHandler
-00002dff   IntSetup
-00002e27   flushUart
-00002eb9   dynoMove
-00002f55   dynoSpeedSet
-00002feb   dynoMultiModeSet
-00003069   dynoWheelModeSet
-000030e5   switchCom
-00003109   dynoReadPosition
-00003251   dynoTurn
-00003377   clearRxBuffer
-00003387   dynoReset
-000033f1   dynoPing
-00003455   dynoSetID
-000034d1   dynoJointModeSet
-00003559   recv_struct
-00003665   send_struct
-0000374d   __aeabi_memcpy
-0000374d   __aeabi_memcpy4
-0000374d   __aeabi_memcpy8
-0000374d   memcpy
-000037e9   __TI_auto_init
-000038dd   _c_int00
-00003925   copy_in
-00003969   C$$EXIT
-0000396d   abort
-00003975   exit
-000039ad   _args_main
-000039c5   _register_unlock
-000039cb   _register_lock
-000039d3   _nop
-000039d9   __TI_zero_init
-000039eb   __TI_decompress_none
-000039f9   ResetISR
-00003a05   SysCtlDelay
-00003a0b   __TI_decompress_rle24
-00003e64   ACTUATOR_FORWARD_LIMIT
-00003e66   ACTUATOR_REVERSE_LIMIT
+00002885   delay
+0000289f   wristClockwise
+000028cf   wristCounterClockwise
+00002905   wristUp
+00002939   wristDown
+0000296d   elbowCounterClockwise
+000029a5   elbowClockwise
+000029d9   elbowDown
+00002a0d   elbowUp
+00002a41   actuatorForward
+00002a93   actuatorReverse
+00002ae5   baseClockwise
+00002b01   baseCounterClockwise
+00002b25   armStructCompare
+00002c07   initHardware
+00002cf5   resetStruct
+00002d31   setMotor
+00002d79   initPositions
+00002da5   UARTMotherIntHandler
+00002e03   IntSetup
+00002e2b   flushUart
+00002ebd   dynoMove
+00002f59   dynoSpeedSet
+00002fef   dynoMultiModeSet
+0000306d   dynoWheelModeSet
+000030e9   switchCom
+0000310d   dynoReadPosition
+00003255   dynoTurn
+0000337b   clearRxBuffer
+0000338b   dynoReset
+000033f5   dynoPing
+00003459   dynoSetID
+000034d5   dynoJointModeSet
+0000355d   recv_struct
+00003669   send_struct
+00003751   __aeabi_memcpy
+00003751   __aeabi_memcpy4
+00003751   __aeabi_memcpy8
+00003751   memcpy
+000037ed   __TI_auto_init
+000038e1   _c_int00
+00003929   copy_in
+0000396d   C$$EXIT
+00003971   abort
+00003979   exit
+000039b1   _args_main
+000039c9   _register_unlock
+000039cf   _register_lock
+000039d7   _nop
+000039dd   __TI_zero_init
+000039ef   __TI_decompress_none
+000039fd   ResetISR
+00003a09   SysCtlDelay
+00003a0f   __TI_decompress_rle24
+00003e68   ACTUATOR_FORWARD_LIMIT
+00003e6a   ACTUATOR_REVERSE_LIMIT
 00003f9c   __TI_Handler_Table_Base
 00003fa8   __TI_Handler_Table_Limit
 00003fb8   __TI_CINIT_Base
