@@ -47,28 +47,28 @@ void main()
 					resetStruct(&armData, ARM_STRUCT_SIZE);
 				
 				else if(armData.wristUp){
-					wristUp(256);
+					wristUp(armData.speed);
 				}
 				else if(armData.wristDown){
-					wristDown(256);
+					wristDown(armData.speed);
 				}
 				else if(armData.wristClockwise){
-					wristClockwise(256);
+					wristClockwise(armData.speed);
 				}
 				else if(armData.wristCounterClockwise){
-					wristCounterClockwise(256);
+					wristCounterClockwise(armData.speed);
 				}
 				else if(armData.elbowUp){
-					elbowUp(256);
+					elbowUp(armData.speed);
 				}
 				else if(armData.elbowDown){
-					elbowDown(256);
+					elbowDown(armData.speed);
 				}
 				else if(armData.elbowClockwise){
-					elbowClockwise(256);
+					elbowClockwise(armData.speed);
 				}
 				else if(armData.elbowCounterClockwise){
-					elbowCounterClockwise(256);
+					elbowCounterClockwise(armData.speed);
 				}
 				else if(armData.actuatorForward){
 					actuatorForward(&actuatorPos);
@@ -77,10 +77,10 @@ void main()
 					actuatorReverse(&actuatorPos);
 				}
 				else if(armData.baseClockwise){
-					baseClockwise(256);
+					baseClockwise(armData.speed);
 				}
 				else if(armData.baseCounterClockwise){
-					baseCounterClockwise(256);
+					baseCounterClockwise(armData.speed);
 				}
 				delay(DELAY);
 				break;
