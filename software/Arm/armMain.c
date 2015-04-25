@@ -391,12 +391,8 @@ void UARTMotherIntHandler()
 			uint8_t i;
 			for(i = 1; i < 3; i++)
 			{
-				if(!(HWREG(UART_MOTHER + UART_O_FR) & UART_FR_RXFE))//uartCharGetNonBlocking
-				{
-					uartRxBuf[i] = HWREG(UART_MOTHER + UART_O_DR);
-				}
+				uartRxBuf[i] = UARTCharGetNonBlocking(UART_MOTHER);
 			}
-
 			handled = 1;
 		}
 	}

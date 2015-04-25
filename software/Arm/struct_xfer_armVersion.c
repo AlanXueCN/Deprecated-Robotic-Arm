@@ -45,14 +45,14 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 	// Read in data bytes
 	for ( i = 0 ; i <= size ; i++)
 	{
-	 if((temp = UARTCharGetNonBlocking(uart)) == -1)
+	 if((temp = UARTCharGet(uart)) == -1)
 		{
 			return(-1);
 		}
 		rx_buffer[i] = temp;
 	}
 
-	rx_buffer[size] = UARTCharGetNonBlocking(uart); //get the checksum
+	rx_buffer[size] = UARTCharGet(uart); //get the checksum
 
 
 	// calculate checksum
@@ -64,11 +64,11 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 	}
 
 	// Does checksum match?
-	/*if ( calc_CS != rx_buffer[size])
+	if ( calc_CS != rx_buffer[size])
 	{
 		// Checksum does not match
 		return false;
-	}*/
+	}
 
 	//retrieve the id, which should be the first parameter in the incoming struct always (if it's not, complain about it)
 	id = rx_buffer[0];
@@ -89,40 +89,29 @@ void send_struct(uint32_t uart, void* my_struct, uint8_t id)
     uint8_t size;
     uint8_t start_byte1 = 0x06;
     uint8_t start_byte2 = 0x85;
-
-    switch(id)
-    {
-     //   case MOTOR_STRUCT_ID:
-       //     size = sizeof(*((struct motor_struct*)my_struct));
-        //    break;
-        case ARM_STRUCT_ID:
-        	size = sizeof(*((struct arm_control_struct *)my_struct));
-        	struct arm_control_struct * armPoint = my_struct;
-        	armPoint -> struct_id = ARM_STRUCT_ID;
-        	break;
-        case GRIPPER_STRUCT_ID:
-        	size = sizeof(*((struct gripper_control_struct*)my_struct));
-        	struct gripper_control_struct * gripPoint = my_struct;
-        	gripPoint -> struct_id = GRIPPER_STRUCT_ID;
-        	break;
-        case DRILL_STRUCT_ID:
-        	size = sizeof(*((struct drill_Controls*)my_struct));
-        	struct drill_Controls * drillPoint = my_struct;
-        	drillPoint -> struct_id = DRILL_STRUCT_ID;
-        	break;
-      //  case SCIENCE_STRUCT_ID:
-        //	size =  sizeof(*((struct science_payload_control_struct*)my_struct));
-        //	break;
-    //    case LIGHTING_STRUCT_ID:
-      //  	size =  sizeof(*((struct lighting_board_struct*)my_struct));
-        //	break;
-   //     case CAMERA_STRUCT_ID:
-     //   	size =  sizeof(*((struct camera_control_struct*)my_struct));
-		//	break;
-
-    }
-
     uint8_t* address = (uint8_t*) my_struct; //pointer for use in sending the data.
+
+	if(id == ARM_STRUCT_ID)
+	{
+		size = sizeof(*((struct arm_control_struct *)my_struct));
+		struct arm_control_struct * armPoint = my_struct;
+		armPoint -> struct_id = ARM_STRUCT_ID;
+	}
+	else if(id == GRIPPER_STRUCT_ID)
+	{
+		size = sizeof(*((struct gripper_control_struct*)my_struct));
+		struct gripper_control_struct * gripPoint = my_struct;
+		gripPoint -> struct_id = GRIPPER_STRUCT_ID;
+	}
+	else if(id == DRILL_STRUCT_ID)
+	{
+		size = sizeof(*((struct drill_Controls*)my_struct));
+		struct drill_Controls * drillPoint = my_struct;
+		drillPoint -> struct_id = DRILL_STRUCT_ID;
+	}
+	else
+		return;//id didn't meet anything. Fire the programmer
+
     uint8_t CS = size; //checksum
 
     UARTCharPut(uart, start_byte1);
