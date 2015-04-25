@@ -39,7 +39,8 @@ void main()
 			switch(receiveData.id)
 			{
 			case ARM_STRUCT_ID:
-				armStructCompare(&armData, &receiveData);
+				delay(1);
+				checkStops(&receiveData);
 				memcpy(&armData, &receiveData, receiveData.size);
 
 				if(armData.reset)
@@ -99,6 +100,9 @@ void main()
 				break;
 			}
 		}
+
+		//else
+			// GPIOPinWrite(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED, BLUE_LED);
 
 		handled = 0;
 		flushUart(UART_MOTHER);
@@ -222,33 +226,29 @@ void baseCounterClockwise(int16_t speed){
 	delay(DELAY);
 }
 
-//compares the values with arm -- which contains data still from last transmission -- and receive
-// -- which is the new commands. If it is found that the previous struct arm has a variable set that
-//received does not have set, it means that function should no longer move in the new command and
-//calls a function for that movement to stop.
-void armStructCompare(struct arm_control_struct *arm, receiveStruct *received)
+void checkStops(receiveStruct *received)
 {
 	//if((received -> genParam1 == 0) && (arm -> reset == 1))
 		//do fudge all
-	if((received -> genParam2 == 0) && (arm -> wristUp == 1))
+	if((received -> genParam2 == 0))
 		wristUp(0);
-	else if((received -> genParam3 == 0) && (arm -> wristDown == 1))
+	if((received -> genParam3 == 0))
 		wristDown(0);
-	else if((received -> genParam4 == 0) && (arm -> wristClockwise == 1))
+	if((received -> genParam4 == 0))
 		wristClockwise(0);
-	else if((received -> genParam5 == 0) && (arm -> wristCounterClockwise == 1))
+	if((received -> genParam5 == 0))
 		wristCounterClockwise(0);
-	else if((received -> genParam6 == 0) && (arm -> elbowUp == 1))
+	if((received -> genParam6 == 0))
 		elbowUp(0);
-	else if((received -> genParam7 == 0) && (arm -> elbowDown == 1))
+	if((received -> genParam7 == 0))
 		elbowDown(0);
-	else if((received -> genParam8 == 0) && (arm -> elbowClockwise == 1))
+	if((received -> genParam8 == 0))
 		elbowClockwise(0);
-	else if((received -> genParam9 == 0) && (arm -> elbowCounterClockwise == 1))
+	if((received -> genParam9 == 0))
 		wristCounterClockwise(0);
-	else if((received -> genParam12 == 0) && (arm -> baseClockwise == 1))
+	if((received -> genParam12 == 0))
 		baseClockwise(0);
-	else if((received -> genParam13 == 0) && (arm -> baseCounterClockwise == 1))
+	if((received -> genParam13 == 0))
 		wristCounterClockwise(0);
 }
 
@@ -330,6 +330,10 @@ void initHardware()
 	GPIOPinTypeGPIOOutput(GPIO_PORTB_BASE, GPIO_PIN_3); //tri-state-buffer enable
 	GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, GPIO_PIN_3);
 
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF); //enable LED for debugging
+	GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED);
+
+
 	//interrupt setups
 	IntSetup();
 
@@ -385,6 +389,7 @@ void UARTMotherIntHandler()
 	UARTIntClear(UART_MOTHER, UART_INT_RX);
 	if(!(handled))
 	{
+		GPIOPinWrite(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED, RED_LED);
 		uartRxBuf[0] = UARTCharGetNonBlocking(UART_MOTHER);
 		if(uartRxBuf[0] == STRUCT_START1)
 		{

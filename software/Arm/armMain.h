@@ -38,25 +38,16 @@
 
 #include <stdint.h>
 
+#define RED_LED   GPIO_PIN_1
+#define BLUE_LED  GPIO_PIN_2
+#define GREEN_LED GPIO_PIN_3
 
 #define DELAY 5
 #define WRIST_DYNOA_ID          0x01
 #define WRIST_DYNOB_ID			0x02
 #define ELBOW_DYNOA_ID			0x03
 #define ELBOW_DYNOB_ID			0x04
-#define BASE_DYNO_ID			0x05
-
-#define WRIST_HORI_ID			0x01 //placeholders until the controls system is changed properly out
-#define WRIST_VERT_ID			0x02
-#define ELBOW_HORI_ID			0x03
-#define ELBOW_VERT_ID			0x04
 #define BASE_ID					0x05
-
-#define WRISTA_START_POS		0
-#define WRISTB_START_POS		0
-#define ELBOWA_START_POS		0
-#define ELBOWB_START_POS		0
-#define BASE_START_POS			0
 
 #define ACTUATOR_START_POS		ACTUATOR_REVERSE_LIMIT
 const uint16_t ACTUATOR_FORWARD_LIMIT = 1600;//limit of the values it can be set to on forward
@@ -93,7 +84,9 @@ extern void delay(int time);
 //clears the RX buffer. uint32_t uart is the base address of the uart peripheral to be flushed
 extern void flushUart(uint32_t uart);
 
-extern void armStructCompare(struct arm_control_struct *arm, receiveStruct *received);
+//Checks the incoming transmission and sees which movements are not called on -- IE their command variables in the
+//struct are 0. It then sets each one of those movements to 0, stopping them.
+extern void checkStops(receiveStruct *received);
 
 
 ///////////////main movement call functions///////////////////////////////////////////////////////////////
