@@ -20,7 +20,7 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 	uint8_t id;
 	uint8_t calc_CS;	   //calculated Chacksum
 	int16_t temp;
-	uint8_t rx_buffer[150];
+	uint8_t rx_buffer[20] = {5, 5, 5, 5, 5, 5 ,5 ,5 ,5 , 5, 5, 5,5,5,5,5,5,5,5,5};
 
 
 	// Check for Start byte 1
@@ -43,7 +43,7 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 	uartRxBuf[2] = 0;
 
 	// Read in data bytes
-	for ( i = 0 ; i <= size ; i++)
+	for ( i = 0 ; i < size ; i++)
 	{
 	 if((temp = UARTCharGet(uart)) == -1)
 		{
@@ -74,7 +74,7 @@ bool recv_struct( uint32_t uart, receiveStruct* myStruct)
 	id = rx_buffer[0];
 
 	// Copy buffer into struct, then pass in the instruction and id and size bytes
-	memcpy (myStruct, rx_buffer, size);
+	memcpy (myStruct, (uint8_t*)rx_buffer, size);
 	myStruct -> id = id;
 	myStruct -> size = size;
 	delay(2);

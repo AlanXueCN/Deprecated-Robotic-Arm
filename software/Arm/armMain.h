@@ -58,6 +58,8 @@ const uint16_t ACTUATOR_REVERSE_LIMIT = 2350;
 
 #define ARM_STRUCT_SIZE			sizeof(struct arm_control_struct)
 #define RECEIVE_STRUCT_SIZE		sizeof(receiveData)
+#define GRIPPER_STRUCT_SIZE		sizeof(struct gripper_control_struct)
+#define DRILL_STRUCT_SIZE		sizeof(struct drill_Controls)
 ////////////////////////////////global variables
 uint8_t uartRxBuf[4] = {0,0,0,0};
 uint8_t handled = 1;

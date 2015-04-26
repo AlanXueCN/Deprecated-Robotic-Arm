@@ -60,7 +60,6 @@
 struct arm_control_struct
 {
 	uint8_t struct_id;
-	uint8_t reset;
 	uint8_t wristUp;
 	uint8_t wristDown;
 	uint8_t wristClockwise;
@@ -73,7 +72,8 @@ struct arm_control_struct
 	uint8_t actuatorReverse;
 	uint8_t baseClockwise;
 	uint8_t baseCounterClockwise;
-	uint16_t speed;
+	int8_t speed1;
+	int8_t speed2;
 };
 
 struct gripper_control_struct

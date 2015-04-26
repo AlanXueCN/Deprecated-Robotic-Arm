@@ -12,7 +12,7 @@
 //Update 4-15-15 -- set up ability for the arm and wrist to move up and down with dual dynamixel movement.
 //WARNING: CLOCKWISE/CC MOVEMENT IS NOT FUNCTIONAL! todo: get this working
 //RoveSoHard
-
+//todo: adjust for the new int16_t stuff in receive data
 
 #include "armMain.h"
 
@@ -25,6 +25,7 @@ void main()
 	struct drill_Controls drillData;
 	receiveStruct receiveData;
 	uint16_t actuatorPos;
+	int16_t armSpeed;
 
 	resetStruct(&receiveData, RECEIVE_STRUCT_SIZE);
 	initHardware();
@@ -41,34 +42,34 @@ void main()
 			case ARM_STRUCT_ID:
 				delay(1);
 				checkStops(&receiveData);
-				memcpy(&armData, &receiveData, receiveData.size);
+				memcpy(&armData, &receiveData, ARM_STRUCT_SIZE);
+				armSpeed = armData.speed2; //Converts the two speed bytes over into one large 16_bit value
+				armSpeed = armSpeed << 8;
+				armSpeed += (uint8_t)armData.speed1;
 
-				if(armData.reset)
-					resetStruct(&armData, ARM_STRUCT_SIZE);
-				
-				else if(armData.wristUp){
-					wristUp(armData.speed);
+				if(armData.wristUp){
+					wristUp(armSpeed);
 				}
 				else if(armData.wristDown){
-					wristDown(armData.speed);
+					wristDown(armSpeed);
 				}
 				else if(armData.wristClockwise){
-					wristClockwise(armData.speed);
+					wristClockwise(armSpeed);
 				}
 				else if(armData.wristCounterClockwise){
-					wristCounterClockwise(armData.speed);
+					wristCounterClockwise(armSpeed);
 				}
 				else if(armData.elbowUp){
-					elbowUp(armData.speed);
+					elbowUp(armSpeed);
 				}
 				else if(armData.elbowDown){
-					elbowDown(armData.speed);
+					elbowDown(armSpeed);
 				}
 				else if(armData.elbowClockwise){
-					elbowClockwise(armData.speed);
+					elbowClockwise(armSpeed);
 				}
 				else if(armData.elbowCounterClockwise){
-					elbowCounterClockwise(armData.speed);
+					elbowCounterClockwise(armSpeed);
 				}
 				else if(armData.actuatorForward){
 					actuatorForward(&actuatorPos);
@@ -77,16 +78,16 @@ void main()
 					actuatorReverse(&actuatorPos);
 				}
 				else if(armData.baseClockwise){
-					baseClockwise(armData.speed);
+					baseClockwise(armSpeed);
 				}
 				else if(armData.baseCounterClockwise){
-					baseCounterClockwise(armData.speed);
+					baseCounterClockwise(armSpeed);
 				}
 				delay(DELAY);
 				break;
 
 			case GRIPPER_STRUCT_ID:
-				memcpy(&gripperData, &receiveData, receiveData.size);
+				memcpy(&gripperData, &receiveData, GRIPPER_STRUCT_SIZE);
 				//send_struct(UART_ENDE, &gripperData, INST_OTHER, GRIPPER_STRUCT_ID);
 				delay(DELAY);
 				break;
@@ -94,7 +95,7 @@ void main()
 
 
 			case DRILL_STRUCT_ID:
-				memcpy(&drillData, &receiveData, receiveData.size);
+				memcpy(&drillData, &receiveData, DRILL_STRUCT_SIZE);
 				//send_struct(UART_ENDE, &drillData, INST_OTHER, DRILL_STRUCT_ID);
 				delay(DELAY);
 				break;
@@ -182,7 +183,7 @@ void elbowUp(int16_t speed){
 	delay(DELAY);
 }
 
-void actuatorForward(uint16_t *pos){
+void actuatorForward(int16_t *pos){
 	if(*pos >= (ACTUATOR_FORWARD_LIMIT + ACTUATOR_INC)) //The normal operation. If it's so that the next increment WONT push it beyond
 	{											//or put it right at the limit, proceed as normal
 		*pos -= ACTUATOR_INC;
@@ -199,7 +200,7 @@ void actuatorForward(uint16_t *pos){
 						//else, we're at the limit, no operation
 }
 
-void actuatorReverse(uint16_t *pos){
+void actuatorReverse(int16_t *pos){
 	if(*pos <= (ACTUATOR_REVERSE_LIMIT - ACTUATOR_INC)) //The normal operation. If it's so that the next increment WONT push it beyond
 	{											//or put it right at the limit, proceed as normal
 		*pos += ACTUATOR_INC;
@@ -228,27 +229,25 @@ void baseCounterClockwise(int16_t speed){
 
 void checkStops(receiveStruct *received)
 {
-	//if((received -> genParam1 == 0) && (arm -> reset == 1))
-		//do fudge all
-	if((received -> genParam2 == 0))
+	if((received -> genParam1 == 0))
 		wristUp(0);
-	if((received -> genParam3 == 0))
+	if((received -> genParam2 == 0))
 		wristDown(0);
-	if((received -> genParam4 == 0))
+	if((received -> genParam3 == 0))
 		wristClockwise(0);
+	if((received -> genParam4 == 0))
+		wristCounterClockwise(0);
 	if((received -> genParam5 == 0))
-		wristCounterClockwise(0);
-	if((received -> genParam6 == 0))
 		elbowUp(0);
-	if((received -> genParam7 == 0))
+	if((received -> genParam6 == 0))
 		elbowDown(0);
-	if((received -> genParam8 == 0))
+	if((received -> genParam7 == 0))
 		elbowClockwise(0);
-	if((received -> genParam9 == 0))
+	if((received -> genParam8 == 0))
 		wristCounterClockwise(0);
-	if((received -> genParam12 == 0))
+	if((received -> genParam11 == 0))
 		baseClockwise(0);
-	if((received -> genParam13 == 0))
+	if((received -> genParam12 == 0))
 		wristCounterClockwise(0);
 }
 
@@ -332,7 +331,7 @@ void initHardware()
 
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_GPIOF); //enable LED for debugging
 	GPIOPinTypeGPIOOutput(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED);
-
+	GPIOPinWrite(GPIO_PORTF_BASE, RED_LED|BLUE_LED|GREEN_LED, 0);
 
 	//interrupt setups
 	IntSetup();
