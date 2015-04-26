@@ -73,7 +73,7 @@ struct arm_control_struct
 	uint8_t actuatorReverse;
 	uint8_t baseClockwise;
 	uint8_t baseCounterClockwise;
-	uint32_t speed;
+	uint16_t speed;
 };
 
 struct gripper_control_struct

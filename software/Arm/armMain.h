@@ -56,8 +56,8 @@ const uint16_t ACTUATOR_REVERSE_LIMIT = 2350;
 #define ACTUATOR_INC			53//800 -- its Difference in limits -- divided into 15 increments
 #define DELAY 5
 
-#define ARM_STRUCT_SIZE			14
-#define RECEIVE_STRUCT_SIZE		18
+#define ARM_STRUCT_SIZE			sizeof(struct arm_control_struct)
+#define RECEIVE_STRUCT_SIZE		sizeof(receiveData)
 ////////////////////////////////global variables
 uint8_t uartRxBuf[4] = {0,0,0,0};
 uint8_t handled = 1;
