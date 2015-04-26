@@ -1,1 +1,0 @@
-"./armMain.obj" "./dynamixel.obj" "./struct_xfer_armVersion.obj" "./tm4c123gh6pm_startup_ccs.obj" "../tm4c123gh6pm.cmd" -l"libc.a" 
