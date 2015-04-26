@@ -55,7 +55,7 @@
 //struct ID's:
 #define GRIPPER_STRUCT_ID	 202
 #define DRILL_STRUCT_ID		 203
-#define ARM_STRUCT_ID 		 201
+#define ARM_STRUCT_ID 		 200
 
 struct arm_control_struct
 {
