@@ -84,7 +84,7 @@
 #define OFF                         0
 #define ON                          1
 #define LEFT						0
-#define RIGTH                       1
+#define RIGHT                       1
 #define AX_BYTE_READ                1
 #define AX_BYTE_READ_POS            2
 #define AX_RESET_LENGTH				2
@@ -125,8 +125,6 @@
 #define LOCK                        1
 
 
-#define LEFT 1
-#define RIGHT 2
 
 void DynamixelSendData(UART_Handle uart, char data);
 
