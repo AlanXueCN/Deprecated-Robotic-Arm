@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.0.0">
+<eagle version="6.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -140,12 +140,12 @@
 <layer number="222" name="222bmp" color="23" fill="1" visible="no" active="no"/>
 <layer number="223" name="223bmp" color="24" fill="1" visible="no" active="no"/>
 <layer number="224" name="224bmp" color="25" fill="1" visible="no" active="no"/>
-<layer number="225" name="225bmp" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="226" name="226bmp" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="227" name="227bmp" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="228" name="228bmp" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="229" name="229bmp" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="230" name="230bmp" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="225" name="225bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="226" name="226bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="227" name="227bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="228" name="228bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="229" name="229bmp" color="7" fill="1" visible="no" active="yes"/>
+<layer number="230" name="230bmp" color="7" fill="1" visible="no" active="yes"/>
 <layer number="231" name="Eagle3D_PG1" color="7" fill="1" visible="no" active="no"/>
 <layer number="232" name="Eagle3D_PG2" color="7" fill="1" visible="no" active="no"/>
 <layer number="233" name="Eagle3D_PG3" color="7" fill="1" visible="no" active="no"/>
@@ -154,7 +154,7 @@
 <layer number="250" name="Descript" color="3" fill="1" visible="no" active="no"/>
 <layer number="251" name="SMDround" color="12" fill="11" visible="no" active="no"/>
 <layer number="254" name="cooling" color="7" fill="1" visible="no" active="no"/>
-<layer number="255" name="routoute" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="255" name="routoute" color="7" fill="1" visible="no" active="yes"/>
 </layers>
 <board>
 <plain>
@@ -6763,9 +6763,6 @@ Please make sure your boards conform to these design rules.</description>
 <autorouter>
 <pass name="Default">
 <param name="RoutingGrid" value="50mil"/>
-<param name="AutoGrid" value="1"/>
-<param name="Efforts" value="0"/>
-<param name="TopRouterVariant" value="1"/>
 <param name="tpViaShape" value="round"/>
 <param name="PrefDir.1" value="|"/>
 <param name="PrefDir.2" value="0"/>
@@ -7075,7 +7072,7 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="45.466" y1="20.574" x2="45.466" y2="22.9205" width="0.4064" layer="1"/>
 <wire x1="45.466" y1="22.9205" x2="45.7835" y2="23.238" width="0.4064" layer="1"/>
 </signal>
-<signal name="N$5">
+<signal name="TX+">
 <contactref element="U$3" pad="1"/>
 <contactref element="R11" pad="2"/>
 <contactref element="U$4" pad="Y"/>
@@ -7090,7 +7087,7 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="58.166" y1="35.814" x2="58.166" y2="38.354" width="0.4064" layer="1"/>
 <wire x1="58.166" y1="38.354" x2="57.785" y2="38.735" width="0.4064" layer="1"/>
 </signal>
-<signal name="N$1">
+<signal name="TX-">
 <contactref element="U$3" pad="2"/>
 <contactref element="R11" pad="1"/>
 <contactref element="U$4" pad="Z"/>
@@ -7103,7 +7100,7 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="59.8805" y1="35.938" x2="56.772" y2="35.938" width="0.4064" layer="16"/>
 <wire x1="56.772" y1="35.938" x2="56.515" y2="36.195" width="0.4064" layer="16"/>
 </signal>
-<signal name="N$2">
+<signal name="RX-">
 <contactref element="U$3" pad="6"/>
 <contactref element="R10" pad="2"/>
 <contactref element="U$4" pad="B"/>
@@ -7120,7 +7117,7 @@ Please make sure your boards conform to these design rules.</description>
 <wire x1="49.53" y1="37.592" x2="50.927" y2="36.195" width="0.4064" layer="16"/>
 <wire x1="50.927" y1="36.195" x2="51.435" y2="36.195" width="0.4064" layer="16"/>
 </signal>
-<signal name="N$3">
+<signal name="RX+">
 <contactref element="U$3" pad="3"/>
 <contactref element="R10" pad="1"/>
 <contactref element="U$4" pad="A"/>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="7.0.0">
+<eagle version="6.5.0">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -6207,7 +6207,7 @@ B340A  3A 40V SMA &lt;br&gt;</description>
 <wire x1="76.2" y1="58.42" x2="76.2" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$5" class="0">
+<net name="TX+" class="0">
 <segment>
 <wire x1="106.68" y1="7.62" x2="119.38" y2="7.62" width="0.1524" layer="91"/>
 <wire x1="119.38" y1="7.62" x2="119.38" y2="22.86" width="0.1524" layer="91"/>
@@ -6219,7 +6219,7 @@ B340A  3A 40V SMA &lt;br&gt;</description>
 <junction x="106.68" y="7.62"/>
 </segment>
 </net>
-<net name="N$1" class="0">
+<net name="TX-" class="0">
 <segment>
 <wire x1="106.68" y1="12.7" x2="116.84" y2="12.7" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="12.7" x2="121.92" y2="12.7" width="0.1524" layer="91"/>
@@ -6232,7 +6232,7 @@ B340A  3A 40V SMA &lt;br&gt;</description>
 <pinref part="U$4" gate="G$1" pin="Z"/>
 </segment>
 </net>
-<net name="N$2" class="0">
+<net name="RX-" class="0">
 <segment>
 <wire x1="106.68" y1="17.78" x2="127" y2="17.78" width="0.1524" layer="91"/>
 <wire x1="127" y1="17.78" x2="127" y2="10.16" width="0.1524" layer="91"/>
@@ -6244,7 +6244,7 @@ B340A  3A 40V SMA &lt;br&gt;</description>
 <junction x="106.68" y="17.78"/>
 </segment>
 </net>
-<net name="N$3" class="0">
+<net name="RX+" class="0">
 <segment>
 <wire x1="106.68" y1="22.86" x2="116.84" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="116.84" y1="22.86" x2="116.84" y2="25.4" width="0.1524" layer="91"/>
