@@ -569,6 +569,10 @@ const UART_Config UART_config[] = {
  */
 void EK_TM4C123GXL_initUART(void)
 {
+
+	HWREG(GPIO_PORTD_BASE + GPIO_O_LOCK)=GPIO_LOCK_KEY;
+	HWREG(GPIO_PORTD_BASE + GPIO_O_CR) |= 0x81;
+
 	// UART0 UNUSED
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
 	GPIOPinConfigure(GPIO_PA1_U0TX);
@@ -616,6 +620,7 @@ void EK_TM4C123GXL_initUART(void)
 	GPIOPinConfigure(GPIO_PE1_U7TX);
 	GPIOPinConfigure(GPIO_PE0_U7RX);
 	GPIOPinTypeUART(GPIO_PORTE_BASE, GPIO_PIN_1 | GPIO_PIN_0);
+
 
     /* Initialize the UART driver */
 #if TI_DRIVERS_UART_DMA
