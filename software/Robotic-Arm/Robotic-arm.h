@@ -9,6 +9,6 @@
 #define ROBOTIC_ARM_H_
 
 #include "rtos-headers.h"
-#include "dynamixel.h"
+#include "roveIncludes/dynamixel.h"
 
 #endif /* ROBOTIC_ARM_H_ */
