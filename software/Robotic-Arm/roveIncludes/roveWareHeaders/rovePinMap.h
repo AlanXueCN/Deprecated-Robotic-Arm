@@ -20,12 +20,38 @@
 // MRDesign Team::roveWare::		roveCom and RoveNet services headers
 
 #include "../roveWare.h"
+
 /*
- * UARTS
+*		UART 0:   TX PA1, RX PA0
+* 		UART 1:   TX PB1, RX PB0
+*
+* 		UART 2:   TX PD7, RX PD6  //UART_MOTHERBOARD
+*
+* 		UART 3:   TX PC7, RX PC6  //UART_ENDEFFECTOR
+* 		UART 4:   TX PC5, RX PC4  //UART_DYNAMIXEL
+* 		UART 5:   TX PE5, RX PE4
+* 		UART 6:   TX PD5, RX PD4
+* 		UART 7:   TX PE1, RX PE0  //UART_ACTUATOR
+
+
+ /*	GPIO
+ *
+ * DATA_FLOW_CTRL_1: 	DC_1:		PB3
+ * MOTOR_CONTROLLER_ENABLE:			PD2
+ * MOTOR_CONTROLLER_INPUT_1			PD3
+ * MOTOR_CONTROLLER_INPUT_2			PE2
  */
 
 /*
- * GPIO
- */
+ *
+#define UART_DYNAMIXEL  		UART1_BASE
+#define UART_MOTHERBOARD	    UART2_BASE
+#define UART_ENDEFFECTOR		UART3_BASE
+#define UART_ACTUATOR 			UART7_BASE
+
+*/
+
+
+
 
 #endif /* ROVEPINMAP_H_ */

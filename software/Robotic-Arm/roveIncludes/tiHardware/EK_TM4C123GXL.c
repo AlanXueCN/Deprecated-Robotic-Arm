@@ -541,16 +541,26 @@ UARTTiva_Object uartTivaObjects[EK_TM4C123GXL_UARTCOUNT];
 
 /* UART configuration structure */
 const UARTTiva_HWAttrs uartTivaHWAttrs[EK_TM4C123GXL_UARTCOUNT] = {
-    {UART0_BASE, INT_UART0}  /* EK_TM4C123GXL_UART0 */
+	{UART0_BASE, INT_UART0}, //
+	{UART1_BASE, INT_UART1}, //
+	{UART2_BASE, INT_UART2}, //
+	{UART3_BASE, INT_UART3}, //
+	{UART4_BASE, INT_UART4}, //
+	{UART5_BASE, INT_UART5}, //
+	{UART6_BASE, INT_UART6}, //
+	{UART7_BASE, INT_UART7}, //
 };
 
 const UART_Config UART_config[] = {
-    {
-        &UARTTiva_fxnTable,
-        &uartTivaObjects[0],
-        &uartTivaHWAttrs[0]
-    },
-    {NULL, NULL, NULL}
+	{&UARTTiva_fxnTable, &uartTivaObjects[0], &uartTivaHWAttrs[0]},
+	{&UARTTiva_fxnTable, &uartTivaObjects[1], &uartTivaHWAttrs[1]},
+	{&UARTTiva_fxnTable, &uartTivaObjects[2], &uartTivaHWAttrs[2]},
+	{&UARTTiva_fxnTable, &uartTivaObjects[3], &uartTivaHWAttrs[3]},
+	{&UARTTiva_fxnTable, &uartTivaObjects[4], &uartTivaHWAttrs[4]},
+	{&UARTTiva_fxnTable, &uartTivaObjects[5], &uartTivaHWAttrs[5]},
+	{&UARTTiva_fxnTable, &uartTivaObjects[6], &uartTivaHWAttrs[6]},
+	{&UARTTiva_fxnTable, &uartTivaObjects[7], &uartTivaHWAttrs[7]},
+	{NULL, NULL, NULL}
 };
 #endif /* TI_DRIVERS_UART_DMA */
 
@@ -559,11 +569,53 @@ const UART_Config UART_config[] = {
  */
 void EK_TM4C123GXL_initUART(void)
 {
-    /* Enable and configure the peripherals used by the uart. */
-    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
-    GPIOPinConfigure(GPIO_PA0_U0RX);
-    GPIOPinConfigure(GPIO_PA1_U0TX);
-    GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1);
+	// UART0 UNUSED
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART0);
+	GPIOPinConfigure(GPIO_PA1_U0TX);
+	GPIOPinConfigure(GPIO_PA0_U0RX);
+	GPIOPinTypeUART(GPIO_PORTA_BASE, GPIO_PIN_1 | GPIO_PIN_0);
+
+    // UART1 UNUSED
+    SysCtlPeripheralEnable(SYSCTL_PERIPH_UART1);
+	GPIOPinConfigure(GPIO_PB1_U1TX);
+    GPIOPinConfigure(GPIO_PB0_U1RX);
+    GPIOPinTypeUART(GPIO_PORTB_BASE, GPIO_PIN_1 | GPIO_PIN_0);
+
+    //UART2 = UART_MOTHERBOARD
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART2);
+	GPIOPinConfigure(GPIO_PD7_U2TX);
+	GPIOPinConfigure(GPIO_PD6_U2RX);
+	GPIOPinTypeUART(GPIO_PORTD_BASE, GPIO_PIN_6 | GPIO_PIN_7);
+
+	//UART3 = UART_ENDEFFECTOR
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART3);
+	GPIOPinConfigure(GPIO_PC7_U3TX);
+	GPIOPinConfigure(GPIO_PC6_U3RX);
+	GPIOPinTypeUART(GPIO_PORTC_BASE, GPIO_PIN_6 | GPIO_PIN_7);
+
+	//UART4 = UART_DYNAMIXEL
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART4);
+	GPIOPinConfigure(GPIO_PC5_U4TX);
+	GPIOPinConfigure(GPIO_PC4_U4RX);
+	GPIOPinTypeUART(GPIO_PORTC_BASE, GPIO_PIN_5 | GPIO_PIN_4);
+
+	//UART5 UNUSED
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART5);
+	GPIOPinConfigure(GPIO_PE5_U5TX);
+	GPIOPinConfigure(GPIO_PE4_U5RX);
+	GPIOPinTypeUART(GPIO_PORTE_BASE, GPIO_PIN_5 | GPIO_PIN_4);
+
+	//UART6 UNUSED
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART6);
+	GPIOPinConfigure(GPIO_PD5_U6TX);
+	GPIOPinConfigure(GPIO_PD4_U6RX);
+	GPIOPinTypeUART(GPIO_PORTD_BASE, GPIO_PIN_5 | GPIO_PIN_4);
+
+	//UART7 = UART_ACTUATOR
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART7);
+	GPIOPinConfigure(GPIO_PE1_U7TX);
+	GPIOPinConfigure(GPIO_PE0_U7RX);
+	GPIOPinTypeUART(GPIO_PORTE_BASE, GPIO_PIN_1 | GPIO_PIN_0);
 
     /* Initialize the UART driver */
 #if TI_DRIVERS_UART_DMA
