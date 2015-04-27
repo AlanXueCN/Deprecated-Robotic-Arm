@@ -5,10 +5,18 @@
  *      Author: mrdtdev
  */
 
+#pragma once
+
 #ifndef ROVESTRUCTTRANSFER_H_
 #define ROVESTRUCTTRANSFER_H_
-#include "../rtos-headers.h"
-// robot arm values
+
+// globally scoped Texas Instruments (TI) headers
+
+#include "../RoboticArmMain.h"
+
+// MRDesign Team::roveWare::		roveCom and RoveNet services headers
+
+#include "../roveWare.h"
 
 //deprecated in favor of variable speed
 

@@ -1,16 +1,17 @@
-/*
- * dynamixel.h
- *
- *  Created on: Apr 26, 2015
- *      Author: mrdtdev
- */
+// dynamixel.h
 
-#ifndef DYNAMIXEL_H_
-#define DYNAMIXEL_H_
+#pragma once
 
-//Standard headers
-#include "../Robotic-arm.h"
+#ifndef ROVEDYNAMIXEL_H_
+#define ROVEDYNAMIXEL_H_
 
+// globally scoped Texas Instruments (TI) headers
+
+#include "../RoboticArmMain.h"
+
+// MRDesign Team::roveWare::		roveCom and RoveNet services headers
+
+#include "../roveWare.h"
 
 	// EEPROM AREA  ///////////////////////////////////////////////////////////
 #define AX_MODEL_NUMBER_L           0

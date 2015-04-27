@@ -6,7 +6,7 @@
  */
 
 
-#include "dynamixel.h"
+#include "../roveWareHeaders/roveDynamixel.h"
 
 void DynamixelSendData(UART_Handle uart, char data)
 {
