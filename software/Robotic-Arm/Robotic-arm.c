@@ -39,33 +39,47 @@
  *  ======== echoFxn ========
  *  Task for this function is created statically. See the project's .cfg file.
  */
-Void echoFxn(UArg arg0, UArg arg1)
+
+UART_Handle DynamixelUart;
+
+Void roboticArmMain(UArg arg0, UArg arg1)
 {
-    char input;
-    UART_Handle uart;
-    UART_Params uartParams;
-    const char echoPrompt[] = "\fEchoing characters:\r\n";
+	System_printf("Enter roboticArmMain\n");
+	System_flush();
+/*
+	while(recieve struct)
+	{
+		switch(struct.id)
+		{
+			case wrist_clock_wise:
+				DynamixelSetSpeed(DynamixelUart, WRIST_DYNOA_ID, struct.speed);
+				DynamixelSetSpeed(DynamixelUart, WRIST_DYNOB_ID, struct.speed);
+				break;
+			case wrist_up:
+				DynamixelSetSpeed(DynamixelUart, WRIST_DYNOA_ID, struct.speed);
+				DynamixelSetSpeed(DynamixelUart, WRIST_DYNOB_ID, -struct.speed);
+				break;
+			case elbow_clock_wise:
+				break;
+			case elbow_up:
+				break;
+			case actuator_forward:
+				break;
+			case base_clock_wise:
+				break;
+			case e_stop_arm:
+				//call DynamixelReset on every dynamixel
+				break;
+			case gripper_open:
+				//Passthrough to xbee. There should be an xbee.h library in roveIncludes
+				break;
+			//case whatever_drill_uses:
+				//break;
+			default
 
-    /* Create a UART with data processing off. */
-    UART_Params_init(&uartParams);
-    uartParams.writeDataMode = UART_DATA_BINARY;
-    uartParams.readDataMode = UART_DATA_BINARY;
-    uartParams.readReturnMode = UART_RETURN_FULL;
-    uartParams.readEcho = UART_ECHO_OFF;
-    uartParams.baudRate = 9600;
-    uart = UART_open(Board_UART0, &uartParams);
-
-    if (uart == NULL) {
-        System_abort("Error opening the UART");
-    }
-
-    UART_write(uart, echoPrompt, sizeof(echoPrompt));
-
-    /* Loop forever echoing */
-    while (1) {
-        UART_read(uart, &input, 1);
-        UART_write(uart, &input, 1);
-    }
+		}
+	}
+*/
 }
 
 /*
@@ -77,6 +91,9 @@ int main(void)
     Board_initGeneral();
     Board_initGPIO();
     Board_initUART();
+
+    //Grab our dynamixelUart
+    //DynamixelUart = uartOpen()
 
     /* Turn on user LED */
     GPIO_write(Board_LED0, Board_LED_ON);

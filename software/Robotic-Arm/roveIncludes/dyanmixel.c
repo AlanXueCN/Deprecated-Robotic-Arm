@@ -17,11 +17,21 @@ void DynamixelSendData(UART_Handle uart, char data)
 // Sets a dynamixel to a specific speed
 void DynamixelSetSpeed(UART_Handle uart, uint8_t id, int side, int16_t speed)
 {
-
+	if(speed<0)
+	{
+		//send the data for reverse
+	} else
+	{
+		//send the data for forward
+	}
+	return;
 }
 
 // Sets a dynamixel to a specific angle
-void DynamixelSetAngle(UART_Handle uart, uint8_t id, int16_t angle);
+void DynamixelSetAngle(UART_Handle uart, uint8_t id, int16_t angle)
+{
+	return;
+}
 
 
 void DynamixelReset(UART_Handle uart, uint8_t id)
