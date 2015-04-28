@@ -617,9 +617,9 @@ void EK_TM4C123GXL_initUART(void)
 
 	//UART7 = UART_ACTUATOR
 	SysCtlPeripheralEnable(SYSCTL_PERIPH_UART7);
-	GPIOPinConfigure(GPIO_PE1_U7TX);
 	GPIOPinConfigure(GPIO_PE0_U7RX);
-	GPIOPinTypeUART(GPIO_PORTE_BASE, GPIO_PIN_1 | GPIO_PIN_0);
+	GPIOPinConfigure(GPIO_PE1_U7TX);
+	GPIOPinTypeUART(GPIO_PORTE_BASE, GPIO_PIN_0 | GPIO_PIN_1);
 
 
     /* Initialize the UART driver */

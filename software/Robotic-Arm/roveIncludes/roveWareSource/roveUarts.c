@@ -23,9 +23,13 @@ UART_Handle init_uart(UInt uart_index, UInt baud_rate){
 
 	uart_handle = UART_open(uart_index, &uartParams);
 
+	System_printf("SUCCESS ASSIGNING %d, %d\n", uart_index, baud_rate );
+	System_flush();
+
 	if (uart_handle == NULL) {
 
-		System_abort("Error opening the UART");
+		System_printf("ERROR ASSIGNING %d\n", uart_index);
+		System_flush();
 
 	}//endif
 
