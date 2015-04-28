@@ -47,52 +47,24 @@ int main(void){
 
     Board_initUART();
 
-
     //init UARTS
-
 	System_printf("Assign UARTS\n");
 	System_flush();
 
-	// not utilizing uart0 or uart1 (no mob to pins)
-
-	//uart0 = (UART_Handle)init_uart( 0, 115200 );
-
-	//System_printf("Assigned UART 0\n");
-	//System_flush();
-
-
-	//uart1 = (UART_Handle)init_uart( 1, 115200 );
-
-	//System_printf("Assigned UART 1\n");
-	//System_flush();
-
 	uart2 = (UART_Handle)init_uart( 2, 115200 );
-
 	System_printf("Assigned UART 2\n");
 	System_flush();
 
 	uart3 = (UART_Handle)init_uart( 3, 9600 );
-
 	System_printf("Assigned UART 3\n");
 	System_flush();
 
 	uart4 = (UART_Handle)init_uart( 4, 57600 );
-
 	System_printf("Assigned UART 4\n");
 	System_flush();
 
-	//uart5 = (UART_Handle)init_uart( 5, 115200 );
-
-	//System_printf("Assigned UART 5\n");
-	//System_flush();
-
-	//uart6 = (UART_Handle)init_uart( 6, 115200 );
-
-	//System_printf("Assigned UART 6\n");
-	//System_flush();
 
 	uart7 = (UART_Handle)init_uart( 7, 115200 );
-
 	System_printf("Assigned UART 7\n");
 	System_flush();
 

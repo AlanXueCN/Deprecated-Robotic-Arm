@@ -8,35 +8,25 @@
 
 // this is a RoverMotherboard.cfg object::roveTcpHandlerTask::		priority 2, vital_flag = t, 2048 persistent private stack
 
-
 void roboticArm(UArg arg0, UArg arg1){
 
 	System_printf("Enter roboticArm TASK\n");
 	System_flush();
 
-	char buffer[] = "This is a test of uart 0";
-
-	//extern UART_Handle uart0;
-	//extern UART_Handle uart1;
 	extern UART_Handle uart2;
 	extern UART_Handle uart3;
 	extern UART_Handle uart4;
-	//extern UART_Handle uart5;
-	//extern UART_Handle uart6;
 	extern UART_Handle uart7;
 
+	char buffer[] = "This is a test of uart 0";
 
 	while(1)
 	{
 		System_printf("Testing uarts in TASK\n");
 		System_flush();
-		//UART_write(uart0, "This is a test of uart 0", strlen(buffer));
-		//UART_write(uart1, "This is a test of uart 1", strlen(buffer));
 		UART_write(uart2, "This is a test of uart 2", strlen(buffer));
 		UART_write(uart3, "This is a test of uart 3", strlen(buffer));
 		UART_write(uart4, "This is a test of uart 4", strlen(buffer));
-		//UART_write(uart5, "This is a test of uart 5", strlen(buffer));
-		//UART_write(uart6, "This is a test of uart 6", strlen(buffer));
 		UART_write(uart7, "This is a test of uart 7", strlen(buffer));
 		SysCtlDelay(500);
 	}

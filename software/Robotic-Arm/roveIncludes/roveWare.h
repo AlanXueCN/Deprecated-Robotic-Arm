@@ -11,6 +11,8 @@
 #include "roveWareHeaders/roveStructTransfer.h"
 #include "roveWareHeaders/rovePinMap.h"
 
+#define DATA_FLOW_CTRL_1 0
+
 #define WRIST_DYNOA_ID 0x01
 #define WRIST_DYNOB_ID	0x02
 #define ELBOW_DYNOA_ID	0x03
