@@ -30,14 +30,14 @@ void roboticArm(UArg arg0, UArg arg1){
 
 	while(1)
 	{
-		ms_delay(100);
+		//ms_delay(100);
 
 		dynamixelSetEndless(WRIST_DYNOA_ID);
 
 		System_printf("Testing dynamixelSetEndless %d\n", WRIST_DYNOA_ID);
 		System_flush();
 
-		ms_delay(100);
+		//ms_delay(100);
 
 	}//while
 
