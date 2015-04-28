@@ -1,14 +1,15 @@
-/// roboticArm.c
+/// roboticArm.c 2015
 
-//OWENS FRAMEWORK:
+//TASK:
 
 #include "roveIncludes/roveWareHeaders/roboticArm.h"
 
-// BIOS_start in main inits this as the roveTcpHandlerTask Thread
+// BIOS_start in main inits this as the roboticArmTask Thread
 
-// this is a RoverMotherboard.cfg object::roveTcpHandlerTask::		priority 2, vital_flag = t, 2048 persistent private stack
+// this is a roboticArm.cfg object::roboticArmTask::priority 1,  768 persistent private stack, vital_flag = t,
 
-void roboticArm(UArg arg0, UArg arg1){
+void roboticArm(UArg arg0, UArg arg1)
+{
 
 	System_printf("Enter roboticArm TASK\n");
 	System_flush();
@@ -28,16 +29,34 @@ void roboticArm(UArg arg0, UArg arg1){
 	UART_write(uart4, "This is a test of uart 4", strlen(buffer));
 	UART_write(uart7, "This is a test of uart 7", strlen(buffer));
 
+	//int s_e_cnt = 0;
 	while(1)
 	{
-		//ms_delay(100);
+		//ms_delay(10);
 
-		dynamixelSetEndless(WRIST_DYNOA_ID);
+		//System_printf("Testing dynamixelSetEndless %d\n", WRIST_A_ID);
+		//System_flush();
+		dynamixelSetEndlessCmd(WRIST_A_ID);
+		//System_printf("Testing dynamixelSetEndless %d\n", WRIST_A_ID);
+		//System_flush();
+		dynamixelSetEndlessCmd(WRIST_B_ID);
+		//System_printf("Testing dynamixelSetEndless %d\n", WRIST_A_ID);
+		//System_flush();
+		dynamixelSetEndlessCmd(ELBOW_A_ID);
+		//System_printf("Testing dynamixelSetEndless %d\n", WRIST_A_ID);
+		//System_flush();
+		dynamixelSetEndlessCmd(ELBOW_B_ID);
+		//System_printf("Testing dynamixelSetEndless %d\n", BASE_ID);
+		//System_flush();
+		dynamixelSetEndlessCmd(BASE_ID);
 
-		System_printf("Testing dynamixelSetEndless %d\n", WRIST_DYNOA_ID);
-		System_flush();
+		//System_printf("Success dynamixelSetEndless count %d\n", s_e_cnt);
+		//System_flush();
 
-		//ms_delay(100);
+		//s_e_cnt++;
+
+
+		//ms_delay(10);
 
 	}//while
 

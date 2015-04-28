@@ -1,6 +1,6 @@
-// roveWare.h
-//
-// Created on: Apr 26, 2015
+// roveWare.h 2015
+
+// roveWare driver configuration flex values
 
 #pragma once
 
@@ -16,19 +16,24 @@
 
 #define LOW 0
 #define HIGH 1
-#define DATA_FLOW_CTRL_1 0
+
+#define SET_TRI_ST_BUF_Tx 0
 
 #define DYNAMIXEL_UART 0
 
-#define SET_ENDLESS 0
+#define SET_ENDLESS_CMD 0
 
-#define WRIST_DYNOA_ID  0x01
-#define WRIST_DYNOB_ID	0x02
-#define ELBOW_DYNOA_ID	0x03
-#define ELBOW_DYNOB_ID	0x04
-#define BASE_ID			0x05
+#define WRIST_A_ID  0x01
+#define WRIST_B_ID	0x02
+#define ELBOW_A_ID	0x03
+#define ELBOW_B_ID	0x04
+#define BASE_ID		0x05
 
+//TODO wtf uint8_t value[30] vs  uint8_t value[MAX_DYNAMIXEL_MSG_SIZE]in roveStructs.h ?
 #define MAX_DYNAMIXEL_MSG_SIZE 30
+
+//From Savage Electronics
+
 
 
 //EEPROM AREA
@@ -100,6 +105,11 @@
 #define AX_SYNC_WRITE               131
 
 	// Specials ///////////////////////////////////////////////////////////////
+
+
+//TODO		#define these to make sense in rove so english
+
+
 #define OFF                         0
 #define ON                          1
 #define LEFT						0

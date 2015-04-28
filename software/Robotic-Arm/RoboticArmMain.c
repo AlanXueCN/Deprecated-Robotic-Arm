@@ -2,19 +2,17 @@
 //
 // Using Texas Instruments Code Composer Studio RTOS stack. See read me include for copyright
 //
-// first created:
-//
-// 04_26_2015_Owen_Chiaventone omc8db
-//
-// last edited:
-//
-// 04_26_2015_Judah Schad_jrs6w7@mst.edu
+// 2015_Owen_Chiaventone_omc8db@mst.edu
+// 2015_Judah_Schad_jrs6w7@mst.edu
+// 2015_Connor_Walsh
 //
 // this instatiates global handles, initializes TI modules and then calls the TI BIOS operating system
 //
 // TI BIOS operating system instatiates the roveTCPHandler, roveCmdCntrl, and roveTelemCntrl threads
 
 // includes globally scoped Texas Instruments (TI) header files
+
+//MAIN:
 
 #include "roveIncludes/RoboticArmMain.h"
 
@@ -36,7 +34,8 @@
     UART_Handle uart7;		//PE1 LINEAR_ACTUATOR_UART 115200
 
 
-int main(void){
+int main(void)
+{
 
     //Call board init functions
     Board_initGeneral();

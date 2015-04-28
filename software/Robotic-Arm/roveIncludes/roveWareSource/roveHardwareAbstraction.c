@@ -1,9 +1,6 @@
-/*
- * hardwareAbstraction.c
- *
- *  Created on: Apr 27, 2015
- *      Author: mrdtdev
- */
+// hardwareAbstraction.c 2015
+
+//the roveWare / texas instruments interface lib
 
 #include "../roveWareHeaders/roveHardwareAbstraction.h"
 
@@ -12,9 +9,10 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id)
 
 	uint8_t check_sum;
 
-	switch( ( (struct dynamixel_id_cast*)dynamixel_struct)->struct_id){
+	switch( ( (struct dynamixel_id_cast*)dynamixel_struct)->struct_id)
+	{
 
-		case SET_ENDLESS:
+		case SET_ENDLESS_CMD:
 
 			( (struct set_endless_struct*)dynamixel_struct)->start_byte1 = AX_START;
 			( (struct set_endless_struct*)dynamixel_struct)->start_byte2 = AX_START;
@@ -40,17 +38,17 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id)
 
 }//end fnctn buildSerialStructMessage
 
-void digitalWrite(int pin, int val){
+void digitalWrite(int pin, int write)
+{
 
-	//Alarmingly enough, a switch case is really the only way to deal with this
-	//Everything is base on a bunch of TI defined constants that can't be indexed into
-	//Or iterated through
+	//check 0 case first to optimize indexed compares
+	if(write == LOW)
+	{
 
-	if(val == LOW){
+		switch(pin)
+		{
 
-		switch(pin){
-
-			case DATA_FLOW_CTRL_1 :
+			case SET_TRI_ST_BUF_Tx :
 				GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, (0));
 				break;
 
@@ -61,11 +59,13 @@ void digitalWrite(int pin, int val){
 				return;
 		}//endswitch
 
-	}else if (val == HIGH){
+	}else if (write == HIGH){
 
-		switch(pin){
+		switch(pin)
+		{
 
-			case DATA_FLOW_CTRL_1 :
+			case SET_TRI_ST_BUF_Tx :
+				//~0 implies write without calling GPIO_PIN_3 lookup
 				GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, (~0));
 				break;
 
@@ -124,7 +124,7 @@ int getDevicePort(uint8_t device_id)
 {
 	switch(device_id)
 	{
-		case WRIST_DYNOA_ID...BASE_ID:
+		case WRIST_A_ID...BASE_ID:
 			return DYNAMIXEL_UART;
 		default:
 				//Tried to get jack for an \ invalid device
@@ -139,7 +139,7 @@ int getStructSize(uint8_t struct_id)
 {
 	switch(struct_id)
 	{
-		case SET_ENDLESS:
+		case SET_ENDLESS_CMD:
 			return sizeof(struct set_endless_struct);
 		default:
 				System_printf("getStructSize passed invalid struct_id %d\n", struct_id);
@@ -150,20 +150,8 @@ int getStructSize(uint8_t struct_id)
 }//endfnctn getDevicePort
 
 /*
-uint8_t calcCheckSum(const void* my_struct, uint8_t size){
 
-	uint8_t checkSum = size;
-	uint8_t i;
-
-	for(i = 0; i < size; i++)
-		checkSum ^= *((char*)my_struct + i);
-
-	return checkSum;
-
-}//end fnctn
-
-
-
+Todo recieve
 
 int deviceRead(int rs485jack, char* buffer, int bytes_to_read, int timeout){
 
@@ -293,5 +281,19 @@ int deviceRead(int rs485jack, char* buffer, int bytes_to_read, int timeout){
 	return bytes_read;
 
 }//endfnctn deviceRead
+
+uint8_t calcCheckSum(const void* my_struct, uint8_t size){
+
+	uint8_t checkSum = size;
+	uint8_t i;
+
+	for(i = 0; i < size; i++)
+		checkSum ^= *((char*)my_struct + i);
+
+	return checkSum;
+
+}//end fnctn
+
+
 
 */

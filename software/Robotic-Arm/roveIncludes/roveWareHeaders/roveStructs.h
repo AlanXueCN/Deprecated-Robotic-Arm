@@ -1,9 +1,6 @@
-/*
- * struct.h
- *
- *  Created on: Apr 28, 2015
- *      Author: mrdtdev
- */
+// roveStructs.h 2015
+
+// roveWare comtainer definitions
 
 #pragma once
 
