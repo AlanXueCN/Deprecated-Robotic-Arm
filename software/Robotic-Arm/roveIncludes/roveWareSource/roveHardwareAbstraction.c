@@ -4,6 +4,7 @@
 
 #include "../roveWareHeaders/roveHardwareAbstraction.h"
 
+//see roveStructs.h and rovWare.h for config
 void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id)
 {
 
@@ -14,6 +15,8 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id)
 
 		case SET_ENDLESS_CMD:
 
+			// to switch cast the single dynamixel_msg_struct global buffer instance
+			// using precompile macros to config flex and avoid extra memory copy
 			( (struct set_endless_struct*)dynamixel_struct)->start_byte1 = AX_START;
 			( (struct set_endless_struct*)dynamixel_struct)->start_byte2 = AX_START;
 			( (struct set_endless_struct*)dynamixel_struct)->dynamixel_id = dynamixel_id;
@@ -38,6 +41,8 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id)
 
 }//end fnctn buildSerialStructMessage
 
+
+//see roveStructs.h and rovWare.h for config
 void digitalWrite(int pin, int write)
 {
 
@@ -83,6 +88,7 @@ void digitalWrite(int pin, int write)
 
 }//endfnctn digitalWrite
 
+//see roveStructs.h and rovWare.h for config
 int deviceWrite(int device_port, char* buffer, int bytes_to_write)
 {
 	int bytes_wrote;
@@ -120,6 +126,7 @@ int deviceWrite(int device_port, char* buffer, int bytes_to_write)
 
 }//endfnctn deviceWrite
 
+//see roveStructs.h and rovWare.h for config
 int getDevicePort(uint8_t device_id)
 {
 	switch(device_id)
