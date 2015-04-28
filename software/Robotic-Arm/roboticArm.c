@@ -20,16 +20,26 @@ void roboticArm(UArg arg0, UArg arg1){
 
 	char buffer[] = "This is a test of uart 0";
 
+	System_printf("Testing uarts in TASK\n");
+	System_flush();
+
+	UART_write(uart2, "This is a test of uart 2", strlen(buffer));
+	UART_write(uart3, "This is a test of uart 3", strlen(buffer));
+	UART_write(uart4, "This is a test of uart 4", strlen(buffer));
+	UART_write(uart7, "This is a test of uart 7", strlen(buffer));
+
 	while(1)
 	{
-		System_printf("Testing uarts in TASK\n");
+		ms_delay(100);
+
+		dynamixelSetEndless(WRIST_DYNOA_ID);
+
+		System_printf("Testing dynamixelSetEndless %d\n", WRIST_DYNOA_ID);
 		System_flush();
-		UART_write(uart2, "This is a test of uart 2", strlen(buffer));
-		UART_write(uart3, "This is a test of uart 3", strlen(buffer));
-		UART_write(uart4, "This is a test of uart 4", strlen(buffer));
-		UART_write(uart7, "This is a test of uart 7", strlen(buffer));
-		SysCtlDelay(500);
-	}
+
+		ms_delay(100);
+
+	}//while
 
 /*	while(recieve struct){
 

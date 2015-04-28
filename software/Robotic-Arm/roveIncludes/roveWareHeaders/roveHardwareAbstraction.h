@@ -85,6 +85,10 @@ int deviceWrite(int rs485jack, char* buffer, int bytes_to_write);
 // 			break;
 // 	}
 
-int deviceRead(int rs485jack, char* buffer, int bytes_to_read, int timeout);
+int getDevicePort(uint8_t device_id);
+
+int getStructSize(uint8_t struct_id);
+
+//int deviceRead(int rs485jack, char* buffer, int bytes_to_read, int timeout);
 
 #endif // ROVEHARDWAREABSTRACTION_H_

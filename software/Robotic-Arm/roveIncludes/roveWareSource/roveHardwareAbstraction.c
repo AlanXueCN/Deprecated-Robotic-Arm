@@ -10,8 +10,7 @@
 void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id)
 {
 
-	uint8_t checkSum;
-	uint8_t size;
+	uint8_t check_sum;
 
 	switch( ( (struct dynamixel_id_cast*)dynamixel_struct)->struct_id){
 
@@ -26,7 +25,7 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id)
 			( (struct set_endless_struct*)dynamixel_struct)->ccw_angle_limit_low_byte = 0x00;
 			( (struct set_endless_struct*)dynamixel_struct)->ccw_angle_limit_high_byte = 0x00;
 
-			uint8_t check_sum = ( ~(dynamixel_id + AX_GOAL_LENGTH + AX_WRITE_DATA + AX_CCW_ANGLE_LIMIT_L) ) & 0xFF;
+			check_sum = ( ~(dynamixel_id + AX_GOAL_LENGTH + AX_WRITE_DATA + AX_CCW_ANGLE_LIMIT_L) ) & 0xFF;
 
 			( (struct set_endless_struct*)dynamixel_struct)->check_sum = check_sum;
 
@@ -97,8 +96,8 @@ int deviceWrite(int device_port, char* buffer, int bytes_to_write)
 	System_printf("deviceWrite called\n");
 	System_flush();
 
-	switch(device_port){
-
+	switch(device_port)
+	{
 		// we have to include case 0 to get TI's compiler to build a jump table
 		// if we leave this out, mux performance goes from O(1) to O(n) (That's bad)
 		case DYNAMIXEL_UART:
@@ -121,9 +120,10 @@ int deviceWrite(int device_port, char* buffer, int bytes_to_write)
 
 }//endfnctn deviceWrite
 
-int getDevicePort(int device_id){
-
-	switch(device_id){
+int getDevicePort(uint8_t device_id)
+{
+	switch(device_id)
+	{
 		case WRIST_DYNOA_ID...BASE_ID:
 			return DYNAMIXEL_UART;
 		default:
@@ -132,9 +132,22 @@ int getDevicePort(int device_id){
 				System_flush();
 			return -1;
 	}//endswitch (device)
-}//endfnctn deviceJack
 
+}//endfnctn getDevicePort
 
+int getStructSize(uint8_t struct_id)
+{
+	switch(struct_id)
+	{
+		case SET_ENDLESS:
+			return sizeof(struct set_endless_struct);
+		default:
+				System_printf("getStructSize passed invalid struct_id %d\n", struct_id);
+				System_flush();
+			return -1;
+	}//endswitch
+
+}//endfnctn getDevicePort
 
 /*
 uint8_t calcCheckSum(const void* my_struct, uint8_t size){

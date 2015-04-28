@@ -21,7 +21,7 @@
 typedef struct dynamixel_msg_struct{
 
 	uint8_t struct_id;
-	uint8_t value[MAX_DYNAMIXEL_MSG_SIZE];
+	uint8_t value[30];
 
 }__attribute__((packed)) dynamixel_msg_struct, *dyna_msg;
 

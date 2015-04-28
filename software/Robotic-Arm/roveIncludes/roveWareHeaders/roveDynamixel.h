@@ -15,7 +15,7 @@
 
 //void dynamixelSendData(UART_Handle uart, uint8_t* data_buffer);
 
-void dynamixelSetEndless(UART_Handle uart, uint8_t dynamixel_id);
+void dynamixelSetEndless(uint8_t dynamixel_id);
 
 /*
 // Sets a dynamixel to a specific speed

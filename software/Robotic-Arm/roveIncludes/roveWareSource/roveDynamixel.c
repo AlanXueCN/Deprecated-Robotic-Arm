@@ -7,28 +7,32 @@
 
 #include "../roveWareHeaders/roveDynamixel.h"
 
-void dynamixelSetEndless(UART_Handle uart, uint8_t dynamixel_id)
+void dynamixelSetEndless(uint8_t dynamixel_id)
 {
-//TODO:
 
+		int device_port;
 		int bytes_to_write;
 		int bytes_wrote;
-		int device_port;
 
 		dynamixel_msg_struct dynamixel_buffer_struct;
+		dynamixel_buffer_struct.struct_id = SET_ENDLESS;
 
 		// set tristate buffer to transmit
 		digitalWrite(DATA_FLOW_CTRL_1, HIGH);
 
 		// populate the dynamixel_buffer_struct for dynamixel format frame
-		buildDynamixelMessage((void*)(&dynamixel_buffer_struct), dynamixel_id);
+		buildDynamixelStructMessage((void*)(&dynamixel_buffer_struct), dynamixel_id);
 
 		//get the uart
 		device_port = getDevicePort(dynamixel_id);
 
-		bytes_to_write = getStructSize( ( (struct dynamixel_id_cast*)(&dynamixel_buffer_struct))->struct_id);
+		//bytes_to_write = getStructSize( ( (struct dynamixel_id_cast*)(&dynamixel_buffer_struct))->struct_id);
+		bytes_to_write = getStructSize( dynamixel_buffer_struct.struct_id );
 
 		bytes_wrote = deviceWrite(device_port, (char*)&dynamixel_buffer_struct, bytes_to_write);
+
+		System_printf("Testing dynamixelSetEndless bytes_to_write %d, bytes_wrote %d\n", bytes_to_write, bytes_wrote);
+		System_flush();
 
 		//set tri state buffer back for read
 		digitalWrite(DATA_FLOW_CTRL_1, HIGH);
