@@ -5,18 +5,22 @@
  //      Author: mrdtdev
  ///
 
+#pragma once
+
 #ifndef ROVEHARDWAREABSTRACTION_H_
 #define ROVEHARDWAREABSTRACTION_H_
 
 // globally scoped Texas Instruments (TI) headers
 
-#include "../RoverRobotArmMain.h"
+#include "../RoboticArmMain.h"
 
 // MRDesign Team::roveWare::		roveCom and RoveNet services headers
 
-#include "../mrdtRoveWare.h"
+#include "../roveWare.h"
 
 //HARDWARE ABSTRACTION FUNCTIONS
+
+void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id);
 
 // digitalWrite sets a bit to be on or off
 // inputs:

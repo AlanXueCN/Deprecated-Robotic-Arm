@@ -7,55 +7,39 @@
 
 #include "../roveWareHeaders/roveHardwareAbstraction.h"
 
+void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id)
+{
 
-// roveHardwareAbstraction
-//
-// first created:
-//
-// 01_22_2015_Owen_Chiaventone omc8db
-//
-// last edited:
-//
-// 02_24_2015_Judah Schad_jrs6w7@mst.edu
+	uint8_t checkSum;
+	uint8_t size;
 
-#include "../roveWareHeaders/roveHardwareAbstraction.h"
+	switch( ( (struct dynamixel_id_cast*)dynamixel_struct)->struct_id){
 
-//TODO Configure Patch Panel Jacks to Physical Devices (In Hardware FIRST)
+		case SET_ENDLESS:
 
-int getDeviceJack(int device_id){
+			( (struct set_endless_struct*)dynamixel_struct)->start_byte1 = AX_START;
+			( (struct set_endless_struct*)dynamixel_struct)->start_byte2 = AX_START;
+			( (struct set_endless_struct*)dynamixel_struct)->dynamixel_id = dynamixel_id;
+			( (struct set_endless_struct*)dynamixel_struct)->msg_size = AX_GOAL_LENGTH;
+			( (struct set_endless_struct*)dynamixel_struct)->read_write_flag = AX_WRITE_DATA;
+			( (struct set_endless_struct*)dynamixel_struct)->ccw_angle_limit_reg_addr = AX_CCW_ANGLE_LIMIT_L;
+			( (struct set_endless_struct*)dynamixel_struct)->ccw_angle_limit_low_byte = 0x00;
+			( (struct set_endless_struct*)dynamixel_struct)->ccw_angle_limit_high_byte = 0x00;
 
-	switch(device_id){
-		case 0:
-				//Tried to get jack for an null device
-				System_printf("getDeviceJack passed null device %d\n", device);
-				System_flush();
-			return -1;
+			uint8_t check_sum = ( ~(dynamixel_id + AX_GOAL_LENGTH + AX_WRITE_DATA + AX_CCW_ANGLE_LIMIT_L) ) & 0xFF;
 
-		case test_device_id:
+			( (struct set_endless_struct*)dynamixel_struct)->check_sum = check_sum;
 
-			return ONBOARD_ROVECOMM;
-
-		case motor_left_id:
-
-			return ONBOARD_ROVECOMM;
-
-		case bms_emergency_stop_command_id ... bms_total_amperage_telem_id:
-			return ONBOARD_ROVECOMM;
-
-		case power_board_command_id ... power_board_telem_main_battery_voltage_id:
-			return POWER_BOARD;
+			break;
 
 		default:
-				//Tried to get jack for an \ invalid device
-				System_printf("getDeviceJack passed invalid device %d\n", device);
-				System_flush();
-			return -1;
+			System_printf("Error in function: buildDynamixelStructMessage() - struct size is not valid");
+			System_flush();
+			break;
 
-	}//endswitch (device)
+		}//endswitch
 
-}//endfnctn deviceJack
-
-
+}//end fnctn buildSerialStructMessage
 
 void digitalWrite(int pin, int val){
 
@@ -100,145 +84,76 @@ void digitalWrite(int pin, int val){
 
 }//endfnctn digitalWrite
 
-
-int deviceWrite(int rs485jack, char* buffer, int bytes_to_write){
-
-/*	int bytes_wrote;
+int deviceWrite(int device_port, char* buffer, int bytes_to_write)
+{
+	int bytes_wrote;
 
 	// give us access to the uart handles defined at the global scope in main
-
-	extern UART_Handle uart0;
-	extern UART_Handle uart1;
 	extern UART_Handle uart2;
 	extern UART_Handle uart3;
 	extern UART_Handle uart4;
-	extern UART_Handle uart5;
-	extern UART_Handle uart6;
 	extern UART_Handle uart7;
 
-					//System_printf("deviceWrite called\n");
-					//System_flush();
+	System_printf("deviceWrite called\n");
+	System_flush();
 
-	switch(rs485jack){
+	switch(device_port){
 
 		// we have to include case 0 to get TI's compiler to build a jump table
 		// if we leave this out, mux performance goes from O(1) to O(n) (That's bad)
-		case 0:
-		break;
-		case 1:
-			// configure the mux pins, see the mux datasheet for more info
-			digitalWrite(U3_MUX_S0, HIGH);
-			digitalWrite(U3_MUX_S1, HIGH);
-			// write the buffer to the device
-			bytes_wrote = UART_write(uart3, buffer, bytes_to_write);
-			break;
-		case 2:
-			digitalWrite(U3_MUX_S0, LOW);
-			digitalWrite(U3_MUX_S1, HIGH);
-			bytes_wrote = UART_write(uart3, buffer, bytes_to_write);
-			break;
-		case 3:
-			digitalWrite(U3_MUX_S0, HIGH);
-			digitalWrite(U3_MUX_S1, LOW);
-			bytes_wrote = UART_write(uart3, buffer, bytes_to_write);
-			break;
-		case 4:
-			digitalWrite(U6_MUX_S0, LOW);
-			digitalWrite(U6_MUX_S1, HIGH);
-			bytes_wrote = UART_write(uart6, buffer, bytes_to_write);
-			break;
-		case 5:
-			digitalWrite(U6_MUX_S0, HIGH);
-			digitalWrite(U6_MUX_S1, LOW);
-			bytes_wrote = UART_write(uart6, buffer, bytes_to_write);
-			break;
-		case 6:
-			digitalWrite(U7_MUX_S0, HIGH);
-			digitalWrite(U7_MUX_S1, HIGH);
-			bytes_wrote = UART_write(uart7, buffer, bytes_to_write);
-			break;
-		case 7:
-			digitalWrite(U7_MUX_S0, LOW);
-			digitalWrite(U7_MUX_S1, HIGH);
-			bytes_wrote = UART_write(uart7, buffer, bytes_to_write);
-			break;
-		case 8:
-			digitalWrite(U7_MUX_S0, HIGH);
-			digitalWrite(U7_MUX_S1, LOW);
-			bytes_wrote = UART_write(uart7, buffer, bytes_to_write);
-			break;
-		case 9:
-			digitalWrite(U5_MUX_S0, LOW);
-			digitalWrite(U5_MUX_S1, LOW);
-			bytes_wrote = UART_write(uart5, buffer, bytes_to_write);
-			break;
-		case 10:
-			digitalWrite(U5_MUX_S0, LOW);
-			digitalWrite(U5_MUX_S1, HIGH);
-			bytes_wrote = UART_write(uart5, buffer, bytes_to_write);
-			break;
-		case 11:
-			digitalWrite(U5_MUX_S0, HIGH);
-			digitalWrite(U5_MUX_S1, LOW);
-			bytes_wrote = UART_write(uart5, buffer, bytes_to_write);
-			break;
-		case 12:
-			digitalWrite(U5_MUX_S0, LOW);
-			digitalWrite(U5_MUX_S1, LOW);
-			bytes_wrote = UART_write(uart5, buffer, bytes_to_write);
-			break;
-		case 13:
-			digitalWrite(U5_MUX_S0, HIGH);
-			digitalWrite(U5_MUX_S1, HIGH);
-			bytes_wrote = UART_write(uart5, buffer, bytes_to_write);
-			break;
-		case 14:
-			digitalWrite(U4_MUX_S0, LOW);
-			digitalWrite(U4_MUX_S1, LOW);
+		case DYNAMIXEL_UART:
 			bytes_wrote = UART_write(uart4, buffer, bytes_to_write);
-			break;
-		case 15:
-			digitalWrite(U4_MUX_S0, LOW);
-			digitalWrite(U4_MUX_S1, HIGH);
-			bytes_wrote = UART_write(uart4, buffer, bytes_to_write);
-			break;
-		case 16:
-			digitalWrite(U4_MUX_S0, HIGH);
-			digitalWrite(U4_MUX_S1, HIGH);
-			bytes_wrote = UART_write(uart4, buffer, bytes_to_write);
-			break;
-		case 17:
-			digitalWrite(U4_MUX_S0, HIGH);
-			digitalWrite(U4_MUX_S1, LOW);
-			bytes_wrote = UART_write(uart4, buffer, bytes_to_write);
-			break;
-		case POWER_BOARD:
-			digitalWrite(U6_MUX_S0, HIGH);
-			digitalWrite(U6_MUX_S1, HIGH);
-			bytes_wrote = UART_write(uart6, buffer, bytes_to_write);
-			break;
-		case ONBOARD_ROVECOMM:
-			bytes_wrote = UART_write(uart2, buffer, bytes_to_write);
 			break;
 		default:
 			//Tried to write to invalid device
-			System_printf("DeviceWrite passed invalid device %d\n", rs485jack);
+			System_printf("DeviceWrite passed invalid device %d\n", device_port);
 			System_flush();
-			return -1;
+			break;
 		//etc.
 
-	}//end switch(rs485jack)
+	}//end switch(jack)
 
 	// make sure the message is fully written before leaving the function
 
 	ms_delay(1);
 
 	return bytes_wrote;
-*/
+
 }//endfnctn deviceWrite
 
-int deviceRead(int rs485jack, char* buffer, int bytes_to_read, int timeout){
+int getDevicePort(int device_id){
+
+	switch(device_id){
+		case WRIST_DYNOA_ID...BASE_ID:
+			return DYNAMIXEL_UART;
+		default:
+				//Tried to get jack for an \ invalid device
+				System_printf("getDevicePort passed invalid device_id %d\n", device_id);
+				System_flush();
+			return -1;
+	}//endswitch (device)
+}//endfnctn deviceJack
+
+
+
 /*
+uint8_t calcCheckSum(const void* my_struct, uint8_t size){
+
+	uint8_t checkSum = size;
+	uint8_t i;
+
+	for(i = 0; i < size; i++)
+		checkSum ^= *((char*)my_struct + i);
+
+	return checkSum;
+
+}//end fnctn
+
+
+
+
+int deviceRead(int rs485jack, char* buffer, int bytes_to_read, int timeout){
+
 	int bytes_read;
 
 	// give us access to the uart handles defined at the global scope in main
@@ -363,5 +278,7 @@ int deviceRead(int rs485jack, char* buffer, int bytes_to_read, int timeout){
 	}//endswitch(rs485jack)
 
 	return bytes_read;
-*/
+
 }//endfnctn deviceRead
+
+*/

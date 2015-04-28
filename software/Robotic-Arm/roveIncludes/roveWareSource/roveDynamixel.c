@@ -5,18 +5,45 @@
  *      Author: mrdtdev
  */
 
-
 #include "../roveWareHeaders/roveDynamixel.h"
 
-
-/*
-void dynamixelWrite(UART_Handle uart, char* data_buffer)
+void dynamixelSetEndless(UART_Handle uart, uint8_t dynamixel_id)
 {
-	UART_write(uart, &data, 1);
+//TODO:
+
+		int bytes_to_write;
+		int bytes_wrote;
+		int device_port;
+
+		dynamixel_msg_struct dynamixel_buffer_struct;
+
+		// set tristate buffer to transmit
+		digitalWrite(DATA_FLOW_CTRL_1, HIGH);
+
+		// populate the dynamixel_buffer_struct for dynamixel format frame
+		buildDynamixelMessage((void*)(&dynamixel_buffer_struct), dynamixel_id);
+
+		//get the uart
+		device_port = getDevicePort(dynamixel_id);
+
+		bytes_to_write = getStructSize( ( (struct dynamixel_id_cast*)(&dynamixel_buffer_struct))->struct_id);
+
+		bytes_wrote = deviceWrite(device_port, (char*)&dynamixel_buffer_struct, bytes_to_write);
+
+		//set tri state buffer back for read
+		digitalWrite(DATA_FLOW_CTRL_1, HIGH);
+
+}//endfnctn  dynamixelSetEndless
+
+/*void dynamixelWrite(UART_Handle uart, uint8_t* data_buffer)
+{
+
 	return;
 }
 
+*/
 
+/*
 OWENS STUBS
 
 // Sets a dynamixel to a specific speed
@@ -70,38 +97,6 @@ void delayMicros(int microseconds)
 
 //Runtime Command to turn on and off endless rotation ( maaaybeee feeels a bit liiike Open Loop emulation)
 
-void dynamixelSetEndless(UART_Handle uart, uint8_t dynamixel_id)
-{
-//TODO:
-		// set tristate buffer to transmit
-		//digitalWrite(DATA_FLOW_CTRL_1, HIGH);
-
-		// fill message buffer with dynamixel instruction format frame
-	    // buildDynamixelMessage(uart, dynamixel_msg_buff);
-			/*Changing the CCW Angle Limits for Full Rotation
-			uint8_t AX_CCW_AL_LT = 0;
-			uint8_t check_sum = ( ~(ID + AX_GOAL_LENGTH + AX_WRITE_DATA + AX_CCW_ANGLE_LIMIT_L) ) & 0xFF;
-			sendData(AX_START);
-			sendData(AX_START);
-			sendData(ID);
-			sendData(AX_GOAL_LENGTH);
-			sendData(AX_WRITE_DATA);
-			sendData(AX_CCW_ANGLE_LIMIT_L );
-			sendData(AX_CCW_AL_LT);
-			sendData(AX_CCW_AL_LT);
-			sendData(Checksum);
-			//delayus(TX_DELAY_TIME);
-			*/
-		// send the buffer
-		//dynamixelWrite(uart, char data);
-			//bytes_wrote = UART_write(uart3, dynamixel_msg_buff, bytes_to_write);
-
-		//set tri state buffer back for read
-		//digitalWrite(DATA_FLOW_CTRL_1, HIGH);
-
-		return;
-
-}//endfnctn  dynamixelSetEndless
 
 
 //Runtime direction and speed

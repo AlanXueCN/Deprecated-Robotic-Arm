@@ -5,6 +5,8 @@
  *      Author: mrdtdev
  */
 
+#pragma once
+
 #ifndef ROVEUARTS_H_
 #define ROVEUARTS_H_
 

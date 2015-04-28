@@ -1,4 +1,4 @@
-///
+ //
  // rovePinMap.h
  //
  //  Created on: Apr 26, 2015
@@ -10,18 +10,15 @@
 #ifndef ROVEPINMAP_H_
 #define ROVEPINMAP_H_
 
-
 // includes globally scoped Texas Instruments (TI) header files
 
 // globally scoped Texas Instruments (TI) headers
 
-#include "../RoboticArmMain.h"
+//#include "../RoboticArmMain.h"
 
 // MRDesign Team::roveWare::		roveCom and RoveNet services headers
 
-#include "../roveWare.h"
-
-
+//#include "../roveWare.h"
 
 //		UART 0:   TX PA1, RX PA0
 // 		UART 1:   TX PB1, RX PB0
@@ -38,10 +35,6 @@
 // GPIO
 
 
-// DATA_FLOW_CTRL_1
-
-//GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, (0));
-//
 // DATA_FLOW_CTRL_1: 	DC_1:		PB3
 // MOTOR_CONTROLLER_ENABLE:			PD2
 // MOTOR_CONTROLLER_INPUT_1			PD3
