@@ -26,14 +26,14 @@
 
 // globally create UART handles
 
-	UART_Handle uart0;
-    UART_Handle uart1;		//these all transmit
-    UART_Handle uart2;		//these all transmit
-    UART_Handle uart3;		//these all transmit
-    UART_Handle uart4;		//these all transmit
-    UART_Handle uart5;
-    UART_Handle uart6;
-    UART_Handle uart7;
+	//UART_Handle uart0;
+    //UART_Handle uart1;
+    UART_Handle uart2;		//PD7 MOTHERBOARD_UART 115200
+    UART_Handle uart3;		//PC7 END_EFFECTOR_UART 9600
+    UART_Handle uart4;		//PC5 DYNAMIXEL_UART 57600
+    //UART_Handle uart5;
+    //UART_Handle uart6;
+    UART_Handle uart7;		//PE1 LINEAR_ACTUATOR_UART 115200
 
 
 int main(void){
@@ -55,41 +55,41 @@ int main(void){
 
 	// not utilizing uart0 or uart1 (no mob to pins)
 
-	uart0 = (UART_Handle)init_uart( 0, 115200 );
+	//uart0 = (UART_Handle)init_uart( 0, 115200 );
 
-	System_printf("Assigned UART 0\n");
-	System_flush();
+	//System_printf("Assigned UART 0\n");
+	//System_flush();
 
 
-	uart1 = (UART_Handle)init_uart( 1, 115200 );
+	//uart1 = (UART_Handle)init_uart( 1, 115200 );
 
-	System_printf("Assigned UART 1\n");
-	System_flush();
+	//System_printf("Assigned UART 1\n");
+	//System_flush();
 
 	uart2 = (UART_Handle)init_uart( 2, 115200 );
 
 	System_printf("Assigned UART 2\n");
 	System_flush();
 
-	uart3 = (UART_Handle)init_uart( 3, 115200 );
+	uart3 = (UART_Handle)init_uart( 3, 9600 );
 
 	System_printf("Assigned UART 3\n");
 	System_flush();
 
-	uart4 = (UART_Handle)init_uart( 4, 115200 );
+	uart4 = (UART_Handle)init_uart( 4, 57600 );
 
 	System_printf("Assigned UART 4\n");
 	System_flush();
 
-	uart5 = (UART_Handle)init_uart( 5, 115200 );
+	//uart5 = (UART_Handle)init_uart( 5, 115200 );
 
-	System_printf("Assigned UART 5\n");
-	System_flush();
+	//System_printf("Assigned UART 5\n");
+	//System_flush();
 
-	uart6 = (UART_Handle)init_uart( 6, 115200 );
+	//uart6 = (UART_Handle)init_uart( 6, 115200 );
 
-	System_printf("Assigned UART 6\n");
-	System_flush();
+	//System_printf("Assigned UART 6\n");
+	//System_flush();
 
 	uart7 = (UART_Handle)init_uart( 7, 115200 );
 
