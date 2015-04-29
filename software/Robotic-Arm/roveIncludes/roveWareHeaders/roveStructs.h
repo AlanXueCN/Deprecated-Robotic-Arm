@@ -64,6 +64,21 @@ struct set_speed_struct{
 
 }__attribute__((packed));
 
+//min position is 0x000	max position is 0xFFF
+struct linear_actuator_struct{
+
+	//address of low byte
+	uint8_t target_low_byte;
+	uint8_t target_high_byte;
+
+	//tracked
+	uint16_t current_position;
+
+	// arg0
+	uint16_t target_position;
+
+}__attribute__((packed));
+
 //only used for getStructSize((struct dynamixel_id_cast*)dynamixel_struct->struct_id)
 
 struct dynamixel_id_cast{

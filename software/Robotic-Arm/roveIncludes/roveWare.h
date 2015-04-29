@@ -20,9 +20,11 @@
 #define SET_TRI_ST_BUF_Tx 0
 
 #define DYNAMIXEL_UART 0
+#define LINEAR_ACTUATOR_UART 1
 
 #define SET_ENDLESS_CMD 0
 #define SET_SPEED_CMD	1
+#define SET_ACTUATOR_CMD 2
 
 #define WRIST_A_ID  0x01
 #define WRIST_B_ID	0x02
@@ -30,8 +32,15 @@
 #define ELBOW_B_ID	0x04
 #define BASE_ID		0x05
 
+#define LIN_ACT_ID  0x06
+
+#define MIN_LIN_ACT_POSITION 0
+#define MAX_LIN_ACT_POSITION 4095
+
 //TODO wtf uint8_t value[30] vs  uint8_t value[MAX_DYNAMIXEL_MSG_SIZE]in roveStructs.h ?
 #define MAX_DYNAMIXEL_MSG_SIZE 30
+
+#define LIN_DONT_PRINT_BYTES 4
 
 //From Savage Electronics
 

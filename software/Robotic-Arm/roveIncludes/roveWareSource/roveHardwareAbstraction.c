@@ -7,14 +7,12 @@
 //see roveStructs.h and rovWare.h for config
 void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, uint16_t command_value)
 {
-
 	uint8_t check_sum;
 	uint8_t speed_low_byte = (uint8_t)command_value;
 	uint8_t speed_high_byte = (uint8_t)(command_value >> 8);
 
 	switch( ( (struct dynamixel_id_cast*)dynamixel_struct)->struct_id)
 	{
-
 		case SET_ENDLESS_CMD:
 
 			// to switch cast the single dynamixel_msg_struct global buffer instance
@@ -51,10 +49,56 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, u
 
 		break;
 
-		default:
-			System_printf("Error in function: buildDynamixelStructMessage() - struct size is not valid");
+		case SET_ACTUATOR_CMD:
+
+			//target = current + command
+			((struct linear_actuator_struct*)dynamixel_struct)->target_position =
+			(command_value + ( (struct linear_actuator_struct*)dynamixel_struct)->current_position);
+
+			if ((((struct linear_actuator_struct*)dynamixel_struct)->target_position) > MAX_LIN_ACT_POSITION )
+			{
+				((struct linear_actuator_struct*)dynamixel_struct)->target_position = MAX_LIN_ACT_POSITION;
+
+			}//endif
+
+			if ((((struct linear_actuator_struct*)dynamixel_struct)->target_position) < MIN_LIN_ACT_POSITION )
+			{
+				((struct linear_actuator_struct*)dynamixel_struct)->target_position = MIN_LIN_ACT_POSITION;
+
+			}//endif
+
+			((struct linear_actuator_struct*)dynamixel_struct)->current_position =
+					((struct linear_actuator_struct*)dynamixel_struct)->target_position;
+
+			//target_low_byte = 0xC0 + (target + 0x1F)
+			((struct linear_actuator_struct*)dynamixel_struct)->target_low_byte =
+			(uint8_t)( 0xC0 + (( ((struct linear_actuator_struct*)dynamixel_struct)->target_position)& 0x1F) );
+
+			//target_high_byte =
+			((struct linear_actuator_struct*)dynamixel_struct)->target_high_byte =
+			(uint8_t)( ((((struct linear_actuator_struct*)dynamixel_struct)->target_position) >> 5)& 0x7F);
+
+			System_printf("SET_ACTUATOR_CMD() target_position %d/n",
+				((struct linear_actuator_struct*)dynamixel_struct)->target_position);
+
+			System_printf("SET_ACTUATOR_CMD() target_low_byte %d/n",
+				((struct linear_actuator_struct*)dynamixel_struct)->target_low_byte);
+
+			System_printf("SET_ACTUATOR_CMD() target_high_byte %d/n",
+				((struct linear_actuator_struct*)dynamixel_struct)->target_high_byte);
 			System_flush();
+
 		break;
+
+		default:
+
+				System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");
+				System_flush();
+
+
+
+		break;
+
 		}//endswitch
 
 }//end fnctn buildSerialStructMessage
@@ -69,13 +113,18 @@ void digitalWrite(int pin, int write)
 		switch(pin)
 		{
 			case SET_TRI_ST_BUF_Tx :
+
 				GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, (0));
+
 			break;
 
 			default:
+
 				System_printf("DigitalWrite passed invalid pin %d\n", pin);
 				System_flush();
+
 			return;
+
 		}//endswitch
 
 	}else if(write == HIGH)
@@ -84,14 +133,19 @@ void digitalWrite(int pin, int write)
 		switch(pin)
 		{
 			case SET_TRI_ST_BUF_Tx :
+
 				//~0 implies write without calling GPIO_PIN_3 lookup
 				GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, (~0));
+
 			break;
 
 			default:
+
 				System_printf("DigitalWrite passed invalid pin %d\n", pin);
 				System_flush();
+
 			return;
+
 		}//endswitch
 
 	}//endif
@@ -119,11 +173,21 @@ int deviceWrite(int device_port, char* buffer, int bytes_to_write)
 		// we have to include case 0 to get TI's compiler to build a jump table
 		// if we leave this out, mux performance goes from O(1) to O(n) (That's bad)
 		case DYNAMIXEL_UART:
+
 			bytes_wrote = UART_write(uart4, buffer, bytes_to_write);
+
 		break;
+		case LINEAR_ACTUATOR_UART:
+
+			bytes_wrote = UART_write(uart7, buffer, bytes_to_write);
+
+		break;
+
 		default:
+
 			System_printf("DeviceWrite passed invalid device %d\n", device_port);
 			System_flush();
+
 		break;
 		//etc.
 	}//end switch(jack)
@@ -142,10 +206,18 @@ int getDevicePort(uint8_t device_id)
 	switch(device_id)
 	{
 		case WRIST_A_ID...BASE_ID:
+
 		return DYNAMIXEL_UART;
+
+		case LIN_ACT_ID:
+
+		return LINEAR_ACTUATOR_UART;
+
 		default:
+
 			System_printf("getDevicePort passed invalid device_id %d\n", device_id);
 			System_flush();
+
 		return -1;
 	}//endswitch (device)
 
@@ -156,13 +228,24 @@ int getStructSize(uint8_t struct_id)
 	switch(struct_id)
 	{
 		case SET_ENDLESS_CMD:
+
 			return sizeof(struct set_endless_struct);
+
 		case SET_SPEED_CMD:
+
 			return sizeof(struct set_speed_struct);
+
+		case SET_ACTUATOR_CMD:
+
+			return (sizeof(struct linear_actuator_struct) - LIN_DONT_PRINT_BYTES);
+
 		default:
+
 			System_printf("getStructSize passed invalid struct_id %d\n", struct_id);
 			System_flush();
+
 		return -1;
+
 	}//endswitch
 
 }//endfnctn getDevicePort

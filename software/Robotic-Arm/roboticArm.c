@@ -45,14 +45,19 @@ void roboticArm(UArg arg0, UArg arg1)
 	System_flush();
 	dynamixelSetEndlessCmd(BASE_ID);
 
+	System_printf("Testing setLinActuatorCmd %d\n", LIN_ACT_ID);
+	System_flush();
+	setLinActuatorCmd(LIN_ACT_ID, 0);
+
 	int command_loop_thru_count = 0;
 	int test_speed = 1000;
+	int test_lin_act_increment = 200;
 	while(1)
 	{
 		ms_delay(1);
 
-		//if(test_speed < 900)
-		//{
+		if(test_speed < 900)
+		{
 
 			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", WRIST_A_ID, test_speed);
 			System_flush();
@@ -69,13 +74,18 @@ void roboticArm(UArg arg0, UArg arg1)
 			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", BASE_ID, test_speed);
 			System_flush();
 			dynamixelSetSpeedCmd(BASE_ID, test_speed);
-		//}else{
 
-		//	test_speed = 0;
+			System_printf("Testing setLinActuatorCmd id %d, test_lin_act_increment %d\n", LIN_ACT_ID, test_lin_act_increment);
+			System_flush();
+			setLinActuatorCmd(LIN_ACT_ID, test_lin_act_increment);
 
-		//}//endif
+		}else{
 
-		//test_speed = test_speed + 115;
+			test_speed = 0;
+
+		}//endif
+
+		test_speed = test_speed + 10;
 
 		System_printf("Success dynamixelSetSpeedCmd count %d\n", command_loop_thru_count);
 		System_flush();

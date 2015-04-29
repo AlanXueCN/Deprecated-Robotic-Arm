@@ -86,6 +86,33 @@ void dynamixelSetSpeedCmd(uint8_t dynamixel_id, uint16_t speed)
 
 }//endfnctn  dynamixelSetEndless
 
+void setLinActuatorCmd(uint8_t device_id, uint16_t target_increment )
+{
+		//TODO static?? global??
+		dynamixel_msg_struct dynamixel_buffer_struct;
+		int device_port;
+		int bytes_to_write;
+		int bytes_wrote;
+
+		// set function config
+		dynamixel_buffer_struct.struct_id = SET_ACTUATOR_CMD;
+
+		// get the uart
+		device_port = getDevicePort(device_id);
+
+		// size of message
+		bytes_to_write = getStructSize( dynamixel_buffer_struct.struct_id );
+
+		// populate the dynamixel_buffer_struct for dynamixel format frame
+		buildDynamixelStructMessage((void*)(&dynamixel_buffer_struct), device_id, target_increment);
+
+		bytes_wrote = deviceWrite(device_port, (char*)&dynamixel_buffer_struct, bytes_to_write);
+
+		System_printf("Testing setLinActuatorCmd bytes_to_write %d, bytes_wrote %d\n", bytes_to_write, bytes_wrote);
+		System_flush();
+
+
+}//endfnctn  setActuatorCmd
 
 //Todo Functions to Add
 

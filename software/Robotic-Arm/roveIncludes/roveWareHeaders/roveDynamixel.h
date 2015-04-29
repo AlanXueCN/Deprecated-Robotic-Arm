@@ -13,14 +13,18 @@
 
 #include "../roveWare.h"
 
-//void dynamixelSendData(UART_Handle uart, uint8_t* data_buffer);
-
 void dynamixelSetEndless(uint8_t dynamixel_id);
+
+void setLinActuatorCmd(uint8_t device_id, uint16_t target_increment );
+
+void dynamixelSetSpeedCmd(uint8_t dynamixel_id, uint16_t speed);
 
 /*
 // Sets a dynamixel to a specific speed
 void DynamixelSetSpeed(UART_Handle uart, uint8_t id, int side, int16_t speed);
 
+//void dynamixelSendData(UART_Handle uart, uint8_t* data_buffer);
+ *
 // Sets a dynamixel to a specific angle
 void DynamixelSetAngle(UART_Handle uart, uint8_t id, int16_t angle);
 
