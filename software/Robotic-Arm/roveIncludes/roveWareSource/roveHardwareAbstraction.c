@@ -32,7 +32,7 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, u
 
 		break;
 
-		case SET_SPEED_CMD:
+		case SET_SPEED_LEFT_CMD:
 
 			( (struct set_speed_struct*)dynamixel_struct)->start_byte1 = AX_START;
 			( (struct set_speed_struct*)dynamixel_struct)->start_byte2 = AX_START;
@@ -49,44 +49,20 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, u
 
 		break;
 
-		case SET_ACTUATOR_CMD:
+		case SET_SPEED_RIGHT_CMD:
 
-			//target = current + command
-			((struct linear_actuator_struct*)dynamixel_struct)->target_position =
-			(command_value + ( (struct linear_actuator_struct*)dynamixel_struct)->current_position);
+			( (struct set_speed_struct*)dynamixel_struct)->start_byte1 = AX_START;
+			( (struct set_speed_struct*)dynamixel_struct)->start_byte2 = AX_START;
+			( (struct set_speed_struct*)dynamixel_struct)->dynamixel_id = dynamixel_id;
+			( (struct set_speed_struct*)dynamixel_struct)->msg_size = AX_SPEED_LENGTH;
+			( (struct set_speed_struct*)dynamixel_struct)->read_write_flag = AX_WRITE_DATA;
+			( (struct set_speed_struct*)dynamixel_struct)->speed_low_byte_reg_addr = AX_GOAL_SPEED_L;
+			( (struct set_speed_struct*)dynamixel_struct)->speed_low_byte = speed_low_byte;
+			( (struct set_speed_struct*)dynamixel_struct)->speed_high_byte = (speed_high_byte + 4);
 
-			if ((((struct linear_actuator_struct*)dynamixel_struct)->target_position) > MAX_LIN_ACT_POSITION )
-			{
-				((struct linear_actuator_struct*)dynamixel_struct)->target_position = MAX_LIN_ACT_POSITION;
+			check_sum = ( ~(dynamixel_id + AX_SPEED_LENGTH + AX_WRITE_DATA + AX_GOAL_SPEED_L + speed_low_byte + speed_high_byte) ) & 0xFF;
 
-			}//endif
-
-			if ((((struct linear_actuator_struct*)dynamixel_struct)->target_position) < MIN_LIN_ACT_POSITION )
-			{
-				((struct linear_actuator_struct*)dynamixel_struct)->target_position = MIN_LIN_ACT_POSITION;
-
-			}//endif
-
-			((struct linear_actuator_struct*)dynamixel_struct)->current_position =
-					((struct linear_actuator_struct*)dynamixel_struct)->target_position;
-
-			//target_low_byte = 0xC0 + (target + 0x1F)
-			((struct linear_actuator_struct*)dynamixel_struct)->target_low_byte =
-			(uint8_t)( 0xC0 + (( ((struct linear_actuator_struct*)dynamixel_struct)->target_position)& 0x1F) );
-
-			//target_high_byte =
-			((struct linear_actuator_struct*)dynamixel_struct)->target_high_byte =
-			(uint8_t)( ((((struct linear_actuator_struct*)dynamixel_struct)->target_position) >> 5)& 0x7F);
-
-			System_printf("SET_ACTUATOR_CMD() target_position %d/n",
-				((struct linear_actuator_struct*)dynamixel_struct)->target_position);
-
-			System_printf("SET_ACTUATOR_CMD() target_low_byte %d/n",
-				((struct linear_actuator_struct*)dynamixel_struct)->target_low_byte);
-
-			System_printf("SET_ACTUATOR_CMD() target_high_byte %d/n",
-				((struct linear_actuator_struct*)dynamixel_struct)->target_high_byte);
-			System_flush();
+			( (struct set_endless_struct*)dynamixel_struct)->check_sum = check_sum;
 
 		break;
 
@@ -94,17 +70,69 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, u
 
 				System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");
 				System_flush();
-
-
-
 		break;
 
 		}//endswitch
 
-}//end fnctn buildSerialStructMessage
+}//end fnctn buildDynamixelStructMessage
 
 
-//see roveStructs.h and rovWare.h for config
+uint16_t buildLinActuatorStructMessage(void* lin_act_struct, uint8_t device_id, uint16_t current_position, uint16_t command_value)
+{
+
+	switch( ( (struct dynamixel_id_cast*)lin_act_struct)->struct_id)
+	{
+		case SET_LIN_ACTUATOR_CMD:
+
+			System_printf("BEFORE SET_ACTUATOR_CMD() current_position %d\n\n\n", current_position);
+			System_printf("BEFORE SET_ACTUATOR_CMD() target_position %d\n\n\n", ((struct linear_actuator_struct*)lin_act_struct)->target_position);
+			System_flush();
+
+			//target = current + command
+			((struct linear_actuator_struct*)lin_act_struct)->target_position = current_position + command_value;
+
+			if ( ((struct linear_actuator_struct*)lin_act_struct)->target_position > MAX_LIN_ACT_POSITION )
+			{
+				((struct linear_actuator_struct*)lin_act_struct)->target_position = MAX_LIN_ACT_POSITION;
+
+			}//endif
+
+			if ( ((struct linear_actuator_struct*)lin_act_struct)->target_position < MIN_LIN_ACT_POSITION )
+			{
+				((struct linear_actuator_struct*)lin_act_struct)->target_position = MIN_LIN_ACT_POSITION;
+
+			}//endif
+
+			current_position = ((struct linear_actuator_struct*)lin_act_struct)->target_position;
+
+			//target_low_byte = 0xC0 + (target + 0x1F)
+			((struct linear_actuator_struct*)lin_act_struct)->target_low_byte =
+			(uint8_t)( 0xC0 + (( ((struct linear_actuator_struct*)lin_act_struct)->target_position)& 0x1F) );
+
+			//target_high_byte =
+			((struct linear_actuator_struct*)lin_act_struct)->target_high_byte =
+			(uint8_t)( ((((struct linear_actuator_struct*)lin_act_struct)->target_position) >> 5)& 0x7F);
+
+			System_printf("AFTER SET_ACTUATOR_CMD() current_position %d\n\n\n", current_position);
+			System_printf("AFTER SET_ACTUATOR_CMD() target_position %d\n\n\n", ((struct linear_actuator_struct*)lin_act_struct)->target_position);
+			System_flush();
+			System_printf("AFTER SET_ACTUATOR_CMD() target_low_byte %d\n",((struct linear_actuator_struct*)lin_act_struct)->target_low_byte);
+			System_printf("AFTER SET_ACTUATOR_CMD() target_high_byte %d\n",((struct linear_actuator_struct*)lin_act_struct)->target_high_byte);
+			System_flush();
+
+		return current_position;
+
+		default:
+
+			System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");
+			System_flush();
+
+		return -1;
+
+	}//endswitch
+
+}//end fnctn buildLinActuatorStructMessage
+
 void digitalWrite(int pin, int write)
 {
 	//check 0 case first to optimize indexed compares
@@ -154,7 +182,7 @@ void digitalWrite(int pin, int write)
 
 }//endfnctn digitalWrite
 
-//see roveStructs.h and rovWare.h for config
+
 int deviceWrite(int device_port, char* buffer, int bytes_to_write)
 {
 	int bytes_wrote;
@@ -200,7 +228,7 @@ int deviceWrite(int device_port, char* buffer, int bytes_to_write)
 
 }//endfnctn deviceWrite
 
-//see roveStructs.h and rovWare.h for config
+
 int getDevicePort(uint8_t device_id)
 {
 	switch(device_id)
@@ -231,11 +259,11 @@ int getStructSize(uint8_t struct_id)
 
 			return sizeof(struct set_endless_struct);
 
-		case SET_SPEED_CMD:
+		case SET_SPEED_LEFT_CMD...SET_SPEED_RIGHT_CMD:
 
 			return sizeof(struct set_speed_struct);
 
-		case SET_ACTUATOR_CMD:
+		case SET_LIN_ACTUATOR_CMD:
 
 			return (sizeof(struct linear_actuator_struct) - LIN_DONT_PRINT_BYTES);
 

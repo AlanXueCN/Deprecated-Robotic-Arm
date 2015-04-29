@@ -15,9 +15,11 @@
 
 void dynamixelSetEndless(uint8_t dynamixel_id);
 
-void setLinActuatorCmd(uint8_t device_id, uint16_t target_increment );
+uint16_t setLinActuatorCmd(uint8_t device_id, uint16_t current_position, uint16_t target_increment );
 
-void dynamixelSetSpeedCmd(uint8_t dynamixel_id, uint16_t speed);
+void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, uint16_t speed);
+
+void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, uint16_t speed);
 
 /*
 // Sets a dynamixel to a specific speed

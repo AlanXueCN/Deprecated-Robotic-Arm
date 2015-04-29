@@ -23,8 +23,10 @@
 #define LINEAR_ACTUATOR_UART 1
 
 #define SET_ENDLESS_CMD 0
-#define SET_SPEED_CMD	1
-#define SET_ACTUATOR_CMD 2
+#define SET_SPEED_LEFT_CMD	1
+#define SET_SPEED_RIGHT_CMD	2
+
+#define SET_LIN_ACTUATOR_CMD 3
 
 #define WRIST_A_ID  0x01
 #define WRIST_B_ID	0x02

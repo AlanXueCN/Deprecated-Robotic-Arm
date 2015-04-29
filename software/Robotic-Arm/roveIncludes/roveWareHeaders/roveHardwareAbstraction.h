@@ -22,6 +22,9 @@
 
 void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, uint16_t command_value );
 
+uint16_t buildLinActuatorStructMessage(void* lin_act_struct
+		, uint8_t device_id, uint16_t current_position, uint16_t command_value);
+
 // digitalWrite sets a bit to be on or off
 // inputs:
 // 	pin - name of the pin. Can be found in rovePinMap.h or the eagle file
