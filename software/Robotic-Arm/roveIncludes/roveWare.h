@@ -22,6 +22,7 @@
 #define DYNAMIXEL_UART 0
 
 #define SET_ENDLESS_CMD 0
+#define SET_SPEED_CMD	1
 
 #define WRIST_A_ID  0x01
 #define WRIST_B_ID	0x02

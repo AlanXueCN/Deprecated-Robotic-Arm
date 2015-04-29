@@ -20,7 +20,7 @@
 
 //HARDWARE ABSTRACTION FUNCTIONS
 
-void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id);
+void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, uint16_t command_value );
 
 // digitalWrite sets a bit to be on or off
 // inputs:

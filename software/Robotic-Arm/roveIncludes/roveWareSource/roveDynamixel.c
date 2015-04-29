@@ -16,9 +16,43 @@
 
 //Runtime Command to turn on and off endless rotation ( maaaybeee feeels a bit liiike Open Loop emulation)
 
-void dynamixelSetEndlessCmd(uint8_t dynamixel_id)
+void dynamixelSetEndlessCmd(uint8_t dynamixel_id )
 {
+		//TODO static?? global??
+		dynamixel_msg_struct dynamixel_buffer_struct;
+		int device_port;
+		int bytes_to_write;
+		int bytes_wrote;
 
+		// set function config
+		dynamixel_buffer_struct.struct_id = SET_ENDLESS_CMD;
+
+		// get the uart
+		device_port = getDevicePort(dynamixel_id);
+
+		// size of message
+		bytes_to_write = getStructSize( dynamixel_buffer_struct.struct_id );
+
+		// populate the dynamixel_buffer_struct for dynamixel format frame
+		buildDynamixelStructMessage((void*)(&dynamixel_buffer_struct), dynamixel_id, 0);
+
+		// set tristate buffer to transmit
+		digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
+
+		bytes_wrote = deviceWrite(device_port, (char*)&dynamixel_buffer_struct, bytes_to_write);
+
+		// set tri state buffer back for read
+		digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
+
+		System_printf("Testing dynamixelSetEndless bytes_to_write %d, bytes_wrote %d\n", bytes_to_write, bytes_wrote);
+		System_flush();
+
+
+}//endfnctn  dynamixelSetEndless
+
+
+void dynamixelSetSpeedCmd(uint8_t dynamixel_id, uint16_t speed)
+{
 		// static??
 		int device_port;
 		int bytes_to_write;
@@ -27,7 +61,7 @@ void dynamixelSetEndlessCmd(uint8_t dynamixel_id)
 		dynamixel_msg_struct dynamixel_buffer_struct;
 
 		//set function config
-		dynamixel_buffer_struct.struct_id = SET_ENDLESS_CMD;
+		dynamixel_buffer_struct.struct_id = SET_SPEED_CMD;
 
 		// set tristate buffer to transmit
 		digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
@@ -39,7 +73,7 @@ void dynamixelSetEndlessCmd(uint8_t dynamixel_id)
 		bytes_to_write = getStructSize( dynamixel_buffer_struct.struct_id );
 
 		// populate the dynamixel_buffer_struct for dynamixel format frame
-		buildDynamixelStructMessage((void*)(&dynamixel_buffer_struct), dynamixel_id);
+		buildDynamixelStructMessage((void*)(&dynamixel_buffer_struct), dynamixel_id, speed);
 
 		bytes_wrote = deviceWrite(device_port, (char*)&dynamixel_buffer_struct, bytes_to_write);
 

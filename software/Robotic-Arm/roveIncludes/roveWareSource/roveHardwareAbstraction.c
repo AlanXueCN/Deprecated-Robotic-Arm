@@ -5,10 +5,12 @@
 #include "../roveWareHeaders/roveHardwareAbstraction.h"
 
 //see roveStructs.h and rovWare.h for config
-void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id)
+void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, uint16_t command_value)
 {
 
 	uint8_t check_sum;
+	uint8_t speed_low_byte = (uint8_t)command_value;
+	uint8_t speed_high_byte = (uint8_t)(command_value >> 8);
 
 	switch( ( (struct dynamixel_id_cast*)dynamixel_struct)->struct_id)
 	{
@@ -30,13 +32,29 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id)
 
 			( (struct set_endless_struct*)dynamixel_struct)->check_sum = check_sum;
 
-			break;
+		break;
+
+		case SET_SPEED_CMD:
+
+			( (struct set_speed_struct*)dynamixel_struct)->start_byte1 = AX_START;
+			( (struct set_speed_struct*)dynamixel_struct)->start_byte2 = AX_START;
+			( (struct set_speed_struct*)dynamixel_struct)->dynamixel_id = dynamixel_id;
+			( (struct set_speed_struct*)dynamixel_struct)->msg_size = AX_SPEED_LENGTH;
+			( (struct set_speed_struct*)dynamixel_struct)->read_write_flag = AX_WRITE_DATA;
+			( (struct set_speed_struct*)dynamixel_struct)->speed_low_byte_reg_addr = AX_GOAL_SPEED_L;
+			( (struct set_speed_struct*)dynamixel_struct)->speed_low_byte = speed_low_byte;
+			( (struct set_speed_struct*)dynamixel_struct)->speed_high_byte = speed_high_byte;
+
+			check_sum = ( ~(dynamixel_id + AX_SPEED_LENGTH + AX_WRITE_DATA + AX_GOAL_SPEED_L + speed_low_byte + speed_high_byte) ) & 0xFF;
+
+			( (struct set_endless_struct*)dynamixel_struct)->check_sum = check_sum;
+
+		break;
 
 		default:
 			System_printf("Error in function: buildDynamixelStructMessage() - struct size is not valid");
 			System_flush();
-			break;
-
+		break;
 		}//endswitch
 
 }//end fnctn buildSerialStructMessage
@@ -45,41 +63,35 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id)
 //see roveStructs.h and rovWare.h for config
 void digitalWrite(int pin, int write)
 {
-
 	//check 0 case first to optimize indexed compares
 	if(write == LOW)
+	{
+		switch(pin)
+		{
+			case SET_TRI_ST_BUF_Tx :
+				GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, (0));
+			break;
+
+			default:
+				System_printf("DigitalWrite passed invalid pin %d\n", pin);
+				System_flush();
+			return;
+		}//endswitch
+
+	}else if(write == HIGH)
 	{
 
 		switch(pin)
 		{
-
-			case SET_TRI_ST_BUF_Tx :
-				GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, (0));
-				break;
-
-			default:
-						//Tried to write to invalid device
-						System_printf("DigitalWrite passed invalid pin %d\n", pin);
-						System_flush();
-				return;
-		}//endswitch
-
-	}else if (write == HIGH){
-
-		switch(pin)
-		{
-
 			case SET_TRI_ST_BUF_Tx :
 				//~0 implies write without calling GPIO_PIN_3 lookup
 				GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, (~0));
-				break;
+			break;
 
 			default:
-						//Tried to write to invalid device
-						System_printf("DigitalWrite passed invalid pin %d\n", pin);
-						System_flush();
-					return;
-
+				System_printf("DigitalWrite passed invalid pin %d\n", pin);
+				System_flush();
+			return;
 		}//endswitch
 
 	}//endif
@@ -108,14 +120,12 @@ int deviceWrite(int device_port, char* buffer, int bytes_to_write)
 		// if we leave this out, mux performance goes from O(1) to O(n) (That's bad)
 		case DYNAMIXEL_UART:
 			bytes_wrote = UART_write(uart4, buffer, bytes_to_write);
-			break;
+		break;
 		default:
-			//Tried to write to invalid device
 			System_printf("DeviceWrite passed invalid device %d\n", device_port);
 			System_flush();
-			break;
+		break;
 		//etc.
-
 	}//end switch(jack)
 
 	// make sure the message is fully written before leaving the function
@@ -132,12 +142,11 @@ int getDevicePort(uint8_t device_id)
 	switch(device_id)
 	{
 		case WRIST_A_ID...BASE_ID:
-			return DYNAMIXEL_UART;
+		return DYNAMIXEL_UART;
 		default:
-				//Tried to get jack for an \ invalid device
-				System_printf("getDevicePort passed invalid device_id %d\n", device_id);
-				System_flush();
-			return -1;
+			System_printf("getDevicePort passed invalid device_id %d\n", device_id);
+			System_flush();
+		return -1;
 	}//endswitch (device)
 
 }//endfnctn getDevicePort
@@ -148,10 +157,12 @@ int getStructSize(uint8_t struct_id)
 	{
 		case SET_ENDLESS_CMD:
 			return sizeof(struct set_endless_struct);
+		case SET_SPEED_CMD:
+			return sizeof(struct set_speed_struct);
 		default:
-				System_printf("getStructSize passed invalid struct_id %d\n", struct_id);
-				System_flush();
-			return -1;
+			System_printf("getStructSize passed invalid struct_id %d\n", struct_id);
+			System_flush();
+		return -1;
 	}//endswitch
 
 }//endfnctn getDevicePort

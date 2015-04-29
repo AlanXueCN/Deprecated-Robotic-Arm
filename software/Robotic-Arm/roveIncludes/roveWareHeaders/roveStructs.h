@@ -43,6 +43,27 @@ struct set_endless_struct{
 
 }__attribute__((packed));
 
+
+struct set_speed_struct{
+
+	uint8_t start_byte1;
+	uint8_t start_byte2;
+
+	// arg0
+	uint8_t dynamixel_id;
+
+	//message
+	uint8_t msg_size;
+	uint8_t read_write_flag;
+
+	//address of low byte
+	uint8_t speed_low_byte_reg_addr;
+	uint8_t speed_low_byte;
+	uint8_t speed_high_byte;
+	uint8_t check_sum;
+
+}__attribute__((packed));
+
 //only used for getStructSize((struct dynamixel_id_cast*)dynamixel_struct->struct_id)
 
 struct dynamixel_id_cast{

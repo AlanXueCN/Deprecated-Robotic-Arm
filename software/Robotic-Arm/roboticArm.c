@@ -29,34 +29,61 @@ void roboticArm(UArg arg0, UArg arg1)
 	UART_write(uart4, "This is a test of uart 4", strlen(buffer));
 	UART_write(uart7, "This is a test of uart 7", strlen(buffer));
 
-	//int s_e_cnt = 0;
+	System_printf("Testing dynamixelSetEndless %d\n", WRIST_A_ID);
+	System_flush();
+	dynamixelSetEndlessCmd(WRIST_A_ID);
+	System_printf("Testing dynamixelSetEndless %d\n", WRIST_B_ID);
+	System_flush();
+	dynamixelSetEndlessCmd(WRIST_B_ID);
+	System_printf("Testing dynamixelSetEndless %d\n", ELBOW_A_ID);
+	System_flush();
+	dynamixelSetEndlessCmd(ELBOW_A_ID);
+	System_printf("Testing dynamixelSetEndless %d\n", ELBOW_B_ID);
+	System_flush();
+	dynamixelSetEndlessCmd(ELBOW_B_ID);
+	System_printf("Testing dynamixelSetEndless %d\n", BASE_ID);
+	System_flush();
+	dynamixelSetEndlessCmd(BASE_ID);
+
+	int command_loop_thru_count = 0;
+	int test_speed = 1000;
 	while(1)
 	{
-		//ms_delay(10);
+		ms_delay(1);
 
-		//System_printf("Testing dynamixelSetEndless %d\n", WRIST_A_ID);
-		//System_flush();
-		dynamixelSetEndlessCmd(WRIST_A_ID);
-		//System_printf("Testing dynamixelSetEndless %d\n", WRIST_A_ID);
-		//System_flush();
-		dynamixelSetEndlessCmd(WRIST_B_ID);
-		//System_printf("Testing dynamixelSetEndless %d\n", WRIST_A_ID);
-		//System_flush();
-		dynamixelSetEndlessCmd(ELBOW_A_ID);
-		//System_printf("Testing dynamixelSetEndless %d\n", WRIST_A_ID);
-		//System_flush();
-		dynamixelSetEndlessCmd(ELBOW_B_ID);
-		//System_printf("Testing dynamixelSetEndless %d\n", BASE_ID);
-		//System_flush();
-		dynamixelSetEndlessCmd(BASE_ID);
+		//if(test_speed < 900)
+		//{
 
-		//System_printf("Success dynamixelSetEndless count %d\n", s_e_cnt);
-		//System_flush();
+			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", WRIST_A_ID, test_speed);
+			System_flush();
+			dynamixelSetSpeedCmd(WRIST_A_ID, test_speed);
+			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", WRIST_B_ID, test_speed);
+			System_flush();
+			dynamixelSetSpeedCmd(WRIST_B_ID, test_speed);
+			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", ELBOW_A_ID, test_speed);
+			System_flush();
+			dynamixelSetSpeedCmd(ELBOW_A_ID, test_speed);
+			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", ELBOW_B_ID, test_speed);
+			System_flush();
+			dynamixelSetSpeedCmd(ELBOW_B_ID, test_speed);
+			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", BASE_ID, test_speed);
+			System_flush();
+			dynamixelSetSpeedCmd(BASE_ID, test_speed);
+		//}else{
 
-		//s_e_cnt++;
+		//	test_speed = 0;
+
+		//}//endif
+
+		//test_speed = test_speed + 115;
+
+		System_printf("Success dynamixelSetSpeedCmd count %d\n", command_loop_thru_count);
+		System_flush();
+
+		command_loop_thru_count++;
 
 
-		//ms_delay(10);
+		ms_delay(1);
 
 	}//while
 
