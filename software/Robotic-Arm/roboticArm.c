@@ -52,7 +52,7 @@ void roboticArm(UArg arg0, UArg arg1)
 				case e_stop_arm:
 
 					dynamixelSetSpeedLeftCmd(WRIST_A_ID, 0);
-					dynamixelSetSpeedLefttCmd(WRIST_B_ID, 0);
+					dynamixelSetSpeedLeftCmd(WRIST_B_ID, 0);
 					dynamixelSetSpeedLeftCmd(ELBOW_A_ID, 0);
 					dynamixelSetSpeedRightCmd(ELBOW_B_ID, 0);
 					dynamixelSetSpeedLeftCmd(BASE_ID, 0);
@@ -207,7 +207,7 @@ void roboArmReverseCmd(uint8_t struct_id, int16_t speed, char* buffer_struct)
 			System_flush();
 
 			dynamixelSetSpeedLeftCmd(ELBOW_A_ID, speed);
-			dynamixelSetSpeedLefttCmd(ELBOW_B_ID, speed);
+			dynamixelSetSpeedLeftCmd(ELBOW_B_ID, speed);
 
 		break;
 

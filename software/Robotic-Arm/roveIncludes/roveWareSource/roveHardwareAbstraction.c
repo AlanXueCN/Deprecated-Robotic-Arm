@@ -77,7 +77,7 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, i
 }//end fnctn buildDynamixelStructMessage
 
 
-int16_t buildLinActuatortMessage(void* lin_act_struct, uint8_t device_id, int16_t current_position, int16_t command_value)
+int16_t buildLinActuatorMessage(void* lin_act_struct, uint8_t device_id, int16_t current_position, int16_t command_value)
 {
 
 	switch( ( (struct dynamixel_id_cast*)lin_act_struct)->struct_id)
