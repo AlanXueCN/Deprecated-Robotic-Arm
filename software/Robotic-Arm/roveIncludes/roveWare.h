@@ -21,11 +21,11 @@
 
 #define DYNAMIXEL_UART 0
 #define LINEAR_ACTUATOR_UART 1
+#define MOTHERBOARD_UART 2
 
 #define SET_ENDLESS_CMD 0
 #define SET_SPEED_LEFT_CMD	1
 #define SET_SPEED_RIGHT_CMD	2
-
 #define SET_LIN_ACTUATOR_CMD 3
 
 #define WRIST_A_ID  0x01
@@ -33,11 +33,40 @@
 #define ELBOW_A_ID	0x03
 #define ELBOW_B_ID	0x04
 #define BASE_ID		0x05
-
 #define LIN_ACT_ID  0x06
+#define MOB_ID 		0x07
 
 #define MIN_LIN_ACT_POSITION 0
 #define MAX_LIN_ACT_POSITION 4095
+
+// robot arm values
+
+//deprecated in favor of variable speed
+
+#define	robot_arm_contant_speed_id 200
+
+// clockwise is positive, counter clockwise is negative
+
+#define wrist_clock_wise 201
+#define wrist_up 202
+#define elbow_clock_wise 203
+#define elbow_up 204
+#define actuator_increment 205
+#define base_clock_wise 206
+#define e_stop_arm 207
+
+// gripper values
+
+#define gripper_open 220
+#define drill 221
+
+// telem_device_id
+
+#define	telem_req_id 254
+
+#define	robot_arm_telem_req_id 0
+#define	gripper_telem_req_id 1
+#define	drill_telem_req_id 2
 
 //TODO wtf uint8_t value[30] vs  uint8_t value[MAX_DYNAMIXEL_MSG_SIZE]in roveStructs.h ?
 #define MAX_DYNAMIXEL_MSG_SIZE 30

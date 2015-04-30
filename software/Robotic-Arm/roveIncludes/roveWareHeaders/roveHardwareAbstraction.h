@@ -20,10 +20,10 @@
 
 //HARDWARE ABSTRACTION FUNCTIONS
 
-void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, uint16_t command_value );
+void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, int16_t command_value );
 
-uint16_t buildLinActuatorStructMessage(void* lin_act_struct
-		, uint8_t device_id, uint16_t current_position, uint16_t command_value);
+int16_t buildLinActuatorStructMessage(void* lin_act_struct
+		, uint8_t device_id, int16_t current_position, int16_t command_value);
 
 // digitalWrite sets a bit to be on or off
 // inputs:

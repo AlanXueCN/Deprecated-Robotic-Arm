@@ -5,7 +5,7 @@
 #include "../roveWareHeaders/roveHardwareAbstraction.h"
 
 //see roveStructs.h and rovWare.h for config
-void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, uint16_t command_value)
+void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, int16_t command_value)
 {
 	uint8_t check_sum;
 	uint8_t speed_low_byte = (uint8_t)command_value;
@@ -77,7 +77,7 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, u
 }//end fnctn buildDynamixelStructMessage
 
 
-uint16_t buildLinActuatorStructMessage(void* lin_act_struct, uint8_t device_id, uint16_t current_position, uint16_t command_value)
+int16_t buildLinActuatortMessage(void* lin_act_struct, uint8_t device_id, int16_t current_position, int16_t command_value)
 {
 
 	switch( ( (struct dynamixel_id_cast*)lin_act_struct)->struct_id)
@@ -241,6 +241,10 @@ int getDevicePort(uint8_t device_id)
 
 		return LINEAR_ACTUATOR_UART;
 
+		case MOB_ID:
+
+		return MOTHERBOARD_UART;
+
 		default:
 
 			System_printf("getDevicePort passed invalid device_id %d\n", device_id);
@@ -278,134 +282,146 @@ int getStructSize(uint8_t struct_id)
 
 }//endfnctn getDevicePort
 
-/*
+bool recvSerialStructMessage(int device_port, char* recieve_buffer)
+{
+	uint8_t rx_len = 0;
+	uint8_t start_byte1 = 0x06;
+	uint8_t start_byte2 = 0x85;
 
-Todo recieve
+	uint8_t check_sum;
 
-int deviceRead(int rs485jack, char* buffer, int bytes_to_read, int timeout){
+	int bytes_read = 0;
+	char local_buffer[40];
+
+	uint8_t garbage_count = 10; // This is used to decide how much pre-data to discard before quitting
+
+	bool start_received = false;
+
+	//testing
+	int debug_rx_cnt = 0;
+
+	if (rx_len == 0)
+	{
+		while (!start_received)
+		{
+			bytes_read = deviceRead(device_port, local_buffer, 1);
+
+			if (bytes_read == 1)
+			{
+				if (local_buffer[0] == start_byte1)
+				{
+					start_received = true;
+
+				}else{
+
+					garbage_count--;
+
+					if (garbage_count <= 0)
+
+						return false;
+
+				}//endif
+
+			}//endif
+
+			debug_rx_cnt++;
+
+		}//endwhile
+
+//		System_printf("Looped through the rx debug_rx_cnt: %d\n", debug_rx_cnt);
+//		System_flush();
+
+		if ((bytes_read = deviceRead(device_port, local_buffer, 1)) == 1)
+		{
+			if (local_buffer[0] != start_byte2)
+			{
+				return false;
+			}//end if
+			else
+			{
+				bytes_read = deviceRead(device_port, local_buffer, 1);
+				if (bytes_read == 1)
+				{
+					rx_len = local_buffer[0];
+					if (rx_len == 0)
+					{
+						return false;
+					}//endif
+				}//end if
+				else
+				{
+					return false;
+				}//end else
+			}//endif
+
+		}//endif
+		else
+		{
+			return false;
+		}
+
+//		System_printf("bytesRead: %d\n", bytesRead);
+//		System_flush();
+
+	}//end if (rx_len == 0)
+
+	if (rx_len > 0)
+	{
+		bytes_read = deviceRead(device_port, local_buffer, rx_len + 1);
+
+		//rx_len + 1 for the checksum byte at the end
+		if (bytes_read != (rx_len + 1))
+
+			return false;
+
+		check_sum = calcCheckSum(local_buffer, rx_len);
+
+		if (check_sum != local_buffer[rx_len])
+		{
+			// Checksum error
+			return false;
+		}//endif
+
+		memcpy(recieve_buffer, local_buffer, rx_len);
+		return true;
+	}//endif
+
+	return false;
+
+}//endfnctn recvSerialStructMessage
+
+
+int deviceRead(int device_port, char* buffer, int bytes_to_read){
 
 	int bytes_read;
 
 	// give us access to the uart handles defined at the global scope in main
 
-	extern UART_Handle uart0;
-	extern UART_Handle uart1;
+	System_printf("Entered deviceRead\n");
+	System_flush();
+
 	extern UART_Handle uart2;
 	extern UART_Handle uart3;
 	extern UART_Handle uart4;
-	extern UART_Handle uart5;
-	extern UART_Handle uart6;
 	extern UART_Handle uart7;
+
 
 	// we have to include case 0 to get TI's compiler to build a jump table
 	// if we leave this out, mux performance goes from O(1) to O(n) (That's bad)
-	switch(rs485jack){
-		case 0:
-		case 1:
-			//Configure the mux pins
-			//See the mux datasheet for more info
-			digitalWrite(U3_MUX_S0, HIGH);
-			digitalWrite(U3_MUX_S1, HIGH);
-
+	switch(device_port){
+		//case 0:
+		case MOTHERBOARD_UART:
 			//Write the buffer to the device
 			bytes_read = UART_read(uart3, buffer, bytes_to_read);
-			break;
-		case 2:
-			digitalWrite(U3_MUX_S0, LOW);
-			digitalWrite(U3_MUX_S1, HIGH);
-			bytes_read = UART_read(uart3, buffer, bytes_to_read);
-			break;
-		case 3:
-			digitalWrite(U3_MUX_S0, HIGH);
-			digitalWrite(U3_MUX_S1, LOW);
-			bytes_read = UART_read(uart3, buffer, bytes_to_read);
-			break;
-		case 4:
-			digitalWrite(U6_MUX_S0, LOW);
-			digitalWrite(U6_MUX_S1, HIGH);
-			bytes_read = UART_read(uart6, buffer, bytes_to_read);
-			break;
-		case 5:
-			digitalWrite(U6_MUX_S0, HIGH);
-			digitalWrite(U6_MUX_S1, LOW);
-			bytes_read = UART_read(uart6, buffer, bytes_to_read);
-			break;
-		case 6:
-			digitalWrite(U7_MUX_S0, HIGH);
-			digitalWrite(U7_MUX_S1, HIGH);
-			bytes_read = UART_read(uart7, buffer, bytes_to_read);
-			break;
-		case 7:
-			digitalWrite(U7_MUX_S0, LOW);
-			digitalWrite(U7_MUX_S1, HIGH);
-			bytes_read = UART_read(uart7, buffer, bytes_to_read);
-			break;
-		case 8:
-			digitalWrite(U7_MUX_S0, HIGH);
-			digitalWrite(U7_MUX_S1, LOW);
-			bytes_read = UART_read(uart7, buffer, bytes_to_read);
-			break;
-		case 9:
-			digitalWrite(U5_MUX_S0, LOW);
-			digitalWrite(U5_MUX_S1, LOW);
-			bytes_read = UART_read(uart5, buffer, bytes_to_read);
-			break;
-		case 10:
-			digitalWrite(U5_MUX_S0, LOW);
-			digitalWrite(U5_MUX_S1, HIGH);
-			bytes_read = UART_read(uart5, buffer, bytes_to_read);
-			break;
-		case 11:
-			digitalWrite(U5_MUX_S0, HIGH);
-			digitalWrite(U5_MUX_S1, LOW);
-			bytes_read = UART_read(uart5, buffer, bytes_to_read);
-			break;
-		case 12:
-			digitalWrite(U5_MUX_S0, LOW);
-			digitalWrite(U5_MUX_S1, LOW);
-			bytes_read = UART_read(uart5, buffer, bytes_to_read);
-			break;
-		case 13:
-			digitalWrite(U5_MUX_S0, HIGH);
-			digitalWrite(U5_MUX_S1, HIGH);
-			bytes_read = UART_read(uart5, buffer, bytes_to_read);
-			break;
-		case 14:
-			digitalWrite(U4_MUX_S0, LOW);
-			digitalWrite(U4_MUX_S1, LOW);
-			bytes_read = UART_read(uart4, buffer, bytes_to_read);
-			break;
-		case 15:
-			digitalWrite(U4_MUX_S0, LOW);
-			digitalWrite(U4_MUX_S1, HIGH);
-			bytes_read = UART_read(uart4, buffer, bytes_to_read);
-			break;
-		case 16:
-			digitalWrite(U4_MUX_S0, HIGH);
-			digitalWrite(U4_MUX_S1, HIGH);
-			bytes_read = UART_read(uart4, buffer, bytes_to_read);
-			break;
-		case 17:
-			digitalWrite(U4_MUX_S0, HIGH);
-			digitalWrite(U4_MUX_S1, LOW);
-			bytes_read = UART_read(uart4, buffer, bytes_to_read);
-			break;
-		case POWER_BOARD:
-			digitalWrite(U6_MUX_S0, HIGH);
-			digitalWrite(U6_MUX_S1, HIGH);
-			bytes_read = UART_read(uart6, buffer, bytes_to_read);
-			break;
-		case ONBOARD_ROVECOMM:
-			bytes_read = UART_read(uart2, buffer, bytes_to_read);
-			break;
+		break;
+
 		default:
 			//Tried to write to invalid device
-			System_printf("DeviceWrite passed invalid device %d\n", rs485jack);
+			System_printf("DeviceRead passed invalid device %d\n", device_port);
 			System_flush();
-			return -1;
-		//etc.
+		return -1;
 
-	}//endswitch(rs485jack)
+	}//endswitch(device_port)
 
 	return bytes_read;
 
@@ -422,7 +438,3 @@ uint8_t calcCheckSum(const void* my_struct, uint8_t size){
 	return checkSum;
 
 }//end fnctn
-
-
-
-*/

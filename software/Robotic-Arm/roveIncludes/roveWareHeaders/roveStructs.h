@@ -15,12 +15,19 @@
 
 #include "../roveWare.h"
 
-typedef struct dynamixel_msg_struct{
+typedef struct message_struct{
 
 	uint8_t struct_id;
 	uint8_t value[30];
 
-}__attribute__((packed)) dynamixel_msg_struct, *dyna_msg;
+}__attribute__((packed)) message_struct, *msg;
+
+struct speed_struct{
+
+	uint8_t struct_id;
+	int16_t speed;
+
+}__attribute__((packed));
 
 
 struct set_endless_struct{

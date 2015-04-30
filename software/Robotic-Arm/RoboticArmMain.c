@@ -24,15 +24,13 @@
 
 // globally create UART handles
 
-	//UART_Handle uart0;
-    //UART_Handle uart1;
     UART_Handle uart2;		//PD7 MOTHERBOARD_UART 115200
     UART_Handle uart3;		//PC7 END_EFFECTOR_UART 9600
     UART_Handle uart4;		//PC5 DYNAMIXEL_UART 57600
-    //UART_Handle uart5;
-    //UART_Handle uart6;
     UART_Handle uart7;		//PE1 LINEAR_ACTUATOR_UART 115200
 
+    //we use a single global buffer, and typecast macros in scope at compile time
+    //message_struct buffer_struct;
 
 int main(void)
 {
