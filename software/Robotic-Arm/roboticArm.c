@@ -58,9 +58,8 @@ void roboticArm(UArg arg0, UArg arg1)
 					dynamixelSetSpeedLeftCmd(BASE_ID, 0);
 					current_position = setLinActuatorCmd(LIN_ACT_ID, current_position, 0);
 
-					//TODO Gripper and Drill e_stop_arm case actions
-//TODO
-/*
+				//TODO Gripper and Drill e_stop_arm case actions
+
 				case actuator_increment:
 
 					System_printf("BEFORE actuator_increment current %d, inc %d\n", current_position, speed);
@@ -72,7 +71,7 @@ void roboticArm(UArg arg0, UArg arg1)
 					System_flush();
 
 				break;
-*/
+
 				case gripper_open:
 
 					//TODO Gripper
@@ -92,8 +91,7 @@ void roboticArm(UArg arg0, UArg arg1)
 				break;
 
 				default:
-					System_printf("\nDefault case reached in roboticArm\n");
-					System_printf("Error: Struct_id cannot be handled");
+					System_printf("\nERROR in RoboticArm.c! struct_id %d cannot be handled \n", buffer_struct.struct_id);
 					System_flush();
 				break;
 
