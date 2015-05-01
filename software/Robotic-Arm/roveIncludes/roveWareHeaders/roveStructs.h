@@ -79,10 +79,10 @@ struct linear_actuator_struct{
 	uint8_t target_high_byte;
 
 	//tracked
-	uint16_t current_position;
+	int16_t current_position;
 
 	// arg0
-	uint16_t target_position;
+	int16_t target_position;
 
 }__attribute__((packed));
 

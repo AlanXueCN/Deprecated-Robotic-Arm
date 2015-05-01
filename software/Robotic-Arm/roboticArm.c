@@ -8,6 +8,10 @@
 
 // this is a roboticArm.cfg object::roboticArmTask::priority 1,  768 persistent private stack, vital_flag = t,
 
+//#define MIN_SPEED -1000
+//#define MAX_SPEED 1000
+//#define SPEED_INCREMENT 100
+
 void roboticArm(UArg arg0, UArg arg1)
 {
 
@@ -20,40 +24,56 @@ void roboticArm(UArg arg0, UArg arg1)
 	//extern const uint8_t FOREVER;
 	const uint8_t FOREVER = 1;
 
-	int16_t speed;
-	int16_t current_position;
+	int16_t speed = 0;
+	int16_t current_position = 0;
 
 	extern UART_Handle uart2;
 	extern UART_Handle uart3;
 	extern UART_Handle uart4;
 	extern UART_Handle uart7;
 
-	while(FOREVER){
+	dynamixelSetSpeedLeftCmd(WRIST_A_ID, 0);
+	dynamixelSetSpeedLeftCmd(WRIST_B_ID, 0);
+	dynamixelSetSpeedLeftCmd(ELBOW_A_ID, 0);
+	dynamixelSetSpeedRightCmd(ELBOW_B_ID, 0);
+	dynamixelSetSpeedLeftCmd(BASE_ID, 0);
+	current_position = setLinActuatorCmd(LIN_ACT_ID, current_position, 0);
 
-		while( recvSerialStructMessage(MOTHERBOARD_UART, (char*)&buffer_struct) )
+//	((struct speed_struct*)(&buffer_struct))->struct_id = 207;
+	while(FOREVER)
+	{
+//		((struct speed_struct*)(&buffer_struct))->speed =  MIN_SPEED;
+//		while( ((struct speed_struct*)(&buffer_struct))->speed < MAX_SPEED )
+//		{
+
+		//((struct speed_struct*)(&buffer_struct))->struct_id = 207;
+		//((struct speed_struct*)(&buffer_struct))->speed = ((struct speed_struct*)(&buffer_struct))->speed + SPEED_INCREMENT;
+
+		while( recvSerialStructMessage(MOTHERBOARD_UART, (void*)&buffer_struct) )
 		{
 			//System_printf("BEFORE ANYTHING struct_id %d, speed %d\n"
 			//			, ((struct speed_struct*)(&buffer_struct))->struct_id
 			//			, ((struct speed_struct*)(&buffer_struct))->speed);
-			System_flush();
+			//System_flush();
 
 			speed = ((struct speed_struct*)(&buffer_struct))->speed;
-
-			speed = (speed/SPEED_STEP_DOWN);
-
-			if(speed < SPEED_MIN)
-			{
-				speed = SPEED_MIN;
-			}//end if
-
-			if(speed > SPEED_MAX)
-			{
-				speed = SPEED_MAX;
-			}//end if
 
 			switch(buffer_struct.struct_id)
 			{
 				case wrist_clock_wise...base_clock_wise:
+
+					speed = (speed/SPEED_STEP_DOWN);
+
+					if(speed < SPEED_MIN)
+					{
+						speed = SPEED_MIN;
+					}//end if
+
+					if(speed > SPEED_MAX)
+					{
+						speed = SPEED_MAX;
+					}//end if
+
 
 					if(speed < 0)
 					{
@@ -77,6 +97,8 @@ void roboticArm(UArg arg0, UArg arg1)
 					current_position = setLinActuatorCmd(LIN_ACT_ID, current_position, 0);
 
 				//TODO Gripper and Drill e_stop_arm case actions
+
+				break;
 
 				case actuator_increment:
 

@@ -20,10 +20,9 @@
 
 //HARDWARE ABSTRACTION FUNCTIONS
 
-void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, int16_t command_value );
+void buildDynamixelStructMessage(void* dynamixel_struct, char* command_buffer, uint8_t dynamixel_id, int16_t command_value );
 
-int16_t buildLinActuatorStructMessage(void* lin_act_struct
-		, uint8_t device_id, int16_t current_position, int16_t command_value);
+int16_t buildLinActuatorStructMessage(void* lin_act_struct, char* command_buffer, int16_t current_position, int16_t command_value);
 
 // digitalWrite sets a bit to be on or off
 // inputs:
@@ -92,6 +91,10 @@ int getDevicePort(uint8_t device_id);
 
 int getStructSize(uint8_t struct_id);
 
-//int deviceRead(int rs485jack, char* buffer, int bytes_to_read, int timeout);
+uint8_t calcCheckSum(const char* my_struct, uint8_t size);
+
+bool recvSerialStructMessage(int device_port, void* recieve_buffer);
+
+int deviceRead(int device_port, char* buffer, int bytes_to_read);
 
 #endif // ROVEHARDWAREABSTRACTION_H_

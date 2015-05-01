@@ -5,7 +5,7 @@
 #include "../roveWareHeaders/roveHardwareAbstraction.h"
 
 //see roveStructs.h and rovWare.h for config
-void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, int16_t command_value)
+void buildDynamixelStructMessage(void* dynamixel_struct, char* command_buffer, uint8_t dynamixel_id, int16_t command_value)
 {
 	uint8_t check_sum;
 	uint8_t speed_low_byte = (uint8_t)command_value;
@@ -74,10 +74,13 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, i
 
 		}//endswitch
 
+	memcpy( command_buffer, dynamixel_struct, sizeof(struct set_speed_struct) );
+
 }//end fnctn buildDynamixelStructMessage
 
+//current_position = buildLinActuatorMessage((void*)(&buffer_struct), command_buffer, device_id, current_position, target_increment);
 
-int16_t buildLinActuatorMessage(void* lin_act_struct, uint8_t device_id, int16_t current_position, int16_t command_value)
+int16_t buildLinActuatorStructMessage(void* lin_act_struct, char* command_buffer, int16_t current_position, int16_t command_value)
 {
 
 	switch( ( (struct dynamixel_id_cast*)lin_act_struct)->struct_id)
@@ -119,6 +122,8 @@ int16_t buildLinActuatorMessage(void* lin_act_struct, uint8_t device_id, int16_t
 			//System_printf("AFTER SET_ACTUATOR_CMD() target_low_byte %d\n",((struct linear_actuator_struct*)lin_act_struct)->target_low_byte);
 			//System_printf("AFTER SET_ACTUATOR_CMD() target_high_byte %d\n",((struct linear_actuator_struct*)lin_act_struct)->target_high_byte);
 			//System_flush();
+
+		memcpy( command_buffer, lin_act_struct, sizeof(struct linear_actuator_struct) );
 
 		return current_position;
 
@@ -183,7 +188,7 @@ void digitalWrite(int pin, int write)
 }//endfnctn digitalWrite
 
 
-int deviceWrite(int device_port, char* buffer, int bytes_to_write)
+int deviceWrite(int device_port, char* buffer,  int bytes_to_write)
 {
 	int bytes_wrote;
 
@@ -282,7 +287,7 @@ int getStructSize(uint8_t struct_id)
 
 }//endfnctn getDevicePort
 
-bool recvSerialStructMessage(int device_port, char* recieve_buffer)
+bool recvSerialStructMessage(int device_port, void* recieve_buffer)
 {
 	uint8_t rx_len = 0;
 	uint8_t start_byte1 = 0x06;
@@ -439,13 +444,16 @@ int deviceRead(int device_port, char* buffer, int bytes_to_read){
 
 }//endfnctn deviceRead
 
-uint8_t calcCheckSum(const void* my_struct, uint8_t size){
+//calcCheckSum(local_buffer, rx_len);
+//uint8_t calcCheckSum(const void* my_struct, uint8_t size)
+uint8_t calcCheckSum(const char* my_struct, uint8_t size)
+{
 
 	uint8_t checkSum = size;
 	uint8_t i;
 
 	for(i = 0; i < size; i++)
-		checkSum ^= *((char*)my_struct + i);
+		checkSum ^= *(my_struct + i);
 
 	return checkSum;
 

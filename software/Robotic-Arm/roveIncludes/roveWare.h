@@ -63,7 +63,7 @@
 
 // Speed Scaling Config
 
-#define SPEED_STEP_DOWN 10
+#define SPEED_STEP_DOWN 8
 #define SPEED_MAX (1000/SPEED_STEP_DOWN)
 #define SPEED_MIN (-1000/SPEED_STEP_DOWN)
 
