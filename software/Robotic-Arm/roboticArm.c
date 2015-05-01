@@ -18,43 +18,41 @@ void roboticArm(UArg arg0, UArg arg1)
 	System_printf("Enter roboticArm TASK\n");
 	System_flush();
 
-	//extern message_struct buffer_struct;
-	message_struct buffer_struct;
-
-	//extern const uint8_t FOREVER;
-	const uint8_t FOREVER = 1;
-
-	int16_t speed = 0;
-	int16_t current_position = 0;
-
 	extern UART_Handle uart2;
 	extern UART_Handle uart3;
 	extern UART_Handle uart4;
 	extern UART_Handle uart7;
 
-	dynamixelSetSpeedLeftCmd(WRIST_A_ID, 0);
-	dynamixelSetSpeedLeftCmd(WRIST_B_ID, 0);
-	dynamixelSetSpeedLeftCmd(ELBOW_A_ID, 0);
-	dynamixelSetSpeedRightCmd(ELBOW_B_ID, 0);
-	dynamixelSetSpeedLeftCmd(BASE_ID, 0);
-	current_position = setLinActuatorCmd(LIN_ACT_ID, current_position, 0);
+	//global static buffer alloc
+	message_struct buffer_struct;
+	char command_buffer[MAX_DYNAMIXEL_MSG_SIZE + 4];
 
-//	((struct speed_struct*)(&buffer_struct))->struct_id = 207;
+	int16_t speed = 0;
+	int16_t lin_act_current_position = 0;
+
+	//init periphs
+	System_printf("Initializing Periphs: \n");
+	System_flush();
+	dynamixelSetSpeedLeftCmd(WRIST_A_ID, 0, (void*)&buffer_struct, command_buffer);
+	dynamixelSetSpeedRightCmd(WRIST_B_ID, 0, (void*)&buffer_struct, command_buffer);
+	dynamixelSetSpeedLeftCmd(ELBOW_A_ID, 0, (void*)&buffer_struct, command_buffer);
+	dynamixelSetSpeedRightCmd(ELBOW_B_ID, 0, (void*)&buffer_struct, command_buffer);
+	dynamixelSetSpeedLeftCmd(BASE_ID, 0, (void*)&buffer_struct, command_buffer);
+	lin_act_current_position = setLinActuatorCmd(LIN_ACT_ID, lin_act_current_position, 0, (void*)&buffer_struct, command_buffer);
+	System_printf("Forever: \n");
+	System_flush();
+
+	//hack for unreachable statement warnings
+	const uint8_t FOREVER = 1;
 	while(FOREVER)
 	{
-//		((struct speed_struct*)(&buffer_struct))->speed =  MIN_SPEED;
-//		while( ((struct speed_struct*)(&buffer_struct))->speed < MAX_SPEED )
-//		{
 
-		//((struct speed_struct*)(&buffer_struct))->struct_id = 207;
-		//((struct speed_struct*)(&buffer_struct))->speed = ((struct speed_struct*)(&buffer_struct))->speed + SPEED_INCREMENT;
-
-		while( recvSerialStructMessage(MOTHERBOARD_UART, (void*)&buffer_struct) )
+		while( recvSerialStructMessage(MOTHERBOARD_UART, (void*)&buffer_struct, command_buffer) )
 		{
-			//System_printf("BEFORE ANYTHING struct_id %d, speed %d\n"
-			//			, ((struct speed_struct*)(&buffer_struct))->struct_id
-			//			, ((struct speed_struct*)(&buffer_struct))->speed);
-			//System_flush();
+			System_printf("recvSerialStructMessage struct_id:	 %d, 	speed:	 %d\n"
+			, ((struct speed_struct*)(&buffer_struct))->struct_id
+			, ((struct speed_struct*)(&buffer_struct))->speed);
+			System_flush();
 
 			speed = ((struct speed_struct*)(&buffer_struct))->speed;
 
@@ -77,11 +75,11 @@ void roboticArm(UArg arg0, UArg arg1)
 
 					if(speed < 0)
 					{
-						roboArmReverseCmd(buffer_struct.struct_id, (-speed), (char*)&buffer_struct);
+						roboArmReverseCmd(buffer_struct.struct_id, (-speed), (void*)&buffer_struct, command_buffer);
 
 					}else{
 
-						roboArmForwardCmd(buffer_struct.struct_id, speed, (char*)&buffer_struct);
+						roboArmForwardCmd(buffer_struct.struct_id, speed, (void*)&buffer_struct, command_buffer);
 
 					}//endif
 
@@ -89,12 +87,12 @@ void roboticArm(UArg arg0, UArg arg1)
 
 				case e_stop_arm:
 
-					dynamixelSetSpeedLeftCmd(WRIST_A_ID, 0);
-					dynamixelSetSpeedLeftCmd(WRIST_B_ID, 0);
-					dynamixelSetSpeedLeftCmd(ELBOW_A_ID, 0);
-					dynamixelSetSpeedRightCmd(ELBOW_B_ID, 0);
-					dynamixelSetSpeedLeftCmd(BASE_ID, 0);
-					current_position = setLinActuatorCmd(LIN_ACT_ID, current_position, 0);
+					dynamixelSetSpeedLeftCmd(WRIST_A_ID, 0, (void*)&buffer_struct, command_buffer);
+					dynamixelSetSpeedLeftCmd(WRIST_B_ID, 0, (void*)&buffer_struct, command_buffer);
+					dynamixelSetSpeedLeftCmd(ELBOW_A_ID, 0, (void*)&buffer_struct, command_buffer);
+					dynamixelSetSpeedRightCmd(ELBOW_B_ID, 0, (void*)&buffer_struct, command_buffer);
+					dynamixelSetSpeedLeftCmd(BASE_ID, 0, (void*)&buffer_struct, command_buffer);
+					lin_act_current_position = setLinActuatorCmd(LIN_ACT_ID, lin_act_current_position, 0, (void*)&buffer_struct, command_buffer);
 
 				//TODO Gripper and Drill e_stop_arm case actions
 
@@ -102,13 +100,10 @@ void roboticArm(UArg arg0, UArg arg1)
 
 				case actuator_increment:
 
-					//System_printf("BEFORE actuator_increment current %d, inc %d\n", current_position, speed);
-					//System_flush();
+					lin_act_current_position = setLinActuatorCmd(LIN_ACT_ID, lin_act_current_position, speed, (void*)&buffer_struct, command_buffer);
 
-					current_position = setLinActuatorCmd(LIN_ACT_ID, current_position, speed);
-
-					//System_printf("AFTER actuator_increment current %d, inc %d\n", current_position, speed);
-					//System_flush();
+					System_printf("Actuator increment:  %d 	 lin_act_current_position: 		%d = setLinActuatorCmd();\n", lin_act_current_position, speed);
+					System_flush();
 
 				break;
 
@@ -116,8 +111,8 @@ void roboticArm(UArg arg0, UArg arg1)
 
 					//TODO Gripper
 
-					//System_printf("What? Not ready for gripper_open");
-					//System_flush();
+					System_printf("What? Not ready for gripper_open");
+					System_flush();
 
 				break;
 
@@ -125,14 +120,14 @@ void roboticArm(UArg arg0, UArg arg1)
 
 					//TODO Drill
 
-					//System_printf("What? Not ready for drill");
-					//System_flush();
+					System_printf("What? Not ready for drill");
+					System_flush();
 
 				break;
 
 				default:
-					//System_printf("\nERROR in RoboticArm.c! struct_id %d cannot be handled \n", buffer_struct.struct_id);
-					//System_flush();
+					System_printf("\nERROR in RoboticArm.c! struct_id %d cannot be handled \n", buffer_struct.struct_id);
+					System_flush();
 				break;
 
 			}//endswitch buffer_struct.struct_id
@@ -144,64 +139,67 @@ void roboticArm(UArg arg0, UArg arg1)
 }//endfnct task robot arm main
 
 //right is forward
-void roboArmForwardCmd(uint8_t struct_id, int16_t speed, char* buffer_struct)
+void roboArmForwardCmd(uint8_t struct_id, int16_t speed, void* buffer_struct, char* command_buffer)
 {
 	switch(struct_id)
 	{
 		case wrist_clock_wise:
 
-			//System_printf("Testing wrist_clock_wise speed %d\n", speed);
-			//System_flush();
+			System_printf("Testing wrist_clock_wise speed %d\n");
+			System_flush();
 
-			dynamixelSetSpeedRightCmd(WRIST_A_ID, speed);
-			dynamixelSetSpeedLeftCmd(WRIST_B_ID, speed);
+			dynamixelSetSpeedRightCmd(WRIST_A_ID, speed, (void*)&buffer_struct, command_buffer);
+			dynamixelSetSpeedLeftCmd(WRIST_B_ID, speed, (void*)&buffer_struct, command_buffer);
 
 		break;
 
 		case wrist_up:
 
-			//System_printf("Testing wrist_up speed %d\n", speed);
-			//System_flush();
+			System_printf("Testing wrist_up speed %d\n", speed);
+			System_flush();
 
-			dynamixelSetSpeedRightCmd(WRIST_A_ID, speed);
-			dynamixelSetSpeedRightCmd(WRIST_B_ID, speed);
+			dynamixelSetSpeedRightCmd(WRIST_A_ID, speed, (void*)&buffer_struct, command_buffer);
+			dynamixelSetSpeedRightCmd(WRIST_B_ID, speed, (void*)&buffer_struct, command_buffer);
 
 		break;
 
 		case elbow_clock_wise:
 
-			//System_printf("Testing elbow_clock_wise speed %d\n", speed);
-			//System_flush();
+			System_printf("Testing elbow_clock_wise speed %d\n", speed);
+			System_flush();
 
-			dynamixelSetSpeedRightCmd(ELBOW_A_ID, speed);
-			dynamixelSetSpeedLeftCmd(ELBOW_B_ID, speed);
+			dynamixelSetSpeedRightCmd(ELBOW_A_ID, speed, (void*)&buffer_struct, command_buffer);
+			dynamixelSetSpeedLeftCmd(ELBOW_B_ID, speed, (void*)&buffer_struct, command_buffer);
 
 		break;
 
 		case elbow_up:
 
-			//System_printf("Testing elbow_up speed %d\n", speed);
-			//System_flush();
+			System_printf("Testing elbow_up speed %d\n", speed);
+			System_flush();
 
-			dynamixelSetSpeedRightCmd(ELBOW_A_ID, speed);
-			dynamixelSetSpeedRightCmd(ELBOW_B_ID, speed);
-
-		break;
-//TODO
-		case actuator_increment:
-
-			//System_printf("Tell Josh to change this with estop %d\n", speed);
-			//System_flush();
+			dynamixelSetSpeedRightCmd(ELBOW_A_ID, speed, (void*)&buffer_struct, command_buffer);
+			dynamixelSetSpeedRightCmd(ELBOW_B_ID, speed, (void*)&buffer_struct, command_buffer);
 
 		break;
 
 		case base_clock_wise:
 
-			//System_printf("Testing elbow_up speed %d\n", speed);
-			//System_flush();
+				System_printf("Testing base_clock_wise speed %d\n", speed);
+				System_flush();
 
-			dynamixelSetSpeedRightCmd(BASE_ID, speed);
+				dynamixelSetSpeedRightCmd(BASE_ID, speed, (void*)&buffer_struct, command_buffer);
 
+		break;
+
+		case e_stop_arm:
+
+			System_printf("!!!!!!!Called E stop from roboArmForwardCmd() speed: %d\n", speed);
+			System_flush();
+//TODO
+		default:
+			System_printf("\nERROR in RoboticArm.c!   roboArmForwardCmd struct_id %d cannot be handled \n", struct_id);
+			System_flush();
 		break;
 
 	}//endswitch struct_id
@@ -209,60 +207,65 @@ void roboArmForwardCmd(uint8_t struct_id, int16_t speed, char* buffer_struct)
 }//endfnctn roboArmForwardCmd
 
 //left is reverse
-void roboArmReverseCmd(uint8_t struct_id, int16_t speed, char* buffer_struct)
+void roboArmReverseCmd(uint8_t struct_id, int16_t speed, void* buffer_struct, char* command_buffer)
 {
 	switch(struct_id)
 	{
 		//reverse (left) clockwise is counterclockwise
 		case wrist_clock_wise:
 
-			//System_printf("Testing wrist_counter_clock_wise speed %d\n", speed);
-			//System_flush();
+			System_printf("Testing wrist_counter_clock_wise speed %d\n", speed);
+			System_flush();
 
-			dynamixelSetSpeedLeftCmd(WRIST_A_ID, speed);
-			dynamixelSetSpeedRightCmd(WRIST_B_ID, speed);
+			dynamixelSetSpeedLeftCmd(WRIST_A_ID, speed, (void*)&buffer_struct, command_buffer);
+			dynamixelSetSpeedRightCmd(WRIST_B_ID, speed, (void*)&buffer_struct, command_buffer);
 
 		break;
 
 		case wrist_up:
 
 			//reverse (left) up is down
-			//System_printf("Testing wrist_down_speed %d\n", speed);
-			//System_flush();
+			System_printf("Testing wrist_down_speed %d\n", speed);
+			System_flush();
 
-			dynamixelSetSpeedLeftCmd(WRIST_A_ID, speed);
-			dynamixelSetSpeedLeftCmd(WRIST_B_ID, speed);
+			dynamixelSetSpeedLeftCmd(WRIST_A_ID, speed, (void*)&buffer_struct, command_buffer);
+			dynamixelSetSpeedLeftCmd(WRIST_B_ID, speed, (void*)&buffer_struct, command_buffer);
 		break;
 
 		//reverse (left) clockwise is counterclockwise
 		case elbow_clock_wise:
 
-			//System_printf("Testing elbow_counter_clock_wise speed %d\n", speed);
-			//System_flush();
+			System_printf("Testing elbow_counter_clock_wise speed %d\n", speed);
+			System_flush();
 
-			dynamixelSetSpeedLeftCmd(ELBOW_A_ID, speed);
-			dynamixelSetSpeedRightCmd(ELBOW_B_ID, speed);
+			dynamixelSetSpeedLeftCmd(ELBOW_A_ID, speed, (void*)&buffer_struct, command_buffer);
+			dynamixelSetSpeedRightCmd(ELBOW_B_ID, speed, (void*)&buffer_struct, command_buffer);
 		break;
 
 		//reverse (left) up is down
 		case elbow_up:
 
-			//System_printf("Testing elbow_down speed %d\n", speed);
-			//System_flush();
+			System_printf("Testing elbow_down speed %d\n", speed);
+			System_flush();
 
-			dynamixelSetSpeedLeftCmd(ELBOW_A_ID, speed);
-			dynamixelSetSpeedLeftCmd(ELBOW_B_ID, speed);
+			dynamixelSetSpeedLeftCmd(ELBOW_A_ID, speed, (void*)&buffer_struct, command_buffer);
+			dynamixelSetSpeedLeftCmd(ELBOW_B_ID, speed, (void*)&buffer_struct, command_buffer);
 
 		break;
 
 		//reverse (left) clockwise is counterclockwise
 		case base_clock_wise:
 
-			//System_printf("Testing base_counter_clock_wise speed %d\n", speed);
-			//System_flush();
+			System_printf("Testing base_counter_clock_wise speed %d\n", speed);
+			System_flush();
 
-			dynamixelSetSpeedLeftCmd(BASE_ID, speed);
+			dynamixelSetSpeedLeftCmd(BASE_ID, speed, (void*)&buffer_struct, command_buffer);
 
+		break;
+
+		default:
+			System_printf("\nERROR in RoboticArm.c!  roboArmReverseCmd  struct_id %d cannot be handled \n", struct_id);
+			System_flush();
 		break;
 
 	}//endswitch struct_id

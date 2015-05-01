@@ -13,13 +13,13 @@
 
 #include "../roveWare.h"
 
-void dynamixelSetEndless(uint8_t dynamixel_id);
+void dynamixelSetEndless(uint8_t dynamixel_id, void* buffer_struct, char* command_buffer);
 
-int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t target_increment );
+int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t target_increment, void* buffer_struct, char* command_buffer);
 
-void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed);
+void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed, void* buffer_struct, char* command_buffer);
 
-void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed);
+void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed, void* buffer_struct, char* command_buffer);
 
 /*
 // Sets a dynamixel to a specific speed

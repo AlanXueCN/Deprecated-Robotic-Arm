@@ -10,7 +10,7 @@
 
 void roboticArmTester(UArg arg0, UArg arg1)
 {
-
+/*
 	System_printf("Enter roboticArmTester TASK\n");
 	System_flush();
 
@@ -123,5 +123,5 @@ void roboticArmTester(UArg arg0, UArg arg1)
 	}//while
 
 
-
+*/
 }//endfnct task roboticArmTester
