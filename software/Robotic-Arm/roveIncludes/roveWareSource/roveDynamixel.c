@@ -45,8 +45,8 @@ void dynamixelSetEndlessCmd(uint8_t dynamixel_id )
 		// set tri state buffer back for read
 		digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
 
-		System_printf("Testing dynamixelSetEndless bytes_to_write %d, bytes_wrote %d\n", bytes_to_write, bytes_wrote);
-		System_flush();
+		//System_printf("Testing dynamixelSetEndless bytes_to_write %d, bytes_wrote %d\n", bytes_to_write, bytes_wrote);
+		//System_flush();
 
 
 }//endfnctn  dynamixelSetEndless
@@ -81,8 +81,8 @@ void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed)
 		//set tri state buffer back for read
 		digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
 
-		System_printf("Testing dynamixelSetSpeedLeftCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
-		System_flush();
+		//System_printf("Testing dynamixelSetSpeedLeftCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
+		//System_flush();
 }//endfnctn  dynamixelSetEndless
 
 void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed)
@@ -114,8 +114,8 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed)
 		//set tri state buffer back for read
 		digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
 
-		System_printf("Testing dynamixelSetSpeedRightCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
-		System_flush();
+		//System_printf("Testing dynamixelSetSpeedRightCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
+		//System_flush();
 
 
 }//endfnctn  dynamixelSetEndless
@@ -146,8 +146,8 @@ int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t t
 
 		bytes_wrote = deviceWrite(device_port, (char*)&buffer_struct, bytes_to_write);
 
-		System_printf("Testing setLinActuatorCmd device_id %d, current_position %d\n", device_id, current_position);
-		System_flush();
+		//System_printf("Testing setLinActuatorCmd device_id %d, current_position %d\n", device_id, current_position);
+		//System_flush();
 
 		return current_position;
 

@@ -68,8 +68,8 @@ void buildDynamixelStructMessage(void* dynamixel_struct, uint8_t dynamixel_id, i
 
 		default:
 
-				System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");
-				System_flush();
+				//System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");
+				//System_flush();
 		break;
 
 		}//endswitch
@@ -84,9 +84,9 @@ int16_t buildLinActuatorMessage(void* lin_act_struct, uint8_t device_id, int16_t
 	{
 		case SET_LIN_ACTUATOR_CMD:
 
-			System_printf("BEFORE SET_ACTUATOR_CMD() current_position %d\n\n\n", current_position);
-			System_printf("BEFORE SET_ACTUATOR_CMD() target_position %d\n\n\n", ((struct linear_actuator_struct*)lin_act_struct)->target_position);
-			System_flush();
+			//System_printf("BEFORE SET_ACTUATOR_CMD() current_position %d\n\n\n", current_position);
+			//System_printf("BEFORE SET_ACTUATOR_CMD() target_position %d\n\n\n", ((struct linear_actuator_struct*)lin_act_struct)->target_position);
+			//System_flush();
 
 			//target = current + command
 			((struct linear_actuator_struct*)lin_act_struct)->target_position = current_position + command_value;
@@ -113,12 +113,12 @@ int16_t buildLinActuatorMessage(void* lin_act_struct, uint8_t device_id, int16_t
 			((struct linear_actuator_struct*)lin_act_struct)->target_high_byte =
 			(uint8_t)( ((((struct linear_actuator_struct*)lin_act_struct)->target_position) >> 5)& 0x7F);
 
-			System_printf("AFTER SET_ACTUATOR_CMD() current_position %d\n\n\n", current_position);
-			System_printf("AFTER SET_ACTUATOR_CMD() target_position %d\n\n\n", ((struct linear_actuator_struct*)lin_act_struct)->target_position);
-			System_flush();
-			System_printf("AFTER SET_ACTUATOR_CMD() target_low_byte %d\n",((struct linear_actuator_struct*)lin_act_struct)->target_low_byte);
-			System_printf("AFTER SET_ACTUATOR_CMD() target_high_byte %d\n",((struct linear_actuator_struct*)lin_act_struct)->target_high_byte);
-			System_flush();
+			//System_printf("AFTER SET_ACTUATOR_CMD() current_position %d\n\n\n", current_position);
+			//System_printf("AFTER SET_ACTUATOR_CMD() target_position %d\n\n\n", ((struct linear_actuator_struct*)lin_act_struct)->target_position);
+			//System_flush();
+			//System_printf("AFTER SET_ACTUATOR_CMD() target_low_byte %d\n",((struct linear_actuator_struct*)lin_act_struct)->target_low_byte);
+			//System_printf("AFTER SET_ACTUATOR_CMD() target_high_byte %d\n",((struct linear_actuator_struct*)lin_act_struct)->target_high_byte);
+			//System_flush();
 
 		return current_position;
 
@@ -148,8 +148,8 @@ void digitalWrite(int pin, int write)
 
 			default:
 
-				System_printf("DigitalWrite passed invalid pin %d\n", pin);
-				System_flush();
+				//System_printf("DigitalWrite passed invalid pin %d\n", pin);
+				//System_flush();
 
 			return;
 
@@ -169,8 +169,8 @@ void digitalWrite(int pin, int write)
 
 			default:
 
-				System_printf("DigitalWrite passed invalid pin %d\n", pin);
-				System_flush();
+				//System_printf("DigitalWrite passed invalid pin %d\n", pin);
+				//System_flush();
 
 			return;
 
@@ -193,8 +193,8 @@ int deviceWrite(int device_port, char* buffer, int bytes_to_write)
 	extern UART_Handle uart4;
 	extern UART_Handle uart7;
 
-	System_printf("deviceWrite called\n");
-	System_flush();
+	//System_printf("deviceWrite called\n");
+	//System_flush();
 
 	switch(device_port)
 	{
@@ -360,8 +360,8 @@ bool recvSerialStructMessage(int device_port, char* recieve_buffer)
 			return false;
 		}
 
-		System_printf("rx_len: %d\n", rx_len);
-		System_flush();
+		//System_printf("rx_len: %d\n", rx_len);
+		//System_flush();
 
 	}//end if (rx_len == 0)
 
@@ -397,8 +397,8 @@ int deviceRead(int device_port, char* buffer, int bytes_to_read){
 
 	// give us access to the uart handles defined at the global scope in main
 
-	System_printf("Entered deviceRead\n");
-	System_flush();
+	//System_printf("Entered deviceRead\n");
+	//System_flush();
 
 	extern UART_Handle uart2;
 	extern UART_Handle uart3;
@@ -427,8 +427,8 @@ int deviceRead(int device_port, char* buffer, int bytes_to_read){
 
 		default:
 			//Tried to write to invalid device
-			System_printf("DeviceRead passed invalid device %d\n", device_port);
-			System_flush();
+			//System_printf("DeviceRead passed invalid device %d\n", device_port);
+			//System_flush();
 		return -1;
 
 	}//endswitch(device_port)
