@@ -32,7 +32,25 @@ void roboticArm(UArg arg0, UArg arg1)
 
 		while( recvSerialStructMessage(MOTHERBOARD_UART, (char*)&buffer_struct) )
 		{
+			System_printf("BEFORE ANYTHING struct_id %d, speed %d\n"
+						, ((struct speed_struct*)(&buffer_struct))->struct_id
+						, ((struct speed_struct*)(&buffer_struct))->speed);
+			System_flush();
+
 			speed = ((struct speed_struct*)(&buffer_struct))->speed;
+
+			speed = (speed/SPEED_STEP_DOWN);
+
+			if(speed < SPEED_MIN)
+			{
+				speed = SPEED_MIN;
+			}//end if
+
+			if(speed > SPEED_MAX)
+			{
+				speed = SPEED_MAX;
+			}//end if
+
 			switch(buffer_struct.struct_id)
 			{
 				case wrist_clock_wise...base_clock_wise:
@@ -116,6 +134,8 @@ void roboArmForwardCmd(uint8_t struct_id, int16_t speed, char* buffer_struct)
 			dynamixelSetSpeedRightCmd(WRIST_A_ID, speed);
 			dynamixelSetSpeedLeftCmd(WRIST_B_ID, speed);
 
+		break;
+
 		case wrist_up:
 
 			System_printf("Testing wrist_up speed %d\n", speed);
@@ -174,14 +194,18 @@ void roboArmReverseCmd(uint8_t struct_id, int16_t speed, char* buffer_struct)
 		//reverse (left) clockwise is counterclockwise
 		case wrist_clock_wise:
 
-			System_printf("Testing wrist_clock_wise speed %d\n", speed);
+			System_printf("Testing wrist_counter_clock_wise speed %d\n", speed);
 			System_flush();
 
 			dynamixelSetSpeedLeftCmd(WRIST_A_ID, speed);
 			dynamixelSetSpeedRightCmd(WRIST_B_ID, speed);
+
+		break;
+
 		case wrist_up:
 
-			System_printf("Testing wrist_up speed %d\n", speed);
+			//reverse (left) up is down
+			System_printf("Testing wrist_down_speed %d\n", speed);
 			System_flush();
 
 			dynamixelSetSpeedLeftCmd(WRIST_A_ID, speed);
@@ -191,7 +215,7 @@ void roboArmReverseCmd(uint8_t struct_id, int16_t speed, char* buffer_struct)
 		//reverse (left) clockwise is counterclockwise
 		case elbow_clock_wise:
 
-			System_printf("Testing elbow_clock_wise speed %d\n", speed);
+			System_printf("Testing elbow_counter_clock_wise speed %d\n", speed);
 			System_flush();
 
 			dynamixelSetSpeedLeftCmd(ELBOW_A_ID, speed);
@@ -201,7 +225,7 @@ void roboArmReverseCmd(uint8_t struct_id, int16_t speed, char* buffer_struct)
 		//reverse (left) up is down
 		case elbow_up:
 
-			System_printf("Testing elbow_up speed %d\n", speed);
+			System_printf("Testing elbow_down speed %d\n", speed);
 			System_flush();
 
 			dynamixelSetSpeedLeftCmd(ELBOW_A_ID, speed);
@@ -212,7 +236,7 @@ void roboArmReverseCmd(uint8_t struct_id, int16_t speed, char* buffer_struct)
 		//reverse (left) clockwise is counterclockwise
 		case base_clock_wise:
 
-			System_printf("Testing elbow_up speed %d\n", speed);
+			System_printf("Testing base_counter_clock_wise speed %d\n", speed);
 			System_flush();
 
 			dynamixelSetSpeedLeftCmd(BASE_ID, speed);

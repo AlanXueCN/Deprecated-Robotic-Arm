@@ -360,8 +360,8 @@ bool recvSerialStructMessage(int device_port, char* recieve_buffer)
 			return false;
 		}
 
-//		System_printf("bytesRead: %d\n", bytesRead);
-//		System_flush();
+		System_printf("rx_len: %d\n", rx_len);
+		System_flush();
 
 	}//end if (rx_len == 0)
 
@@ -410,9 +410,19 @@ int deviceRead(int device_port, char* buffer, int bytes_to_read){
 	// if we leave this out, mux performance goes from O(1) to O(n) (That's bad)
 	switch(device_port){
 		//case 0:
+		case 0:
+		break;
+		case 1:
+		break;
 		case MOTHERBOARD_UART:
 			//Write the buffer to the device
-			bytes_read = UART_read(uart3, buffer, bytes_to_read);
+			//System_printf("case: %d\n", MOTHERBOARD_UART);
+			//System_flush();
+
+			bytes_read = UART_read(uart2, buffer, bytes_to_read);
+
+			//System_printf("totally passed UART_read with bytes_read: %d\n", bytes_read);
+			//System_flush();
 		break;
 
 		default:
@@ -422,6 +432,8 @@ int deviceRead(int device_port, char* buffer, int bytes_to_read){
 		return -1;
 
 	}//endswitch(device_port)
+
+
 
 	return bytes_read;
 

@@ -14,6 +14,28 @@
 #include "roveWareHeaders/roveTiming.h"
 #include "roveWareHeaders/roveUarts.h"
 
+//		UART 0:   TX PA1, RX PA0
+// 		UART 1:   TX PB1, RX PB0
+//
+// 		UART 2:   TX PD7, RX PD6  MOTHERBOARD_UART
+//
+// 		UART 3:   TX PC7, RX PC6  END_EFFECTOR_UART
+// 		UART 4:   TX PC5, RX PC4  DYNAMIXEL_UART
+// 		UART 5:   TX PE5, RX PE4
+// 		UART 6:   TX PD5, RX PD4
+// 		UART 7:   TX PE1, RX PE0  LINEAR_ACTUATOR_UART
+
+
+// GPIO
+
+
+// SET_TRI_ST_BUF_Tx: 				PB3
+// MOTOR_CONTROLLER_ENABLE:			PD2
+// MOTOR_CONTROLLER_INPUT_1			PD3
+// MOTOR_CONTROLLER_INPUT_2			PE2
+
+
+
 #define LOW 0
 #define HIGH 1
 
@@ -38,6 +60,12 @@
 
 #define MIN_LIN_ACT_POSITION 0
 #define MAX_LIN_ACT_POSITION 4095
+
+// Speed Scaling Config
+
+#define SPEED_STEP_DOWN 10
+#define SPEED_MAX (1000/SPEED_STEP_DOWN)
+#define SPEED_MIN (-1000/SPEED_STEP_DOWN)
 
 // robot arm values
 
