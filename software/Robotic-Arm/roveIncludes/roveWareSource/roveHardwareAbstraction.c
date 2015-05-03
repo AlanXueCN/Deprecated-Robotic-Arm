@@ -46,7 +46,7 @@ bool recvSerialStructMessage(int device_port, void* buffer_struct)
 			}//endif
 
 			//testing
-			debug_rx_cnt++;
+			//debug_rx_cnt++;
 
 		}//endwhile
 
@@ -82,8 +82,8 @@ bool recvSerialStructMessage(int device_port, void* buffer_struct)
 			return false;
 		}
 
-		System_printf("rx_len: %d\n", rx_len);
-		System_flush();
+		//System_printf("rx_len: %d\n", rx_len);
+		//System_flush();
 
 	}//end if (rx_len == 0)
 
@@ -119,8 +119,8 @@ int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 
 	// give us access to the uart handles defined at the global scope in main
 
-	System_printf("Entered deviceRead\n");
-	System_flush();
+	//System_printf("Entered deviceRead\n");
+	//System_flush();
 
 	extern UART_Handle uart2;
 	extern UART_Handle uart3;
@@ -137,19 +137,19 @@ int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 		case 1:
 		break;
 		case MOTHERBOARD_UART:
-			System_printf("deviceRead case: %d, bytes_to_read %d\n", MOTHERBOARD_UART, bytes_to_read);
-			System_flush();
+			//System_printf("deviceRead case: %d, bytes_to_read %d\n", MOTHERBOARD_UART, bytes_to_read);
+			//System_flush();
 
 			bytes_read = UART_read(uart2, read_buffer, bytes_to_read);
 
-			System_printf("totally passed UART_read with bytes_read: %d\n", bytes_read);
-			System_flush();
+			//System_printf("totally passed UART_read with bytes_read: %d\n", bytes_read);
+			//System_flush();
 		break;
 
 		default:
 			//Tried to write to invalid device
-			System_printf("DeviceRead passed invalid device %d\n", device_port);
-			System_flush();
+			//System_printf("DeviceRead passed invalid device %d\n", device_port);
+			//System_flush();
 		return -1;
 
 	}//endswitch(device_port)
@@ -177,8 +177,8 @@ int getDevicePort(uint8_t device_id)
 
 		default:
 
-			System_printf("getDevicePort passed invalid device_id %d\n", device_id);
-			System_flush();
+			//System_printf("getDevicePort passed invalid device_id %d\n", device_id);
+			//System_flush();
 
 		return -1;
 	}//endswitch (device)
@@ -203,8 +203,8 @@ int getStructSize(uint8_t struct_id)
 
 		default:
 
-			System_printf("getStructSize passed invalid struct_id %d\n", struct_id);
-			System_flush();
+			//System_printf("getStructSize passed invalid struct_id %d\n", struct_id);
+			//System_flush();
 
 		return -1;
 
@@ -238,8 +238,8 @@ void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_
 
 			SET_ENDLESS_STRUCT->check_sum = check_sum;
 
-			System_printf("Testing buildDynamixelStructMessage SET_ENDLESS_CMD\n");
-			System_flush();
+			//System_printf("Testing buildDynamixelStructMessage SET_ENDLESS_CMD\n");
+			//System_flush();
 
 		break;
 
@@ -259,8 +259,8 @@ void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_
 
 			SET_DYNA_SPEED_STRUCT->check_sum = check_sum;
 
-			System_printf("Testing buildDynamixelStructMessage SET_SPEED_LEFT_CMD\n");
-			System_flush();
+			//System_printf("Testing buildDynamixelStructMessage SET_SPEED_LEFT_CMD\n");
+			//System_flush();
 
 		break;
 
@@ -280,14 +280,14 @@ void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_
 
 			SET_DYNA_SPEED_STRUCT->check_sum = check_sum;
 
-			System_printf("Testing buildDynamixelStructMessage SET_SPEED_RIGHT_CMD\n");
-			System_flush();
+			//System_printf("Testing buildDynamixelStructMessage SET_SPEED_RIGHT_CMD\n");
+			//System_flush();
 
 		break;
 
 		default:
-				System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid\n");
-				System_flush();
+				//System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid\n");
+				//System_flush();
 		break;
 
 		}//endswitch
@@ -337,8 +337,8 @@ int16_t buildLinActuatorStructMessage(void* buffer_struct, char* write_buffer,  
 
 		default:
 
-			System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");
-			System_flush();
+			//System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");
+			//System_flush();
 
 		return -1;
 
@@ -375,8 +375,8 @@ int deviceWrite(int device_port, char* write_buffer,  int bytes_to_write)
 
 		default:
 
-			System_printf("DeviceWrite passed invalid device %d\n", device_port);
-			System_flush();
+			//System_printf("DeviceWrite passed invalid device %d\n", device_port);
+			//System_flush();
 
 		break;
 		//etc.
@@ -384,7 +384,7 @@ int deviceWrite(int device_port, char* write_buffer,  int bytes_to_write)
 
 	// make sure the message is fully written before leaving the function
 
-	ms_delay(1);
+	//ms_delay(1);
 
 	return bytes_wrote;
 
@@ -427,8 +427,8 @@ void digitalWrite(int pin_number, int set_pin)
 
 			default:
 
-				System_printf("DigitalWrite passed invalid pin %d\n", set_pin);
-				System_flush();
+				//System_printf("DigitalWrite passed invalid pin %d\n", set_pin);
+				//System_flush();
 
 			return;
 

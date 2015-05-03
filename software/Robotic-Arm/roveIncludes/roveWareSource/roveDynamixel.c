@@ -16,8 +16,8 @@ void dynamixelSetEndlessCmd(uint8_t dynamixel_id, void* buffer_struct)
 		int bytes_to_write;
 		int bytes_wrote;
 
-		System_printf("Testing dynamixelSetEndlessCmd dynamixel_id %d\n", dynamixel_id);
-		System_flush();
+		//_printf("Testing dynamixelSetEndlessCmd dynamixel_id %d\n", dynamixel_id);
+		//_flush();
 
 		// get the uart
 		device_port = getDevicePort(dynamixel_id);
@@ -34,15 +34,15 @@ void dynamixelSetEndlessCmd(uint8_t dynamixel_id, void* buffer_struct)
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
 		//debugging only:
-		System_printf("dynamixelSetEndlessCmd just wrote: \n");
-		int i = 0;
-		while( i <( bytes_wrote ) )
-		{
-			System_printf(" : %d\n", write_buffer[i]);
-			System_flush();
+		//_printf("dynamixelSetEndlessCmd just wrote: \n");
+		//int i = 0;
+		//while( i <( bytes_wrote ) )
+		//{
+			//_printf(" : %d\n", write_buffer[i]);
+			//_flush();
 
-			i++;
-		}//end while
+		//	i++;
+		//}//end while
 
 		// set tri state buffer back for read
 		digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
@@ -59,8 +59,8 @@ void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed, void* buffer_
 		int bytes_to_write;
 		int bytes_wrote;
 
-		System_printf("Testing dynamixelSetSpeedLeftCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
-		System_flush();
+		//_printf("Testing dynamixelSetSpeedLeftCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
+		//_flush();
 
 		// set tristate buffer to transmit
 		digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
@@ -77,15 +77,15 @@ void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed, void* buffer_
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
 		//debugging only
-		System_printf("dynamixelSetSpeedLeftCmd just wrote: \n");
-		int i = 0;
-		while( i <( bytes_wrote ) )
-		{
-			System_printf(" : %d\n", write_buffer[i]);
-			System_flush();
+		//_printf("dynamixelSetSpeedLeftCmd just wrote: \n");
+		//int i = 0;
+		//while( i <( bytes_wrote ) )
+		//{
+			//_printf(" : %d\n", write_buffer[i]);
+			//_flush();
 
-			i++;
-		}//end while
+		//	i++;
+		//}//end while
 
 		//set tri state buffer back for read
 		digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
@@ -100,8 +100,8 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed, void* buffer
 		int bytes_to_write;
 		int bytes_wrote;
 
-		System_printf("Testing dynamixelSetSpeedRightCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
-		System_flush();
+		//_printf("Testing dynamixelSetSpeedRightCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
+		//_flush();
 
 		// set tristate buffer to transmit
 		digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
@@ -118,15 +118,15 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed, void* buffer
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
 		//debugging only
-		System_printf("dynamixelSetSpeedRightCmd just wrote: \n");
-		int i = 0;
-		while( i <( bytes_wrote ) )
-		{
-			System_printf(" : %d\n", write_buffer[i]);
-			System_flush();
+		//_printf("dynamixelSetSpeedRightCmd just wrote: \n");
+		//int i = 0;
+		//while( i <( bytes_wrote ) )
+		//{
+			//_printf(" : %d\n", write_buffer[i]);
+			//_flush();
 
 			i++;
-		}//end while
+		//}//end while
 
 		//set tri state buffer back for read
 		digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
@@ -142,9 +142,9 @@ int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t t
 		int bytes_to_write;
 		int bytes_wrote;
 
-		System_printf("Testing setLinActuatorCmd dynamixel_id %d, current_position %d, target_increment %d\n"
-						, device_id, current_position, target_increment);
-		System_flush();
+		//_printf("Testing setLinActuatorCmd dynamixel_id %d, current_position %d, target_increment %d\n"
+						//, device_id, current_position, target_increment);
+		//_flush();
 
 		// get the uart
 		device_port = getDevicePort(device_id);
@@ -158,12 +158,12 @@ int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t t
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
 		//debugging only
-		System_printf("dynamixelSetSpeedRightCmd just wrote: \n");
+		//_printf("dynamixelSetSpeedRightCmd just wrote: \n");
 		int i = 0;
 		while( i <( bytes_wrote ) )
 		{
-			System_printf(" : %d\n", write_buffer[i]);
-			System_flush();
+			//_printf(" : %d\n", write_buffer[i]);
+			//_flush();
 
 			i++;
 		}//end while
