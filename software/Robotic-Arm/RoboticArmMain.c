@@ -27,11 +27,6 @@
     UART_Handle uart4;		//PC5 DYNAMIXEL_UART 57600
     UART_Handle uart7;		//PE1 LINEAR_ACTUATOR_UART 115200
 
-    //we use a single global buffer, and typecast macros in scope at compile time
-    //message_struct buffer_struct;
-
-	int16_t lin_act_current_position = 0;
-
 int main(void)
 {
 

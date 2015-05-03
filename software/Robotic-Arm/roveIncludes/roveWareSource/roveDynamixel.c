@@ -1,11 +1,3 @@
-//TODO:
-
-//JUDAH port savage c lib task / import mob cmdCntrl logic
-
-//OWEN write roveWare wrappers task
-
-//CONNOR import roveStructTransfer Recv lib
-
 // dynamixel.c 2015
 
 #include "../roveWareHeaders/roveDynamixel.h"
@@ -16,67 +8,59 @@
 
 //Runtime Command to turn on and off endless rotation ( maaaybeee feeels a bit liiike Open Loop emulation)
 
-void dynamixelSetEndlessCmd(uint8_t dynamixel_id, void* buffer_struct, char* command_buffer )
+void dynamixelSetEndlessCmd(uint8_t dynamixel_id, void* buffer_struct)
 {
-		int i;
+		char write_buffer[BUFFER_SIZE];
+
 		int device_port;
 		int bytes_to_write;
 		int bytes_wrote;
 
-		// set function config
-		((struct message_struct*)buffer_struct)->struct_id = SET_ENDLESS_CMD;
+		System_printf("Testing dynamixelSetEndlessCmd dynamixel_id %d\n", dynamixel_id);
+		System_flush();
 
 		// get the uart
 		device_port = getDevicePort(dynamixel_id);
 
 		// size of message
-		bytes_to_write = getStructSize( ((struct message_struct*)buffer_struct)->struct_id );
+		bytes_to_write = getStructSize(SET_ENDLESS_CMD);
 
-		System_printf("Testing dynamixelSetEndlessCmd struct_id %d, \n", ((struct message_struct*)buffer_struct)->struct_id);
-		System_flush();
-
-		// populate the buffer_struct for dynamixel format frame
-		buildDynamixelStructMessage((void*)(&buffer_struct), command_buffer, dynamixel_id, 0);
+		// populate the buffer_struct for dynamixel format frame, command_value not used
+		buildDynamixelStructMessage( (void*)(&buffer_struct), write_buffer, dynamixel_id, SET_ENDLESS_CMD, NULL_COMAND_VALUE);
 
 		// set tristate buffer to transmit
 		digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
 
-		bytes_wrote = deviceWrite(device_port, command_buffer, bytes_to_write);
+		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
 		//debugging only:
+		System_printf("dynamixelSetEndlessCmd just wrote: \n");
+		int i = 0;
+		while( i <( bytes_wrote ) )
+		{
+			System_printf(" : %d\n", write_buffer[i]);
+			System_flush();
 
-		i = 0;
-
-		while( i <( bytes_wrote ) ){
-
-		System_printf("Cmd Cntrl Just Sent!: %d\n", command_buffer[i]);
-		System_flush();
-
-		i++;
-
-		}//end for
+			i++;
+		}//end while
 
 		// set tri state buffer back for read
 		digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
 
-		//System_printf("Testing dynamixelSetEndless bytes_to_write %d, bytes_wrote %d\n", bytes_to_write, bytes_wrote);
-		//System_flush();
-
 
 }//endfnctn  dynamixelSetEndless
 
 
-void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed, void* buffer_struct, char* command_buffer)
+void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed, void* buffer_struct)
 {
-		int i;
+		char write_buffer[BUFFER_SIZE];
+
 		int device_port;
 		int bytes_to_write;
 		int bytes_wrote;
 
-//TODO
-
-		//set function config
-		((void*)buffer_struct->struct_id = SET_SPEED_LEFT_CMD;
+		System_printf("Testing dynamixelSetSpeedLeftCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
+		System_flush();
 
 		// set tristate buffer to transmit
 		digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
@@ -85,42 +69,39 @@ void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed, void* buffer_
 		device_port = getDevicePort(dynamixel_id);
 
 		//size of message
-		bytes_to_write = getStructSize( ((void*)(buffer_struct))->struct_id );
+		bytes_to_write = getStructSize(SET_SPEED_LEFT_CMD);
 
 		// populate the buffer_struct for dynamixel format frame
-		buildDynamixelStructMessage((void*)(&buffer_struct), command_buffer, dynamixel_id, speed);
+		buildDynamixelStructMessage( (void*)&buffer_struct, write_buffer, dynamixel_id, SET_SPEED_LEFT_CMD, speed);
 
-		bytes_wrote = deviceWrite(device_port, command_buffer, bytes_to_write);
+		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		//debugging only:
+		//debugging only
+		System_printf("dynamixelSetSpeedLeftCmd just wrote: \n");
+		int i = 0;
+		while( i <( bytes_wrote ) )
+		{
+			System_printf(" : %d\n", write_buffer[i]);
+			System_flush();
 
-		i = 0;
-
-		while( i <( bytes_wrote ) ){
-
-		System_printf("Cmd Cntrl Just Sent!: %d\n", command_buffer[i]);
-		System_flush();
-
-		i++;
-
-		}//end for
+			i++;
+		}//end while
 
 		//set tri state buffer back for read
 		digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
 
-		//System_printf("Testing dynamixelSetSpeedLeftCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
-		//System_flush();
-}//endfnctn  dynamixelSetEndless
+}//endfnctn  dynamixelSetSpeedLeftCmd
 
-void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed, void* buffer_struct, char* command_buffer)
+void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed, void* buffer_struct)
 {
-		int i;
+		char write_buffer[BUFFER_SIZE];
+
 		int device_port;
 		int bytes_to_write;
 		int bytes_wrote;
 
-		//set function config
-		((struct message_struct*)buffer_struct)->struct_id = SET_SPEED_RIGHT_CMD;
+		System_printf("Testing dynamixelSetSpeedRightCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
+		System_flush();
 
 		// set tristate buffer to transmit
 		digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
@@ -129,72 +110,63 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed, void* buffer
 		device_port = getDevicePort(dynamixel_id);
 
 		//size of message
-		bytes_to_write = getStructSize( ((struct message_struct*)buffer_struct)->struct_id );
+		bytes_to_write = getStructSize(SET_SPEED_RIGHT_CMD);
 
 		// populate the buffer_struct for dynamixel format frame
-		buildDynamixelStructMessage((void*)(&buffer_struct), command_buffer, dynamixel_id, speed);
+		buildDynamixelStructMessage( (void*)(&buffer_struct), write_buffer, dynamixel_id, SET_SPEED_RIGHT_CMD, speed);
 
-		bytes_wrote = deviceWrite(device_port, command_buffer, bytes_to_write);
+		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		//debugging only:
+		//debugging only
+		System_printf("dynamixelSetSpeedRightCmd just wrote: \n");
+		int i = 0;
+		while( i <( bytes_wrote ) )
+		{
+			System_printf(" : %d\n", write_buffer[i]);
+			System_flush();
 
-		i = 0;
-
-		while( i <( bytes_wrote ) ){
-
-		System_printf("dynamixelSetSpeedRightCmd Just Sent!: %d\n", command_buffer[i]);
-		System_flush();
-
-		i++;
-
-		}//end for
+			i++;
+		}//end while
 
 		//set tri state buffer back for read
 		digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
 
-		//System_printf("Testing dynamixelSetSpeedRightCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
-		//System_flush();
+}//endfnctn  dynamixelSetSpeedRightCmd
 
 
-}//endfnctn  dynamixelSetEndless
-
-
-int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t target_increment, void* buffer_struct, char* command_buffer)
+int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t target_increment, void* buffer_struct)
 {
-		int i;
+	    char write_buffer[BUFFER_SIZE];
+
 		int device_port;
 		int bytes_to_write;
 		int bytes_wrote;
 
-		// set function config
-		((struct message_struct*)buffer_struct)->struct_id = SET_LIN_ACTUATOR_CMD;
+		System_printf("Testing setLinActuatorCmd dynamixel_id %d, current_position %d, target_increment %d\n"
+						, device_id, current_position, target_increment);
+		System_flush();
 
 		// get the uart
 		device_port = getDevicePort(device_id);
 
 		// size of message
-		bytes_to_write = getStructSize(((struct message_struct*)buffer_struct)->struct_id);
+		bytes_to_write = getStructSize(SET_LIN_ACTUATOR_CMD);
 
 		// populate the buffer_struct for dynamixel format frame
-		current_position = buildLinActuatorStructMessage((void*)(&buffer_struct), command_buffer, current_position, target_increment);
+		current_position = buildLinActuatorStructMessage( (void*)(&buffer_struct), write_buffer, SET_LIN_ACTUATOR_CMD, current_position, target_increment);
 
-		bytes_wrote = deviceWrite(device_port, command_buffer, bytes_to_write);
+		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		//debugging only:
+		//debugging only
+		System_printf("dynamixelSetSpeedRightCmd just wrote: \n");
+		int i = 0;
+		while( i <( bytes_wrote ) )
+		{
+			System_printf(" : %d\n", write_buffer[i]);
+			System_flush();
 
-		i = 0;
-
-		while( i <( bytes_wrote ) ){
-
-		System_printf("setLinActuatorCmd Just Sent!: %d\n", command_buffer[i]);
-		System_flush();
-
-		i++;
-
-		}//end for
-
-		//System_printf("Testing setLinActuatorCmd device_id %d, current_position %d\n", device_id, current_position);
-		//System_flush();
+			i++;
+		}//end while
 
 		return current_position;
 

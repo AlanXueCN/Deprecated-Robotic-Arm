@@ -4,32 +4,31 @@
 
 #include "../roveWareHeaders/roveHardwareAbstraction.h"
 
-bool recvSerialStructMessage(int device_port, void* recieve_buffer, char* command_buffer)
+bool recvSerialStructMessage(int device_port, void* buffer_struct)
 {
+	char read_buffer[BUFFER_SIZE];
+
 	uint8_t rx_len = 0;
 	uint8_t start_byte1 = 0x06;
 	uint8_t start_byte2 = 0x85;
-
 	uint8_t check_sum;
-
 	int bytes_read = 0;
-
 	uint8_t garbage_count = 10; // This is used to decide how much pre-data to discard before quitting
 
 	bool start_received = false;
 
 	//testing
-	int debug_rx_cnt = 0;
+	//int debug_rx_cnt = 0;
 
 	if (rx_len == 0)
 	{
 		while (!start_received)
 		{
-			bytes_read = deviceRead(device_port, command_buffer, 1);
+			bytes_read = deviceRead(device_port, read_buffer, 1);
 
 			if (bytes_read == 1)
 			{
-				if (command_buffer[0] == start_byte1)
+				if (read_buffer[0] == start_byte1)
 				{
 					start_received = true;
 
@@ -45,25 +44,26 @@ bool recvSerialStructMessage(int device_port, void* recieve_buffer, char* comman
 
 			}//endif
 
-			debug_rx_cnt++;
+			//testing
+			//debug_rx_cnt++;
 
 		}//endwhile
 
 //		System_printf("Looped through the rx debug_rx_cnt: %d\n", debug_rx_cnt);
 //		System_flush();
 
-		if ((bytes_read = deviceRead(device_port, command_buffer, 1)) == 1)
+		if ((bytes_read = deviceRead(device_port, read_buffer, 1)) == 1)
 		{
-			if (command_buffer[0] != start_byte2)
+			if (read_buffer[0] != start_byte2)
 			{
 				return false;
 			}//end if
 			else
 			{
-				bytes_read = deviceRead(device_port, command_buffer, 1);
+				bytes_read = deviceRead(device_port, read_buffer, 1);
 				if (bytes_read == 1)
 				{
-					rx_len = command_buffer[0];
+					rx_len = read_buffer[0];
 					if (rx_len == 0)
 					{
 						return false;
@@ -88,22 +88,22 @@ bool recvSerialStructMessage(int device_port, void* recieve_buffer, char* comman
 
 	if (rx_len > 0)
 	{
-		bytes_read = deviceRead(device_port, command_buffer, rx_len + 1);
+		bytes_read = deviceRead(device_port, read_buffer, rx_len + 1);
 
 		//rx_len + 1 for the checksum byte at the end
 		if (bytes_read != (rx_len + 1))
 
 			return false;
 
-		check_sum = calcCheckSum(command_buffer, rx_len);
+		check_sum = calcCheckSum(read_buffer, rx_len);
 
-		if (check_sum != command_buffer[rx_len])
+		if (check_sum != read_buffer[rx_len])
 		{
 			// Checksum error
 			return false;
 		}//endif
 
-		memcpy(recieve_buffer, command_buffer, rx_len);
+		memcpy(buffer_struct, read_buffer, rx_len);
 		return true;
 	}//endif
 
@@ -112,14 +112,14 @@ bool recvSerialStructMessage(int device_port, void* recieve_buffer, char* comman
 }//endfnctn recvSerialStructMessage
 
 
-int deviceRead(int device_port, char* command_buffer, int bytes_to_read){
+int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 
 	int bytes_read;
 
 	// give us access to the uart handles defined at the global scope in main
 
-	//System_printf("Entered deviceRead\n");
-	//System_flush();
+	System_printf("Entered deviceRead\n");
+	System_flush();
 
 	extern UART_Handle uart2;
 	extern UART_Handle uart3;
@@ -136,11 +136,11 @@ int deviceRead(int device_port, char* command_buffer, int bytes_to_read){
 		case 1:
 		break;
 		case MOTHERBOARD_UART:
-			//Write the command_buffer to the device
+			//Write the write_buffer to the device
 			//System_printf("case: %d\n", MOTHERBOARD_UART);
 			//System_flush();
 
-			bytes_read = UART_read(uart2, command_buffer, bytes_to_read);
+			bytes_read = UART_read(uart2, read_buffer, bytes_to_read);
 
 			//System_printf("totally passed UART_read with bytes_read: %d\n", bytes_read);
 			//System_flush();
@@ -191,15 +191,15 @@ int getStructSize(uint8_t struct_id)
 	{
 		case SET_ENDLESS_CMD:
 
-			return sizeof(struct set_endless_struct);
+			return sizeof(set_dyna_endless_struct);
 
 		case SET_SPEED_LEFT_CMD...SET_SPEED_RIGHT_CMD:
 
-			return sizeof(struct set_speed_struct);
+			return sizeof(set_dyna_speed_struct);
 
 		case SET_LIN_ACTUATOR_CMD:
 
-			return (sizeof(struct linear_actuator_struct) - LIN_DONT_PRINT_BYTES);
+			return (sizeof(linear_actuator_struct) - DONT_PRINT_LIN_BYTES);
 
 		default:
 
@@ -214,118 +214,118 @@ int getStructSize(uint8_t struct_id)
 
 
 //see roveStructs.h and rovWare.h for config
-void buildDynamixelStructMessage(void* dynamixel_struct, char* command_buffer, uint8_t dynamixel_id, int16_t command_value)
+void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_t struct_id, uint8_t dynamixel_id, int16_t command_value)
 {
 	uint8_t check_sum;
 	uint8_t speed_low_byte = (uint8_t)command_value;
 	uint8_t speed_high_byte = (uint8_t)(command_value >> 8);
 
-	System_printf("Testing buildDynamixelStructMessage struct_id %d, \n", ((struct dynamixel_id_cast*)dynamixel_struct)->struct_id);
+	System_printf("Testing buildDynamixelStructMessage struct_id %d, \n", struct_id);
 	System_flush();
 
-
-	switch( ((struct dynamixel_id_cast*)dynamixel_struct)->struct_id)
+	switch(struct_id)
 	{
 		case SET_ENDLESS_CMD:
 
-			// to switch cast the single dynamixel_msg_struct global buffer instance
-			// using precompile macros to config flex and avoid extra memory copy
-			( (struct set_endless_struct*)dynamixel_struct)->start_byte1 = AX_START;
-			( (struct set_endless_struct*)dynamixel_struct)->start_byte2 = AX_START;
-			( (struct set_endless_struct*)dynamixel_struct)->dynamixel_id = dynamixel_id;
-			( (struct set_endless_struct*)dynamixel_struct)->msg_size = AX_GOAL_LENGTH;
-			( (struct set_endless_struct*)dynamixel_struct)->read_write_flag = AX_WRITE_DATA;
-			( (struct set_endless_struct*)dynamixel_struct)->ccw_angle_limit_reg_addr = AX_CCW_ANGLE_LIMIT_L;
-			( (struct set_endless_struct*)dynamixel_struct)->ccw_angle_limit_low_byte = 0x00;
-			( (struct set_endless_struct*)dynamixel_struct)->ccw_angle_limit_high_byte = 0x00;
+			// macro casting the buffer_struct instance see roveWare.h and roveStruct.h
+			SET_ENDLESS_STRUCT->start_byte1 = AX_START;
+			SET_ENDLESS_STRUCT->start_byte2 = AX_START;
+			SET_ENDLESS_STRUCT->dynamixel_id = dynamixel_id;
+			SET_ENDLESS_STRUCT->msg_size = AX_GOAL_LENGTH;
+			SET_ENDLESS_STRUCT->read_write_flag = AX_WRITE_DATA;
+			SET_ENDLESS_STRUCT->ccw_angle_limit_reg_addr = AX_CCW_ANGLE_LIMIT_L;
+			SET_ENDLESS_STRUCT->ccw_angle_limit_low_byte = 0x00;
+			SET_ENDLESS_STRUCT->ccw_angle_limit_high_byte = 0x00;
 
 			check_sum = ( ~(dynamixel_id + AX_GOAL_LENGTH + AX_WRITE_DATA + AX_CCW_ANGLE_LIMIT_L) ) & 0xFF;
 
-			( (struct set_endless_struct*)dynamixel_struct)->check_sum = check_sum;
+			SET_ENDLESS_STRUCT->check_sum = check_sum;
 
 		break;
 
 		case SET_SPEED_LEFT_CMD:
 
-			( (struct set_speed_struct*)dynamixel_struct)->start_byte1 = AX_START;
-			( (struct set_speed_struct*)dynamixel_struct)->start_byte2 = AX_START;
-			( (struct set_speed_struct*)dynamixel_struct)->dynamixel_id = dynamixel_id;
-			( (struct set_speed_struct*)dynamixel_struct)->msg_size = AX_SPEED_LENGTH;
-			( (struct set_speed_struct*)dynamixel_struct)->read_write_flag = AX_WRITE_DATA;
-			( (struct set_speed_struct*)dynamixel_struct)->speed_low_byte_reg_addr = AX_GOAL_SPEED_L;
-			( (struct set_speed_struct*)dynamixel_struct)->speed_low_byte = speed_low_byte;
-			( (struct set_speed_struct*)dynamixel_struct)->speed_high_byte = speed_high_byte;
+			// macro casting the buffer_struct instance see roveWare.h and roveStruct.h
+			SET_DYNA_SPEED_STRUCT->start_byte1 = AX_START;
+			SET_DYNA_SPEED_STRUCT->start_byte2 = AX_START;
+			SET_DYNA_SPEED_STRUCT->dynamixel_id = dynamixel_id;
+			SET_DYNA_SPEED_STRUCT->msg_size = AX_SPEED_LENGTH;
+			SET_DYNA_SPEED_STRUCT->read_write_flag = AX_WRITE_DATA;
+			SET_DYNA_SPEED_STRUCT->speed_low_byte_reg_addr = AX_GOAL_SPEED_L;
+			SET_DYNA_SPEED_STRUCT->speed_low_byte = speed_low_byte;
+			SET_DYNA_SPEED_STRUCT->speed_high_byte = speed_high_byte;
 
 			check_sum = ( ~(dynamixel_id + AX_SPEED_LENGTH + AX_WRITE_DATA + AX_GOAL_SPEED_L + speed_low_byte + speed_high_byte) ) & 0xFF;
 
-			( (struct set_endless_struct*)dynamixel_struct)->check_sum = check_sum;
+			SET_DYNA_SPEED_STRUCT->check_sum = check_sum;
 
 		break;
 
 		case SET_SPEED_RIGHT_CMD:
 
-			( (struct set_speed_struct*)dynamixel_struct)->start_byte1 = AX_START;
-			( (struct set_speed_struct*)dynamixel_struct)->start_byte2 = AX_START;
-			( (struct set_speed_struct*)dynamixel_struct)->dynamixel_id = dynamixel_id;
-			( (struct set_speed_struct*)dynamixel_struct)->msg_size = AX_SPEED_LENGTH;
-			( (struct set_speed_struct*)dynamixel_struct)->read_write_flag = AX_WRITE_DATA;
-			( (struct set_speed_struct*)dynamixel_struct)->speed_low_byte_reg_addr = AX_GOAL_SPEED_L;
-			( (struct set_speed_struct*)dynamixel_struct)->speed_low_byte = speed_low_byte;
-			( (struct set_speed_struct*)dynamixel_struct)->speed_high_byte = (speed_high_byte + 4);
+			// macro casting the buffer_struct instance see roveWare.h and roveStruct.h
+			SET_DYNA_SPEED_STRUCT ->start_byte1 = AX_START;
+			SET_DYNA_SPEED_STRUCT ->start_byte2 = AX_START;
+			SET_DYNA_SPEED_STRUCT ->dynamixel_id = dynamixel_id;
+			SET_DYNA_SPEED_STRUCT ->msg_size = AX_SPEED_LENGTH;
+			SET_DYNA_SPEED_STRUCT ->read_write_flag = AX_WRITE_DATA;
+			SET_DYNA_SPEED_STRUCT ->speed_low_byte_reg_addr = AX_GOAL_SPEED_L;
+			SET_DYNA_SPEED_STRUCT ->speed_low_byte = speed_low_byte;
+			SET_DYNA_SPEED_STRUCT ->speed_high_byte = (speed_high_byte + 4);
 
 			check_sum = ( ~(dynamixel_id + AX_SPEED_LENGTH + AX_WRITE_DATA + AX_GOAL_SPEED_L + speed_low_byte + speed_high_byte) ) & 0xFF;
 
-			( (struct set_endless_struct*)dynamixel_struct)->check_sum = check_sum;
+			SET_DYNA_SPEED_STRUCT->check_sum = check_sum;
 
 		break;
 
 		default:
-
 				System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");
 				System_flush();
 		break;
 
 		}//endswitch
 
-	memcpy( command_buffer, dynamixel_struct, sizeof(struct set_speed_struct) );
+	memcpy( write_buffer, buffer_struct, sizeof(set_dyna_speed_struct) );
 
 }//end fnctn buildDynamixelStructMessage
 
-//current_position = buildLinActuatorMessage((void*)(&buffer_struct), command_buffer, device_id, current_position, target_increment);
+//current_position = buildLinActuatorMessage((void*)(&buffer_struct), write_buffer, device_id, current_position, target_increment);
 
-int16_t buildLinActuatorStructMessage(void* lin_act_struct, char* command_buffer, int16_t current_position, int16_t command_value)
+int16_t buildLinActuatorStructMessage(void* buffer_struct, char* write_buffer,  uint8_t struct_id, int16_t current_position, int16_t command_value)
 {
 
-	switch( ( (struct dynamixel_id_cast*)lin_act_struct)->struct_id)
+	System_printf("Testing buildLinActuatorStructMessage struct_id %d, \n", struct_id);
+	System_flush();
+
+	switch(struct_id)
 	{
 		case SET_LIN_ACTUATOR_CMD:
 
 			//target = current + command
-			((struct linear_actuator_struct*)lin_act_struct)->target_position = current_position + command_value;
+			SET_LIN_ACT_STRUCT->target_position = current_position + command_value;
 
-			if ( ((struct linear_actuator_struct*)lin_act_struct)->target_position > MAX_LIN_ACT_POSITION )
+			if (SET_LIN_ACT_STRUCT->target_position > MAX_LIN_ACT_POSITION)
 			{
-				((struct linear_actuator_struct*)lin_act_struct)->target_position = MAX_LIN_ACT_POSITION;
+				SET_LIN_ACT_STRUCT->target_position = MAX_LIN_ACT_POSITION;
 
 			}//endif
 
-			if ( ((struct linear_actuator_struct*)lin_act_struct)->target_position < MIN_LIN_ACT_POSITION )
+			if (SET_LIN_ACT_STRUCT->target_position < MIN_LIN_ACT_POSITION)
 			{
-				((struct linear_actuator_struct*)lin_act_struct)->target_position = MIN_LIN_ACT_POSITION;
+				SET_LIN_ACT_STRUCT->target_position = MIN_LIN_ACT_POSITION;
 
 			}//endif
 
-			current_position = ((struct linear_actuator_struct*)lin_act_struct)->target_position;
+			current_position = SET_LIN_ACT_STRUCT->target_position;
 
 			//target_low_byte = 0xC0 + (target + 0x1F)
-			((struct linear_actuator_struct*)lin_act_struct)->target_low_byte =
-			(uint8_t)( 0xC0 + (( ((struct linear_actuator_struct*)lin_act_struct)->target_position)& 0x1F) );
+			SET_LIN_ACT_STRUCT->target_low_byte = (uint8_t)(0xC0 + (SET_LIN_ACT_STRUCT->target_position & 0x1F) );
 
-			//target_high_byte =
-			((struct linear_actuator_struct*)lin_act_struct)->target_high_byte =
-			(uint8_t)( ((((struct linear_actuator_struct*)lin_act_struct)->target_position) >> 5)& 0x7F);
+			//target_high_byte = (target >> 5) & 0x7F
+			SET_LIN_ACT_STRUCT->target_high_byte = (uint8_t)( (SET_LIN_ACT_STRUCT->target_position >> 5) & 0x7F);
 
-		memcpy( command_buffer, lin_act_struct, sizeof(struct linear_actuator_struct) );
+		memcpy( write_buffer, buffer_struct, sizeof(linear_actuator_struct) );
 
 		return current_position;
 
@@ -341,7 +341,7 @@ int16_t buildLinActuatorStructMessage(void* lin_act_struct, char* command_buffer
 }//end fnctn buildLinActuatorStructMessage
 
 
-int deviceWrite(int device_port, char* buffer,  int bytes_to_write)
+int deviceWrite(int device_port, char* write_buffer,  int bytes_to_write)
 {
 	int bytes_wrote;
 
@@ -358,12 +358,12 @@ int deviceWrite(int device_port, char* buffer,  int bytes_to_write)
 	{
 		case DYNAMIXEL_UART:
 
-			bytes_wrote = UART_write(uart4, buffer, bytes_to_write);
+			bytes_wrote = UART_write(uart4, write_buffer, bytes_to_write);
 
 		break;
 		case LINEAR_ACTUATOR_UART:
 
-			bytes_wrote = UART_write(uart7, buffer, bytes_to_write);
+			bytes_wrote = UART_write(uart7, write_buffer, bytes_to_write);
 
 		break;
 
@@ -385,14 +385,14 @@ int deviceWrite(int device_port, char* buffer,  int bytes_to_write)
 }//endfnctn deviceWrite
 
 
-void digitalWrite(int pin, int write)
+void digitalWrite(int pin_number, int set_pin)
 {
 	//check 0 case first to optimize indexed compares
-	if(write == LOW)
+	if(set_pin == LOW)
 	{
-		switch(pin)
+		switch(pin_number)
 		{
-			case SET_TRI_ST_BUF_Tx :
+			case SET_TRI_ST_BUF_Tx:
 
 				GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, (0));
 
@@ -407,12 +407,12 @@ void digitalWrite(int pin, int write)
 
 		}//endswitch
 
-	}else if(write == HIGH)
+	}else if(set_pin == HIGH)
 	{
 
-		switch(pin)
+		switch(pin_number)
 		{
-			case SET_TRI_ST_BUF_Tx :
+			case SET_TRI_ST_BUF_Tx:
 
 				//~0 implies write without calling GPIO_PIN_3 lookup
 				GPIOPinWrite(GPIO_PORTB_BASE, GPIO_PIN_3, (~0));
@@ -421,8 +421,8 @@ void digitalWrite(int pin, int write)
 
 			default:
 
-				//System_printf("DigitalWrite passed invalid pin %d\n", pin);
-				//System_flush();
+				System_printf("DigitalWrite passed invalid pin %d\n", set_pin);
+				System_flush();
 
 			return;
 
@@ -435,16 +435,15 @@ void digitalWrite(int pin, int write)
 }//endfnctn digitalWrite
 
 
-//calcCheckSum(local_buffer, rx_len);
-//uint8_t calcCheckSum(const void* my_struct, uint8_t size)
-uint8_t calcCheckSum(const char* command_buffer, uint8_t size)
+//calcCheckSum(read_buffer, rx_len);
+uint8_t calcCheckSum(const char* read_buffer, uint8_t size)
 {
 
 	uint8_t check_sum = size;
 	uint8_t i;
 
 	for(i = 0; i < size; i++)
-		check_sum ^= *(command_buffer + i);
+		check_sum ^= *(read_buffer + i);
 
 	return check_sum;
 

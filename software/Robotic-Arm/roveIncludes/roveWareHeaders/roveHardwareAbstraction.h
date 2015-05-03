@@ -1,9 +1,4 @@
-///
- // roveHardwareAbstraction.h
- //
- //  Created on: Mar 3, 2015
- //      Author: mrdtdev
- ///
+// roveHardwareAbstraction.h
 
 #pragma once
 
@@ -20,22 +15,26 @@
 
 //HARDWARE ABSTRACTION FUNCTIONS
 
-void buildDynamixelStructMessage(void* dynamixel_struct, char* command_buffer, uint8_t dynamixel_id, int16_t command_value );
+//fills a write char* write_buffer with the dynamixel formatted putput message
+void buildDynamixelStructMessage(void* buffer_struct,  char* write_buffer, uint8_t struct_id, uint8_t dynamixel_id, int16_t command_value );
 
-int16_t buildLinActuatorStructMessage(void* lin_act_struct, char* command_buffer, int16_t current_position, int16_t command_value);
+//fills a write char* write_buffer with the linear actuated formatted putput message
+int16_t buildLinActuatorStructMessage(void* buffer_struct, char* write_buffer, uint8_t struct_id, int16_t current_position, int16_t command_value);
 
-bool recvSerialStructMessage(int device_port, void* recieve_buffer, char* command_buffer);
+//calls device read and fills a typdef message_struct buffer_struct with a mob message
+bool recvSerialStructMessage(int device_port, void* buffer_struct);
 
-void digitalWrite(int pin, int val);
+//sets high or low for a GPIO pin number
+void digitalWrite(int pin_number, int set_pin);
 
-int deviceWrite(int device_port, char* buffer, int bytes_to_write);
+int deviceWrite(int device_port, char* write_buffer, int bytes_to_write);
 
-int deviceRead(int device_port, char* buffer, int bytes_to_read);
+int deviceRead(int device_port, char* read_buffer, int bytes_to_read);
 
 int getDevicePort(uint8_t device_id);
 
 int getStructSize(uint8_t struct_id);
 
-uint8_t calcCheckSum(const char* my_struct, uint8_t size);
+uint8_t calcCheckSum(const char* read_buffer, uint8_t size);
 
 #endif // ROVEHARDWAREABSTRACTION_H_

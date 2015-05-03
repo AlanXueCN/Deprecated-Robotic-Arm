@@ -14,27 +14,33 @@
 #include "roveWareHeaders/roveTiming.h"
 #include "roveWareHeaders/roveUarts.h"
 
-//		UART 0:   TX PA1, RX PA0
-// 		UART 1:   TX PB1, RX PB0
-//
-// 		UART 2:   TX PD7, RX PD6  MOTHERBOARD_UART
-//
-// 		UART 3:   TX PC7, RX PC6  END_EFFECTOR_UART
-// 		UART 4:   TX PC5, RX PC4  DYNAMIXEL_UART
-// 		UART 5:   TX PE5, RX PE4
-// 		UART 6:   TX PD5, RX PD4
-// 		UART 7:   TX PE1, RX PE0  LINEAR_ACTUATOR_UART
+// GPIO: SET_TRI_ST_BUF_Tx 					PB3
+// GPIO: MOTOR_CONTROLLER_ENABLE			PD2
+// GPIO: MOTOR_CONTROLLER_INPUT_1			PD3
+// GPIO: MOTOR_CONTROLLER_INPUT_2			PE2
+//UART 0:   TX PA1, RX PA0
+//UART 1:   TX PB1, RX PB0
+//UART 2:   TX PD7, RX PD6  MOTHERBOARD_UART
+//UART 3:   TX PC7, RX PC6  END_EFFECTOR_UART
+//UART 4:   TX PC5, RX PC4  DYNAMIXEL_UART
+//UART 5:   TX PE5, RX PE4
+//UART 6:   TX PD5, RX PD4
+//UART 7:   TX PE1, RX PE0  LINEAR_ACTUATOR_UART
+
+//typecasting shorthand for void* buffer_struct at RoboticArm Task scope
+#define SPEED_STRUCT			((speed_struct*)(&buffer_struct))
+#define TEST_STRUCT				((speed_struct*)(&buffer_struct))
+
+//typecasting shorthand for void* buffer_struct at fnctn arg scope
+#define MESSAGE_STRUCT 			((message_struct*)buffer_struct)
+#define SET_ENDLESS_STRUCT 		((set_dyna_endless_struct*)buffer_struct)
+#define SET_DYNA_SPEED_STRUCT 	((set_dyna_speed_struct*)buffer_struct)
+#define SET_LIN_ACT_STRUCT 		((linear_actuator_struct*)buffer_struct)
 
 
-// GPIO
-
-
-// SET_TRI_ST_BUF_Tx: 				PB3
-// MOTOR_CONTROLLER_ENABLE:			PD2
-// MOTOR_CONTROLLER_INPUT_1			PD3
-// MOTOR_CONTROLLER_INPUT_2			PE2
-
-
+//TODO wtf uint8_t value[30]roveStructs.h ?
+#define BUFFER_SIZE 30
+#define DONT_PRINT_LIN_BYTES 4
 
 #define LOW 0
 #define HIGH 1
@@ -58,23 +64,33 @@
 #define LIN_ACT_ID  0x06
 #define MOB_ID 		0x07
 
+#define NULL_COMAND_VALUE 0
+#define LIN_ACT_POSITION_ZERO 0
+#define ZERO_SPEED 0
+
 #define MIN_LIN_ACT_POSITION 0
 #define MAX_LIN_ACT_POSITION 4095
 
-// Speed Scaling Config
-
-#define SPEED_STEP_DOWN 8
+// speed scaling config
+#define SPEED_STEP_DOWN 1
 #define SPEED_MAX (1000/SPEED_STEP_DOWN)
 #define SPEED_MIN (-1000/SPEED_STEP_DOWN)
+
+// tester values config
+#define TEST_MAX_STRUCT_ID wrist_clock_wise
+#define TEST_MIN_STRUCT_ID actuator_increment
+#define TEST_MAX_SPEED 1000
+#define TEST_MIN_SPEED -1000
+#define TEST_STRUCT_INC 1
+#define TEST_SPEED_INC 350
+#define TEST_MS_DELAY 120
 
 // robot arm values
 
 //deprecated in favor of variable speed
-
-#define	robot_arm_contant_speed_id 200
+#define	robot_arm_constant_speed_id 200
 
 // clockwise is positive, counter clockwise is negative
-
 #define wrist_clock_wise 201
 #define wrist_up 202
 #define elbow_clock_wise 203
@@ -84,26 +100,18 @@
 #define actuator_increment 207
 
 // gripper values
-
 #define gripper_open 220
 #define drill 221
 
 // telem_device_id
-
 #define	telem_req_id 254
-
 #define	robot_arm_telem_req_id 0
 #define	gripper_telem_req_id 1
 #define	drill_telem_req_id 2
 
-//TODO wtf uint8_t value[30] vs  uint8_t value[MAX_DYNAMIXEL_MSG_SIZE]in roveStructs.h ?
-#define MAX_DYNAMIXEL_MSG_SIZE 30
 
-#define LIN_DONT_PRINT_BYTES 4
 
 //From Savage Electronics
-
-
 
 //EEPROM AREA
 #define AX_MODEL_NUMBER_L           0

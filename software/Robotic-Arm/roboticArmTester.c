@@ -1,17 +1,19 @@
-/// roboticArmTester.c 2015
+// roboticArmTester.c 2015
 
-//TASK:
+//TESTER TASK:
 
-#include "roveIncludes/roveWareHeaders/roboticArmTester.h"
+#include "roveIncludes/roveWareHeaders/roboticArm.h"
 
-// BIOS_start in main inits this as the roboticArmTask Thread
+// BIOS_start in main inits this as the roboticArmTesterTask Thread
 
-// this is a roboticArm.cfg object::roboticArmTask::priority 1,  768 persistent private stack, vital_flag = t,
+//this is a roboticArm.cfg object::roboticArmTask::priority 1,
+//768 persistent private stack, vital_flag = t,
+
+//roveWare.h :: #define TEST_STRUCT ((speed_struct*)(&buffer_struct))
 
 void roboticArmTester(UArg arg0, UArg arg1)
 {
-/*
-	System_printf("Enter roboticArmTester TASK\n");
+	System_printf("roboticArmTesterTask init \n\n\n");
 	System_flush();
 
 	extern UART_Handle uart2;
@@ -19,109 +21,249 @@ void roboticArmTester(UArg arg0, UArg arg1)
 	extern UART_Handle uart4;
 	extern UART_Handle uart7;
 
-	char buffer[] = "This is a test of uart 0";
+	//task scope buffer alloc
+	message_struct buffer_struct;
 
-	System_printf("Testing uarts in TASK\n");
+	buffer_struct.struct_id = 201;
+	int16_t speed = 0;
+
+	//track the linear actuators position at the task level
+	int16_t lin_act_cur_posit = 0;
+
+	//init periphs
+	System_printf("Initializing Periphs: \n");
 	System_flush();
 
-	UART_write(uart2, "This is a test of uart 2", strlen(buffer));
-	UART_write(uart3, "This is a test of uart 3", strlen(buffer));
-	UART_write(uart4, "This is a test of uart 4", strlen(buffer));
-	UART_write(uart7, "This is a test of uart 7", strlen(buffer));
+	//testing
+	System_printf("roboticArm struct_id:	 %d\n", buffer_struct.struct_id);
+	System_flush();
 
-	System_printf("Testing dynamixelSetEndless %d\n", WRIST_A_ID);
-	System_flush();
-	dynamixelSetEndlessCmd(WRIST_A_ID);
-	System_printf("Testing dynamixelSetEndless %d\n", WRIST_B_ID);
-	System_flush();
-	dynamixelSetEndlessCmd(WRIST_B_ID);
-	System_printf("Testing dynamixelSetEndless %d\n", ELBOW_A_ID);
-	System_flush();
-	dynamixelSetEndlessCmd(ELBOW_A_ID);
-	System_printf("Testing dynamixelSetEndless %d\n", ELBOW_B_ID);
-	System_flush();
-	dynamixelSetEndlessCmd(ELBOW_B_ID);
-	System_printf("Testing dynamixelSetEndless %d\n", BASE_ID);
-	System_flush();
-	dynamixelSetEndlessCmd(BASE_ID);
+	//init all motors to zero
+	dynamixelSetEndlessCmd(WRIST_A_ID, (void*)&buffer_struct);
+	dynamixelSetEndlessCmd(WRIST_B_ID, (void*)&buffer_struct);
+	dynamixelSetEndlessCmd(ELBOW_A_ID, (void*)&buffer_struct);
+	dynamixelSetEndlessCmd(ELBOW_B_ID, (void*)&buffer_struct);
+	dynamixelSetEndlessCmd(BASE_ID, (void*)&buffer_struct);
 
-	System_printf("Testing INIT setLinActuatorCmd %d\n", LIN_ACT_ID);
+	dynamixelSetSpeedLeftCmd(WRIST_A_ID, ZERO_SPEED, (void*)&buffer_struct);
+	dynamixelSetSpeedLeftCmd(WRIST_B_ID, ZERO_SPEED, (void*)&buffer_struct);
+	dynamixelSetSpeedLeftCmd(ELBOW_A_ID, ZERO_SPEED, (void*)&buffer_struct);
+	dynamixelSetSpeedRightCmd(ELBOW_B_ID, ZERO_SPEED, (void*)&buffer_struct);
+	dynamixelSetSpeedLeftCmd(BASE_ID, 0, (void*)&buffer_struct);
+
+	lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, LIN_ACT_POSITION_ZERO, (void*)&buffer_struct);
+
+	System_printf("Loop Forever: \n");
 	System_flush();
-	setLinActuatorCmd(LIN_ACT_ID, 0, 0);
 
-	int command_loop_thru_count = 0;
-	int test_speed = 100;
-	int test_lin_act_increment = 200;
-	uint16_t test_lin_act_cur_position = 0;
-
-	while(1)
+	//hack for unreachable statement warnings
+	const uint8_t FOREVER = 1;
+	while(FOREVER)
 	{
-		ms_delay(10);
 
-		while(test_speed > 0)
+//BEGIN TEST MOD
+
+		TEST_STRUCT->struct_id = 	TEST_MIN_STRUCT_ID;
+		TEST_STRUCT->speed = 		TEST_MIN_SPEED;
+		while(TEST_STRUCT->struct_id <= TEST_MAX_STRUCT_ID)
+		{
+			TEST_STRUCT->struct_id = 	TEST_MIN_STRUCT_ID;
+			TEST_STRUCT->speed = 		TEST_MIN_SPEED;
+
+			while(TEST_STRUCT->speed <= TEST_MAX_SPEED)
 			{
+				TEST_STRUCT->speed = TEST_STRUCT->speed + TEST_SPEED_INC;
+				TEST_STRUCT->struct_id = TEST_STRUCT->speed + TEST_SPEED_INC;
 
-			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", WRIST_A_ID, test_speed);
-			System_flush();
-			dynamixelSetSpeedLeftCmd(WRIST_A_ID, test_speed);
-			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", WRIST_B_ID, test_speed);
-			System_flush();
-			dynamixelSetSpeedLeftCmd(WRIST_B_ID, test_speed);
-			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", ELBOW_A_ID, test_speed);
-			System_flush();
-			dynamixelSetSpeedLeftCmd(ELBOW_A_ID, test_speed);
-			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", ELBOW_B_ID, test_speed);
-			System_flush();
-			dynamixelSetSpeedLeftCmd(ELBOW_B_ID, test_speed);
-			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", BASE_ID, test_speed);
-			System_flush();
-			dynamixelSetSpeedLeftCmd(BASE_ID, test_speed);
+				System_printf("Tester Posted struct_id %d, speed, %d\n", TEST_STRUCT->struct_id, TEST_STRUCT->speed);
+				System_flush();
 
-			test_speed = (test_speed - 10);
+//END TEST MOD
 
-			}//
+				speed = SPEED_STRUCT->speed;
 
-			test_speed = 100;
+				switch(buffer_struct.struct_id)
+				{
+					case wrist_clock_wise...base_clock_wise:
 
-			ms_delay(10);
+						//Scale and Cap speed from roveWare.h
+						speed = (speed/SPEED_STEP_DOWN);
 
-			while(test_speed < 100)
+						if(speed < SPEED_MIN)
+						{
+							speed = SPEED_MIN;
+						}//end if
+
+						if(speed > SPEED_MAX)
+						{
+							speed = SPEED_MAX;
+						}//end if
+
+
+						if(speed < 0)
+						{
+							roboArmReverseCmd(buffer_struct.struct_id, (-speed), (void*)&buffer_struct);
+
+						}else{
+
+							roboArmForwardCmd(buffer_struct.struct_id, speed, (void*)&buffer_struct);
+
+						}//endif
+
+					break;
+
+					case e_stop_arm:
+
+						dynamixelSetSpeedLeftCmd(WRIST_A_ID, 0, (void*)&buffer_struct);
+						dynamixelSetSpeedLeftCmd(WRIST_B_ID, 0, (void*)&buffer_struct);
+						dynamixelSetSpeedLeftCmd(ELBOW_A_ID, 0, (void*)&buffer_struct);
+						dynamixelSetSpeedRightCmd(ELBOW_B_ID, 0, (void*)&buffer_struct);
+						dynamixelSetSpeedLeftCmd(BASE_ID, 0, (void*)&buffer_struct);
+						lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, 0, (void*)&buffer_struct);
+
+					//TODO Gripper and Drill e_stop_arm case actions
+
+					break;
+
+					case actuator_increment:
+
+						lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, speed, (void*)&buffer_struct);
+
+						System_printf("Actuator increment:  %d 	 lin_act_current_position: 		%d = setLinActuatorCmd();\n", lin_act_cur_posit, speed);
+						System_flush();
+
+					break;
+
+					case gripper_open:
+
+						//TODO Gripper
+
+						System_printf("What? Not ready for gripper_open");
+						System_flush();
+
+					break;
+
+					case drill:
+
+						//TODO Drill
+
+						System_printf("What? Not ready for drill");
+						System_flush();
+
+					break;
+
+					default:
+						System_printf("\nERROR in RoboticArm.c! struct_id %d cannot be handled \n", buffer_struct.struct_id);
+						System_flush();
+					break;
+
+				}//endswitch buffer_struct.struct_id
+
+//BEGIN TEST MOD
+
+				ms_delay(TEST_MS_DELAY);
+
+			}//end while TEST_MAX_SPEED
+
+			while(TEST_STRUCT->speed >= TEST_MIN_SPEED)
 			{
+				TEST_STRUCT->speed = TEST_STRUCT->speed - TEST_SPEED_INC;
+				TEST_STRUCT->struct_id = TEST_STRUCT->speed - TEST_SPEED_INC;
 
-			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", WRIST_A_ID, test_speed);
-			System_flush();
-			dynamixelSetSpeedRightCmd(WRIST_A_ID, test_speed);
-			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", WRIST_B_ID, test_speed);
-			System_flush();
-			dynamixelSetSpeedRightCmd(WRIST_B_ID, test_speed);
-			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", ELBOW_A_ID, test_speed);
-			System_flush();
-			dynamixelSetSpeedRightCmd(ELBOW_A_ID, test_speed);
-			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", ELBOW_B_ID, test_speed);
-			System_flush();
-			dynamixelSetSpeedRightCmd(ELBOW_B_ID, test_speed);
-			System_printf("Testing dynamixelSetSpeed id %d, speed %d\n", BASE_ID, test_speed);
-			System_flush();
-			dynamixelSetSpeedRightCmd(BASE_ID, test_speed);
+				System_printf("Tester Posted struct_id %d, speed, %d\n", TEST_STRUCT->struct_id, TEST_STRUCT->speed);
+				System_flush();
 
-			test_speed = (test_speed + 10);
+//END TEST MOD
 
-			}//
+				speed = SPEED_STRUCT->speed;
 
-			System_printf("Testing setLinActuatorCmd id %d, test_lin_act_increment %d\n", LIN_ACT_ID, test_lin_act_increment);
-			System_flush();
-			test_lin_act_cur_position = setLinActuatorCmd(LIN_ACT_ID, test_lin_act_cur_position, test_lin_act_increment);
+				switch(buffer_struct.struct_id)
+				{
+					case wrist_clock_wise...base_clock_wise:
 
+						//Scale and Cap speed from roveWare.h
+						speed = (speed/SPEED_STEP_DOWN);
 
-		System_printf("Success dynamixelSetSpeedCmd count %d\n", command_loop_thru_count);
-		System_flush();
+						if(speed < SPEED_MIN)
+						{
+							speed = SPEED_MIN;
+						}//end if
 
-		command_loop_thru_count++;
-
-		ms_delay(10);
-
-	}//while
+						if(speed > SPEED_MAX)
+						{
+							speed = SPEED_MAX;
+						}//end if
 
 
-*/
+						if(speed < 0)
+						{
+							roboArmReverseCmd(buffer_struct.struct_id, (-speed), (void*)&buffer_struct);
+
+						}else{
+
+							roboArmForwardCmd(buffer_struct.struct_id, speed, (void*)&buffer_struct);
+
+						}//endif
+
+					break;
+
+					case e_stop_arm:
+
+						dynamixelSetSpeedLeftCmd(WRIST_A_ID, 0, (void*)&buffer_struct);
+						dynamixelSetSpeedLeftCmd(WRIST_B_ID, 0, (void*)&buffer_struct);
+						dynamixelSetSpeedLeftCmd(ELBOW_A_ID, 0, (void*)&buffer_struct);
+						dynamixelSetSpeedRightCmd(ELBOW_B_ID, 0, (void*)&buffer_struct);
+						dynamixelSetSpeedLeftCmd(BASE_ID, 0, (void*)&buffer_struct);
+						lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, 0, (void*)&buffer_struct);
+
+					//TODO Gripper and Drill e_stop_arm case actions
+
+					break;
+
+					case actuator_increment:
+
+						lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, speed, (void*)&buffer_struct);
+
+						System_printf("Actuator increment:  %d 	 lin_act_current_position: 		%d = setLinActuatorCmd();\n", lin_act_cur_posit, speed);
+						System_flush();
+
+					break;
+
+					case gripper_open:
+
+						//TODO Gripper
+
+						System_printf("What? Not ready for gripper_open");
+						System_flush();
+
+					break;
+
+					case drill:
+
+						//TODO Drill
+
+						System_printf("What? Not ready for drill");
+						System_flush();
+
+					break;
+
+					default:
+						System_printf("\nERROR in RoboticArm.c! struct_id %d cannot be handled \n", buffer_struct.struct_id);
+						System_flush();
+					break;
+
+				}//endswitch buffer_struct.struct_id
+
+//BEGIN TEST MOD
+
+				ms_delay(TEST_MS_DELAY);
+
+			}//end while TEST_MIN_SPEED
+
+		}//endwhile STRUCT_ID_MAX
+
+//END TEST MOD
+
+	}//endwhile FOREVER
+
 }//endfnct task roboticArmTester

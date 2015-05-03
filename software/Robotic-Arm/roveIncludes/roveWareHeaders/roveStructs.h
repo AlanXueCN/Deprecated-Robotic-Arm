@@ -15,43 +15,24 @@
 
 #include "../roveWare.h"
 
+//TODO why are why typedf the msg pointer here?
+
 typedef struct message_struct{
 
+	//uint8_t value[BUFFER_SIZE];
 	uint8_t struct_id;
 	uint8_t value[30];
 
 }__attribute__((packed)) message_struct, *msg;
 
-struct speed_struct{
+typedef struct speed_struct{
 
 	uint8_t struct_id;
 	int16_t speed;
 
-}__attribute__((packed));
+}__attribute__((packed)) speed_struct;
 
-
-struct set_endless_struct{
-
-	uint8_t start_byte1;
-	uint8_t start_byte2;
-
-	// arg0
-	uint8_t dynamixel_id;
-
-	//message
-	uint8_t msg_size;
-	uint8_t read_write_flag;
-
-	//address of low byte
-	uint8_t ccw_angle_limit_reg_addr;
-	uint8_t ccw_angle_limit_low_byte;
-	uint8_t ccw_angle_limit_high_byte;
-	uint8_t check_sum;
-
-}__attribute__((packed));
-
-
-struct set_speed_struct{
+typedef struct set_dyna_speed_struct{
 
 	uint8_t start_byte1;
 	uint8_t start_byte2;
@@ -69,10 +50,32 @@ struct set_speed_struct{
 	uint8_t speed_high_byte;
 	uint8_t check_sum;
 
-}__attribute__((packed));
+}__attribute__((packed)) set_dyna_speed_struct;
+
+
+typedef struct set_dyna_endless_struct{
+
+	uint8_t start_byte1;
+	uint8_t start_byte2;
+
+	// arg0
+	uint8_t dynamixel_id;
+
+	//message
+	uint8_t msg_size;
+	uint8_t read_write_flag;
+
+	//address of low byte
+	uint8_t ccw_angle_limit_reg_addr;
+	uint8_t ccw_angle_limit_low_byte;
+	uint8_t ccw_angle_limit_high_byte;
+	uint8_t check_sum;
+
+}__attribute__((packed)) set_dyna_endless_struct;
+
 
 //min position is 0x000	max position is 0xFFF
-struct linear_actuator_struct{
+typedef struct linear_actuator_struct{
 
 	//address of low byte
 	uint8_t target_low_byte;
@@ -84,14 +87,7 @@ struct linear_actuator_struct{
 	// arg0
 	int16_t target_position;
 
-}__attribute__((packed));
+}__attribute__((packed)) linear_actuator_struct;
 
-//only used for getStructSize((struct dynamixel_id_cast*)dynamixel_struct->struct_id)
-
-struct dynamixel_id_cast{
-
-	uint8_t struct_id;
-
-}__attribute__((packed));
 
 #endif /* ROVESTRUCTS_H_ */
