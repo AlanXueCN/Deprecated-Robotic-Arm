@@ -301,8 +301,8 @@ void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_
 int16_t buildLinActuatorStructMessage(void* buffer_struct, char* write_buffer,  uint8_t struct_id, int16_t current_position, int16_t command_value)
 {
 
-	System_printf("Testing buildLinActuatorStructMessage struct_id %d, \n", struct_id);
-	System_flush();
+	//System_printf("Testing buildLinActuatorStructMessage struct_id %d, \n", struct_id);
+	//System_flush();
 
 	switch(struct_id)
 	{

@@ -61,7 +61,7 @@ int main(void)
 	System_flush();
 
 	// start TI BIOS
-	System_printf("roveMotherboardMain init \n\n\n");
+	System_printf("roboticArmMain init \n\n\n");
 	System_flush();
 
     BIOS_start();

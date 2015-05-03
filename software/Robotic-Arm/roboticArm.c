@@ -34,6 +34,8 @@ void roboticArm(UArg arg0, UArg arg1)
 	//_printf("Initializing Periphs: \n");
 	//_flush();
 
+	digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
+
 	//init all motors to zero
 	dynamixelSetEndlessCmd(WRIST_A_ID, (void*)&buffer_struct);
 	dynamixelSetEndlessCmd(WRIST_B_ID, (void*)&buffer_struct);

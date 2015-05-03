@@ -29,7 +29,7 @@ void dynamixelSetEndlessCmd(uint8_t dynamixel_id, void* buffer_struct)
 		buildDynamixelStructMessage( (void*)(&buffer_struct), write_buffer, dynamixel_id, SET_ENDLESS_CMD, NULL_COMAND_VALUE);
 
 		// set tristate buffer to transmit
-		digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
+		//digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
@@ -45,7 +45,7 @@ void dynamixelSetEndlessCmd(uint8_t dynamixel_id, void* buffer_struct)
 		//}//end while
 
 		// set tri state buffer back for read
-		digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
+		//digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
 
 
 }//endfnctn  dynamixelSetEndless
@@ -62,14 +62,14 @@ void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed, void* buffer_
 		//_printf("Testing dynamixelSetSpeedLeftCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
 		//_flush();
 
-		// set tristate buffer to transmit
-		digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
-
 		//get the uart
 		device_port = getDevicePort(dynamixel_id);
 
 		//size of message
 		bytes_to_write = getStructSize(SET_SPEED_LEFT_CMD);
+
+		// set tristate buffer to transmit
+		//digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
 
 		// populate the buffer_struct for dynamixel format frame
 		buildDynamixelStructMessage( (void*)&buffer_struct, write_buffer, dynamixel_id, SET_SPEED_LEFT_CMD, speed);
@@ -88,7 +88,7 @@ void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed, void* buffer_
 		//}//end while
 
 		//set tri state buffer back for read
-		digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
+		//digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
 
 }//endfnctn  dynamixelSetSpeedLeftCmd
 
@@ -103,14 +103,14 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed, void* buffer
 		//_printf("Testing dynamixelSetSpeedRightCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
 		//_flush();
 
-		// set tristate buffer to transmit
-		digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
-
 		//get the uart
 		device_port = getDevicePort(dynamixel_id);
 
 		//size of message
 		bytes_to_write = getStructSize(SET_SPEED_RIGHT_CMD);
+
+		// set tristate buffer to transmit
+		//digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
 
 		// populate the buffer_struct for dynamixel format frame
 		buildDynamixelStructMessage( (void*)(&buffer_struct), write_buffer, dynamixel_id, SET_SPEED_RIGHT_CMD, speed);
@@ -125,11 +125,11 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed, void* buffer
 			//_printf(" : %d\n", write_buffer[i]);
 			//_flush();
 
-			i++;
+		//	i++;
 		//}//end while
 
 		//set tri state buffer back for read
-		digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
+		//digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
 
 }//endfnctn  dynamixelSetSpeedRightCmd
 
@@ -159,14 +159,14 @@ int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t t
 
 		//debugging only
 		//_printf("dynamixelSetSpeedRightCmd just wrote: \n");
-		int i = 0;
-		while( i <( bytes_wrote ) )
-		{
+		//int i = 0;
+		//while( i <( bytes_wrote ) )
+		//{
 			//_printf(" : %d\n", write_buffer[i]);
 			//_flush();
 
-			i++;
-		}//end while
+		//	i++;
+		//}//end while
 
 		return current_position;
 
