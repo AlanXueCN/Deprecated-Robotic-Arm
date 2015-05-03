@@ -38,6 +38,8 @@ void roboticArmTester(UArg arg0, UArg arg1)
 	System_printf("roboticArm struct_id:	 %d\n", buffer_struct.struct_id);
 	System_flush();
 
+//COMMENT* HERE FOR RECIEVE TESTER
+
 	//init all motors to zero
 	dynamixelSetEndlessCmd(WRIST_A_ID, (void*)&buffer_struct);
 	dynamixelSetEndlessCmd(WRIST_B_ID, (void*)&buffer_struct);
@@ -263,6 +265,24 @@ void roboticArmTester(UArg arg0, UArg arg1)
 		}//endwhile STRUCT_ID_MAX
 
 //END TEST MOD
+
+//COMMENT* HERE FOR RECIEVE TESTER
+
+/*
+
+		while(FOREVER)
+			{
+
+				while( recvSerialStructMessage(MOTHERBOARD_UART, (void*)&buffer_struct) )
+				{
+					System_printf("recvSerialStructMessage struct_id: %d", buffer_struct.struct_id);
+					System_printf("speed: %d\n", SPEED_STRUCT->speed);
+					System_flush();
+				}//enwhile
+
+//COMMENT* HERE FOR RECIEVE TESTER
+
+*/
 
 	}//endwhile FOREVER
 

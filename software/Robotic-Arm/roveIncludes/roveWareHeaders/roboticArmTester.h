@@ -1,9 +1,6 @@
-/*
- * roboticArmTester.h
- *
- *  Created on: Apr 29, 2015
- *      Author: mrdtdev
- */
+// roboticArmTester.h
+
+#pragma once
 
 #ifndef ROBOTICARMTESTER_H_
 #define ROBOTICARMTESTER_H_
@@ -18,4 +15,4 @@
 
 void roboticArmTester(UArg arg0, UArg arg1);
 
-#endif /* ROBOTICARMTESTER_H_ */
+#endif // ROBOTICARMTESTER_H_
