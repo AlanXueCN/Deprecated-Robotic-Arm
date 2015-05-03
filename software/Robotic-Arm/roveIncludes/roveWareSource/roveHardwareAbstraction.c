@@ -214,14 +214,11 @@ int getStructSize(uint8_t struct_id)
 
 
 //see roveStructs.h and rovWare.h for config
-void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_t struct_id, uint8_t dynamixel_id, int16_t command_value)
+void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_t dynamixel_id, uint8_t struct_id, int16_t command_value)
 {
 	uint8_t check_sum;
 	uint8_t speed_low_byte = (uint8_t)command_value;
 	uint8_t speed_high_byte = (uint8_t)(command_value >> 8);
-
-	System_printf("Testing buildDynamixelStructMessage struct_id %d, \n", struct_id);
-	System_flush();
 
 	switch(struct_id)
 	{
@@ -241,6 +238,9 @@ void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_
 
 			SET_ENDLESS_STRUCT->check_sum = check_sum;
 
+			System_printf("Testing buildDynamixelStructMessage SET_ENDLESS_CMD\n");
+			System_flush();
+
 		break;
 
 		case SET_SPEED_LEFT_CMD:
@@ -258,6 +258,9 @@ void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_
 			check_sum = ( ~(dynamixel_id + AX_SPEED_LENGTH + AX_WRITE_DATA + AX_GOAL_SPEED_L + speed_low_byte + speed_high_byte) ) & 0xFF;
 
 			SET_DYNA_SPEED_STRUCT->check_sum = check_sum;
+
+			System_printf("Testing buildDynamixelStructMessage SET_SPEED_LEFT_CMD\n");
+			System_flush();
 
 		break;
 
@@ -277,10 +280,13 @@ void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_
 
 			SET_DYNA_SPEED_STRUCT->check_sum = check_sum;
 
+			System_printf("Testing buildDynamixelStructMessage SET_SPEED_RIGHT_CMD\n");
+			System_flush();
+
 		break;
 
 		default:
-				System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");
+				System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid\n");
 				System_flush();
 		break;
 

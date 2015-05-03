@@ -39,7 +39,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 	System_flush();
 
 //COMMENT* HERE FOR RECIEVE TESTER
-
+/*
 	//init all motors to zero
 	dynamixelSetEndlessCmd(WRIST_A_ID, (void*)&buffer_struct);
 	dynamixelSetEndlessCmd(WRIST_B_ID, (void*)&buffer_struct);
@@ -67,6 +67,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 
 		TEST_STRUCT->struct_id = 	TEST_MIN_STRUCT_ID;
 		TEST_STRUCT->speed = 		TEST_MIN_SPEED;
+
 		while(TEST_STRUCT->struct_id <= TEST_MAX_STRUCT_ID)
 		{
 			TEST_STRUCT->struct_id = 	TEST_MIN_STRUCT_ID;
@@ -74,8 +75,8 @@ void roboticArmTester(UArg arg0, UArg arg1)
 
 			while(TEST_STRUCT->speed <= TEST_MAX_SPEED)
 			{
+				TEST_STRUCT->struct_id = TEST_STRUCT->struct_id + TEST_STRUCT_INC;
 				TEST_STRUCT->speed = TEST_STRUCT->speed + TEST_SPEED_INC;
-				TEST_STRUCT->struct_id = TEST_STRUCT->speed + TEST_SPEED_INC;
 
 				System_printf("Tester Posted struct_id %d, speed, %d\n", TEST_STRUCT->struct_id, TEST_STRUCT->speed);
 				System_flush();
@@ -169,8 +170,8 @@ void roboticArmTester(UArg arg0, UArg arg1)
 
 			while(TEST_STRUCT->speed >= TEST_MIN_SPEED)
 			{
+				TEST_STRUCT->struct_id = TEST_STRUCT->struct_id - TEST_STRUCT_INC;
 				TEST_STRUCT->speed = TEST_STRUCT->speed - TEST_SPEED_INC;
-				TEST_STRUCT->struct_id = TEST_STRUCT->speed - TEST_SPEED_INC;
 
 				System_printf("Tester Posted struct_id %d, speed, %d\n", TEST_STRUCT->struct_id, TEST_STRUCT->speed);
 				System_flush();
@@ -268,21 +269,19 @@ void roboticArmTester(UArg arg0, UArg arg1)
 
 //COMMENT* HERE FOR RECIEVE TESTER
 
-/*
+*/
 
-		while(FOREVER)
-			{
-
-				while( recvSerialStructMessage(MOTHERBOARD_UART, (void*)&buffer_struct) )
-				{
-					System_printf("recvSerialStructMessage struct_id: %d", buffer_struct.struct_id);
-					System_printf("speed: %d\n", SPEED_STRUCT->speed);
-					System_flush();
-				}//enwhile
+    while(FOREVER)
+    {
+        while( recvSerialStructMessage(MOTHERBOARD_UART, (void*)&buffer_struct) )
+        {
+            System_printf("recvSerialStructMessage struct_id: %d", buffer_struct.struct_id);
+            System_printf("speed: %d\n", SPEED_STRUCT->speed);
+            System_flush();
+        }//endwhile
 
 //COMMENT* HERE FOR RECIEVE TESTER
 
-*/
 
 	}//endwhile FOREVER
 

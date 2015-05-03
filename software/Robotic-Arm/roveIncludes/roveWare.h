@@ -77,13 +77,13 @@
 #define SPEED_MIN (-1000/SPEED_STEP_DOWN)
 
 // tester values config
-#define TEST_MAX_STRUCT_ID wrist_clock_wise
-#define TEST_MIN_STRUCT_ID actuator_increment
+#define TEST_MAX_STRUCT_ID actuator_increment
+#define TEST_MIN_STRUCT_ID wrist_clock_wise
 #define TEST_MAX_SPEED 1000
 #define TEST_MIN_SPEED -1000
 #define TEST_STRUCT_INC 1
 #define TEST_SPEED_INC 350
-#define TEST_MS_DELAY 120
+#define TEST_MS_DELAY 10
 
 // robot arm values
 
