@@ -13,12 +13,13 @@ bool recvSerialStructMessage(int device_port, void* buffer_struct)
 	uint8_t start_byte2 = 0x85;
 	uint8_t check_sum;
 	int bytes_read = 0;
-	uint8_t garbage_count = 10; // This is used to decide how much pre-data to discard before quitting
+	// This is used to decide how much pre-data to discard before quitting
+	uint8_t garbage_count = 10;
 
 	bool start_received = false;
 
 	//testing
-	//int debug_rx_cnt = 0;
+	int debug_rx_cnt = 0;
 
 	if (rx_len == 0)
 	{
@@ -45,7 +46,7 @@ bool recvSerialStructMessage(int device_port, void* buffer_struct)
 			}//endif
 
 			//testing
-			//debug_rx_cnt++;
+			debug_rx_cnt++;
 
 		}//endwhile
 
@@ -81,8 +82,8 @@ bool recvSerialStructMessage(int device_port, void* buffer_struct)
 			return false;
 		}
 
-		//System_printf("rx_len: %d\n", rx_len);
-		//System_flush();
+		System_printf("rx_len: %d\n", rx_len);
+		System_flush();
 
 	}//end if (rx_len == 0)
 
@@ -114,7 +115,7 @@ bool recvSerialStructMessage(int device_port, void* buffer_struct)
 
 int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 
-	int bytes_read;
+	int bytes_read =0;
 
 	// give us access to the uart handles defined at the global scope in main
 
@@ -136,20 +137,19 @@ int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 		case 1:
 		break;
 		case MOTHERBOARD_UART:
-			//Write the write_buffer to the device
-			//System_printf("case: %d\n", MOTHERBOARD_UART);
-			//System_flush();
+			System_printf("deviceRead case: %d, bytes_to_read %d\n", MOTHERBOARD_UART, bytes_to_read);
+			System_flush();
 
 			bytes_read = UART_read(uart2, read_buffer, bytes_to_read);
 
-			//System_printf("totally passed UART_read with bytes_read: %d\n", bytes_read);
-			//System_flush();
+			System_printf("totally passed UART_read with bytes_read: %d\n", bytes_read);
+			System_flush();
 		break;
 
 		default:
 			//Tried to write to invalid device
-			//System_printf("DeviceRead passed invalid device %d\n", device_port);
-			//System_flush();
+			System_printf("DeviceRead passed invalid device %d\n", device_port);
+			System_flush();
 		return -1;
 
 	}//endswitch(device_port)

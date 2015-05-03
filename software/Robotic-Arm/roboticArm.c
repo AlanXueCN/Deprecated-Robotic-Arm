@@ -53,7 +53,7 @@ void roboticArm(UArg arg0, UArg arg1)
 	System_flush();
 
 	//hack for unreachable statement warnings
-	const uint8_t FOREVER = 1;
+	//const uint8_t FOREVER = 1;
 	while(FOREVER)
 	{
 

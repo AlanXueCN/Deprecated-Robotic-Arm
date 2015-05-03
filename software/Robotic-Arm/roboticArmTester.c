@@ -39,7 +39,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 	System_flush();
 
 //COMMENT* HERE FOR RECIEVE TESTER
-/*
+
 	//init all motors to zero
 	dynamixelSetEndlessCmd(WRIST_A_ID, (void*)&buffer_struct);
 	dynamixelSetEndlessCmd(WRIST_B_ID, (void*)&buffer_struct);
@@ -59,7 +59,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 	System_flush();
 
 	//hack for unreachable statement warnings
-	const uint8_t FOREVER = 1;
+	//const uint8_t FOREVER = 1;
 	while(FOREVER)
 	{
 
@@ -269,7 +269,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 
 //COMMENT* HERE FOR RECIEVE TESTER
 
-*/
+/*
 
     while(FOREVER)
     {
@@ -282,7 +282,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 
 //COMMENT* HERE FOR RECIEVE TESTER
 
-
+*/
 	}//endwhile FOREVER
 
 }//endfnct task roboticArmTester

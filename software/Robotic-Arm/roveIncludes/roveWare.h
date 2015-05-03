@@ -77,6 +77,7 @@
 #define SPEED_MIN (-1000/SPEED_STEP_DOWN)
 
 // tester values config
+#define FOREVER 1
 #define TEST_MAX_STRUCT_ID actuator_increment
 #define TEST_MIN_STRUCT_ID wrist_clock_wise
 #define TEST_MAX_SPEED 1000
