@@ -32,10 +32,10 @@
 #define TEST_STRUCT				((speed_struct*)(&buffer_struct))
 
 //typecasting shorthand for void* buffer_struct at fnctn arg scope
-#define MESSAGE_STRUCT 			((message_struct*)buffer_struct)
-#define SET_ENDLESS_STRUCT 		((set_dyna_endless_struct*)buffer_struct)
-#define SET_DYNA_SPEED_STRUCT 	((set_dyna_speed_struct*)buffer_struct)
-#define SET_LIN_ACT_STRUCT 		((linear_actuator_struct*)buffer_struct)
+#define MESSAGE_STRUCT 			((message_struct*)write_buffer)
+#define SET_ENDLESS_STRUCT 		((set_dyna_endless_struct*)write_buffer)
+#define SET_DYNA_SPEED_STRUCT 	((set_dyna_speed_struct*)write_buffer)
+#define SET_LIN_ACT_STRUCT 		((linear_actuator_struct*)write_buffer)
 
 
 //TODO wtf uint8_t value[30]roveStructs.h ?

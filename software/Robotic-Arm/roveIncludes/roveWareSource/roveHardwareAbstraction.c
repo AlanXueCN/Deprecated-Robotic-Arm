@@ -214,9 +214,8 @@ int getStructSize(uint8_t struct_id)
 
 
 //see roveStructs.h and rovWare.h for config
-void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_t dynamixel_id, uint8_t struct_id, int16_t command_value)
+void buildDynamixelStructMessage(char* write_buffer, uint8_t dynamixel_id, uint8_t struct_id, int16_t command_value)
 {
-	uint8_t check_sum;
 	uint8_t speed_low_byte = (uint8_t)command_value;
 	uint8_t speed_high_byte = (uint8_t)(command_value >> 8);
 
@@ -234,12 +233,10 @@ void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_
 			SET_ENDLESS_STRUCT->ccw_angle_limit_low_byte = 0x00;
 			SET_ENDLESS_STRUCT->ccw_angle_limit_high_byte = 0x00;
 
-			check_sum = ( ~(dynamixel_id + AX_GOAL_LENGTH + AX_WRITE_DATA + AX_CCW_ANGLE_LIMIT_L) ) & 0xFF;
+			SET_ENDLESS_STRUCT->check_sum = ( ~(dynamixel_id + AX_GOAL_LENGTH + AX_WRITE_DATA + AX_CCW_ANGLE_LIMIT_L) ) & 0xFF;
 
-			SET_ENDLESS_STRUCT->check_sum = check_sum;
-
-			//System_printf("Testing buildDynamixelStructMessage SET_ENDLESS_CMD\n");
-			//System_flush();
+			System_printf("Testing buildDynamixelStructMessage SET_ENDLESS_CMD %d \n", SET_ENDLESS_STRUCT->check_sum);
+			System_flush();
 
 		break;
 
@@ -255,9 +252,7 @@ void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_
 			SET_DYNA_SPEED_STRUCT->speed_low_byte = speed_low_byte;
 			SET_DYNA_SPEED_STRUCT->speed_high_byte = speed_high_byte;
 
-			check_sum = ( ~(dynamixel_id + AX_SPEED_LENGTH + AX_WRITE_DATA + AX_GOAL_SPEED_L + speed_low_byte + speed_high_byte) ) & 0xFF;
-
-			SET_DYNA_SPEED_STRUCT->check_sum = check_sum;
+			SET_DYNA_SPEED_STRUCT->check_sum  = ( ~(dynamixel_id + AX_SPEED_LENGTH + AX_WRITE_DATA + AX_GOAL_SPEED_L + speed_low_byte + speed_high_byte) ) & 0xFF;
 
 			//System_printf("Testing buildDynamixelStructMessage SET_SPEED_LEFT_CMD\n");
 			//System_flush();
@@ -276,9 +271,7 @@ void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_
 			SET_DYNA_SPEED_STRUCT ->speed_low_byte = speed_low_byte;
 			SET_DYNA_SPEED_STRUCT ->speed_high_byte = (speed_high_byte + 4);
 
-			check_sum = ( ~(dynamixel_id + AX_SPEED_LENGTH + AX_WRITE_DATA + AX_GOAL_SPEED_L + speed_low_byte + speed_high_byte) ) & 0xFF;
-
-			SET_DYNA_SPEED_STRUCT->check_sum = check_sum;
+			SET_DYNA_SPEED_STRUCT->check_sum = ( ~(dynamixel_id + AX_SPEED_LENGTH + AX_WRITE_DATA + AX_GOAL_SPEED_L + speed_low_byte + speed_high_byte) ) & 0xFF;
 
 			//System_printf("Testing buildDynamixelStructMessage SET_SPEED_RIGHT_CMD\n");
 			//System_flush();
@@ -292,13 +285,13 @@ void buildDynamixelStructMessage(void* buffer_struct, char* write_buffer, uint8_
 
 		}//endswitch
 
-	memcpy( write_buffer, buffer_struct, sizeof(set_dyna_speed_struct) );
+	//memcpy( write_buffer, buffer_struct, sizeof(set_dyna_speed_struct) );
 
 }//end fnctn buildDynamixelStructMessage
 
 //current_position = buildLinActuatorMessage((void*)(&buffer_struct), write_buffer, device_id, current_position, target_increment);
 
-int16_t buildLinActuatorStructMessage(void* buffer_struct, char* write_buffer,  uint8_t struct_id, int16_t current_position, int16_t command_value)
+int16_t buildLinActuatorStructMessage(char* write_buffer,  uint8_t struct_id, int16_t current_position, int16_t command_value)
 {
 
 	//System_printf("Testing buildLinActuatorStructMessage struct_id %d, \n", struct_id);
@@ -331,7 +324,7 @@ int16_t buildLinActuatorStructMessage(void* buffer_struct, char* write_buffer,  
 			//target_high_byte = (target >> 5) & 0x7F
 			SET_LIN_ACT_STRUCT->target_high_byte = (uint8_t)( (SET_LIN_ACT_STRUCT->target_position >> 5) & 0x7F);
 
-		memcpy( write_buffer, buffer_struct, sizeof(linear_actuator_struct) );
+		//memcpy( write_buffer, buffer_struct, sizeof(linear_actuator_struct) );
 
 		return current_position;
 

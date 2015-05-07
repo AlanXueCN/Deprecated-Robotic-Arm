@@ -16,10 +16,10 @@
 //HARDWARE ABSTRACTION FUNCTIONS
 
 //fills a write char* write_buffer with the dynamixel formatted putput message
-void buildDynamixelStructMessage(void* buffer_struct,  char* write_buffer, uint8_t dynamixel_id, uint8_t struct_id, int16_t command_value );
+void buildDynamixelStructMessage(char* write_buffer, uint8_t dynamixel_id, uint8_t struct_id, int16_t command_value );
 
 //fills a write char* write_buffer with the linear actuated formatted putput message
-int16_t buildLinActuatorStructMessage(void* buffer_struct, char* write_buffer, uint8_t struct_id, int16_t current_position, int16_t command_value);
+int16_t buildLinActuatorStructMessage(char* write_buffer, uint8_t struct_id, int16_t current_position, int16_t command_value);
 
 //calls device read and fills a typdef message_struct buffer_struct with a mob message
 bool recvSerialStructMessage(int device_port, void* buffer_struct);

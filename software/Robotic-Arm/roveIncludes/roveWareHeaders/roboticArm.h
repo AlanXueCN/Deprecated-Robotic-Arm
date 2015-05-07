@@ -15,8 +15,8 @@
 
 void roboticArm(UArg arg0, UArg arg1);
 
-void roboArmForwardCmd(uint8_t struct_id, int16_t speed, void* buffer_struct);
+void roboArmForwardCmd(uint8_t struct_id, int16_t speed);
 
-void roboArmReverseCmd(uint8_t struct_id, int16_t speed, void* buffer_struct);
+void roboArmReverseCmd(uint8_t struct_id, int16_t speed);
 
 #endif // ROBOTICARM_H_
