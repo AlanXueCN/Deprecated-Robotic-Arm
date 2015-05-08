@@ -50,6 +50,7 @@
 #define DYNAMIXEL_UART 0
 #define LINEAR_ACTUATOR_UART 1
 #define MOTHERBOARD_UART 2
+#define END_EFFECTOR_UART 3
 
 #define SET_ENDLESS_CMD 0
 #define SET_SPEED_LEFT_CMD	1
@@ -63,6 +64,7 @@
 #define BASE_ID		0x05
 #define LIN_ACT_ID  0x06
 #define MOB_ID 		0x07
+#define GRIPPER_ID  0x08
 
 #define NULL_COMAND_VALUE 0
 #define LIN_ACT_POSITION_ZERO 0
@@ -73,6 +75,11 @@
 
 // speed scaling config
 #define SPEED_STEP_DOWN 1
+#define SPEED_MAX (1023/SPEED_STEP_DOWN)
+#define SPEED_MIN (-1023/SPEED_STEP_DOWN)
+
+// speed scaling config
+#define BASE_SPEED_STEP_DOWN 10
 #define SPEED_MAX (1023/SPEED_STEP_DOWN)
 #define SPEED_MIN (-1023/SPEED_STEP_DOWN)
 
@@ -100,8 +107,10 @@
 #define e_stop_arm 206
 #define actuator_increment 207
 
-// gripper values
-#define gripper_open 220
+// positive is open, negative is close
+#define gripper_open 208
+
+//drill
 #define drill 221
 
 // telem_device_id

@@ -33,7 +33,7 @@ void dynamixelSetEndlessCmd(uint8_t dynamixel_id)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		ms_delay(1);
+		//ms_delay(1);
 
 		//debugging only:
 		//_printf("dynamixelSetEndlessCmd just wrote: \n");
@@ -48,7 +48,6 @@ void dynamixelSetEndlessCmd(uint8_t dynamixel_id)
 
 		// set tri state buffer back for read
 		//digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
-
 
 }//endfnctn  dynamixelSetEndless
 
@@ -78,7 +77,7 @@ void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		ms_delay(1);
+		//ms_delay(1);
 
 		//debugging only
 		//_printf("dynamixelSetSpeedLeftCmd just wrote: \n");
@@ -104,8 +103,8 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed)
 		int bytes_to_write;
 		int bytes_wrote;
 
-		System_printf("Testing dynamixelSetSpeedRightCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
-		System_flush();
+		//System_printf("Testing dynamixelSetSpeedRightCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
+		//System_flush();
 
 		//get the uart
 		device_port = getDevicePort(dynamixel_id);
@@ -121,7 +120,7 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		ms_delay(1);
+		//ms_delay(1);
 
 		//debugging only
 		//_printf("dynamixelSetSpeedRightCmd just wrote: \n");
@@ -163,7 +162,7 @@ int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t t
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		ms_delay(1);
+		//ms_delay(1);
 
 		//debugging only
 		//_printf("dynamixelSetSpeedRightCmd just wrote: \n");

@@ -19,7 +19,7 @@ bool recvSerialStructMessage(int device_port, void* buffer_struct)
 	bool start_received = false;
 
 	//testing
-	int debug_rx_cnt = 0;
+	//int debug_rx_cnt = 0;
 
 	if (rx_len == 0)
 	{
@@ -174,6 +174,10 @@ int getDevicePort(uint8_t device_id)
 		case MOB_ID:
 
 		return MOTHERBOARD_UART;
+
+		case GRIPPER_ID:
+
+		return END_EFFECTOR_UART;
 
 		default:
 
@@ -379,6 +383,12 @@ int deviceWrite(int device_port, char* write_buffer,  int bytes_to_write)
 		case LINEAR_ACTUATOR_UART:
 
 			bytes_wrote = UART_write(uart7, write_buffer, bytes_to_write);
+
+		break;
+
+		case END_EFFECTOR_UART:
+
+		     bytes_wrote = UART_write(uart3, write_buffer, bytes_to_write);
 
 		break;
 

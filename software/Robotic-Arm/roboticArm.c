@@ -72,7 +72,7 @@ void roboticArm(UArg arg0, UArg arg1)
 
 			switch(buffer_struct.struct_id)
 			{
-				case wrist_clock_wise...base_clock_wise:
+				case wrist_clock_wise...elbow_up:
 
 					//Scale and Cap speed from roveWare.h
 					speed = (speed/SPEED_STEP_DOWN);
@@ -100,6 +100,33 @@ void roboticArm(UArg arg0, UArg arg1)
 
 				break;
 
+				case base_clock_wise:
+
+                    //Scale and Cap speed from roveWare.h
+                    speed = (speed/BASE_SPEED_STEP_DOWN);
+
+                    if(speed < BASE_SPEED_MIN)
+                    {
+                        speed = BASE_SPEED_MIN;
+                    }//end if
+
+                    if(speed > BASE_SPEED_MAX)
+                    {
+                        speed = BASE_SPEED_MAX;
+                    }//end if
+
+                    if(speed < 0)
+                    {
+                        roboArmReverseCmd(buffer_struct.struct_id, (-speed));
+
+                    }else{
+
+                        roboArmForwardCmd(buffer_struct.struct_id, speed);
+
+                    }//endif
+
+                    break;
+
 				case e_stop_arm:
 
 				    //System_printf("RobotArm.c case e_stop_arm speed: %d\n", SPEED_STRUCT->speed);
@@ -118,9 +145,6 @@ void roboticArm(UArg arg0, UArg arg1)
                     dynamixelSetSpeedRightCmd(BASE_ID, 0);
                     lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, 0);
 
-
-				//TODO Gripper and Drill e_stop_arm case actions
-
 				break;
 
 				case actuator_increment:
@@ -134,10 +158,15 @@ void roboticArm(UArg arg0, UArg arg1)
 
 				case gripper_open:
 
-					//TODO Gripper
+                    if(speed < 0)
+                    {
+                        roboArmReverseCmd(buffer_struct.struct_id, (-speed));
 
-					//_printf("What? Not ready for gripper_open");
-					//_flush();
+                    }else{
+
+                        roboArmForwardCmd(buffer_struct.struct_id, speed);
+
+                    }//endif
 
 				break;
 
@@ -230,12 +259,12 @@ void roboArmForwardCmd(uint8_t struct_id, int16_t speed)
 
 		break;
 
-		case e_stop_arm:
+		case gripper_open:
 
-			//_printf("!!!!!!!Called E stop from roboArmForwardCmd() speed: %d\n", speed);
-			//_flush();
-//TODO
+		    dynamixelSetSpeedRightCmd(GRIPPER_ID, speed);
+
 		break;
+
 		default:
 			//_printf("\nERROR in RoboticArm.c!   roboArmForwardCmd struct_id %d cannot be handled \n", struct_id);
 			//_flush();
@@ -315,6 +344,12 @@ void roboArmReverseCmd(uint8_t struct_id, int16_t speed)
 			dynamixelSetSpeedLeftCmd(BASE_ID, speed);
 
 		break;
+
+        case gripper_open:
+
+            dynamixelSetSpeedLeftCmd(GRIPPER_ID, speed);
+
+        break;
 
 		default:
 			//_printf("\nERROR in RoboticArm.c!  roboArmReverseCmd  struct_id %d cannot be handled \n", struct_id);
