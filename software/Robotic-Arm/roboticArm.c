@@ -49,7 +49,8 @@ void roboticArm(UArg arg0, UArg arg1)
 	dynamixelSetSpeedLeftCmd(ELBOW_B_ID, ZERO_SPEED);
 	dynamixelSetSpeedLeftCmd(BASE_ID, ZERO_SPEED);
 
-	lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, LIN_ACT_POSITION_ZERO);
+	//lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, LIN_ACT_POSITION_ZERO);
+	lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, LIN_ACT_POSITION_ZERO, LIN_ACT_POSITION_MIDDLE);
 
 	//_printf("Loop Forever: \n");
 	//_flush();
@@ -143,7 +144,8 @@ void roboticArm(UArg arg0, UArg arg1)
                     dynamixelSetSpeedRightCmd(ELBOW_A_ID, 0);
                     dynamixelSetSpeedRightCmd(ELBOW_B_ID, 0);
                     dynamixelSetSpeedRightCmd(BASE_ID, 0);
-                    lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, 0);
+                    //lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, 0);
+                    lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, LIN_ACT_POSITION_ZERO, LIN_ACT_POSITION_MIDDLE);
 
 				break;
 

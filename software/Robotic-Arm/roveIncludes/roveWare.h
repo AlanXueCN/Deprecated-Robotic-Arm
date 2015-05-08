@@ -68,20 +68,21 @@
 
 #define NULL_COMAND_VALUE 0
 #define LIN_ACT_POSITION_ZERO 0
+#define LIN_ACT_POSITION_MIDDLE 2048
 #define ZERO_SPEED 0
 
 #define MIN_LIN_ACT_POSITION 0
 #define MAX_LIN_ACT_POSITION 4095
 
 // speed scaling config
-#define SPEED_STEP_DOWN 1
+#define SPEED_STEP_DOWN 2
 #define SPEED_MAX (1023/SPEED_STEP_DOWN)
 #define SPEED_MIN (-1023/SPEED_STEP_DOWN)
 
 // speed scaling config
 #define BASE_SPEED_STEP_DOWN 10
-#define SPEED_MAX (1023/SPEED_STEP_DOWN)
-#define SPEED_MIN (-1023/SPEED_STEP_DOWN)
+#define BASE_SPEED_MAX (1023/BASE_SPEED_STEP_DOWN)
+#define BASE_SPEED_MIN (-1023/BASE_SPEED_STEP_DOWN)
 
 // tester values config
 #define FOREVER 1
@@ -240,4 +241,4 @@
 #define RX_MODE                     0
 #define LOCK                        1
 
-#endif /* ROVEWARE_H_ */
+#endif // ROVEWARE_H_

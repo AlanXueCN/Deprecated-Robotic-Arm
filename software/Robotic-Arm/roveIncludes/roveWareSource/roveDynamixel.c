@@ -33,7 +33,7 @@ void dynamixelSetEndlessCmd(uint8_t dynamixel_id)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		//ms_delay(1);
+		ms_delay(1);
 
 		//debugging only:
 		//_printf("dynamixelSetEndlessCmd just wrote: \n");
@@ -77,7 +77,7 @@ void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		//ms_delay(1);
+		ms_delay(1);
 
 		//debugging only
 		//_printf("dynamixelSetSpeedLeftCmd just wrote: \n");
@@ -120,7 +120,7 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		//ms_delay(1);
+		ms_delay(1);
 
 		//debugging only
 		//_printf("dynamixelSetSpeedRightCmd just wrote: \n");
@@ -162,7 +162,7 @@ int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t t
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		//ms_delay(1);
+		ms_delay(1);
 
 		//debugging only
 		//_printf("dynamixelSetSpeedRightCmd just wrote: \n");
