@@ -33,16 +33,18 @@ void dynamixelSetEndlessCmd(uint8_t dynamixel_id)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
+		ms_delay(1);
+
 		//debugging only:
 		//_printf("dynamixelSetEndlessCmd just wrote: \n");
-		int i = 0;
-		while( i <( bytes_wrote ) )
-		{
-			System_printf(" : %d\n", write_buffer[i]);
-			System_flush();
-
-			i++;
-		}//end while
+		//int i = 0;
+		//while( i <( bytes_wrote ) )
+		//{
+		//	System_printf(" : %d\n", write_buffer[i]);
+		//	System_flush();
+//
+		//	i++;
+		//}//end while
 
 		// set tri state buffer back for read
 		//digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
@@ -76,6 +78,8 @@ void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
+		ms_delay(1);
+
 		//debugging only
 		//_printf("dynamixelSetSpeedLeftCmd just wrote: \n");
 		//int i = 0;
@@ -100,8 +104,8 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed)
 		int bytes_to_write;
 		int bytes_wrote;
 
-		//_printf("Testing dynamixelSetSpeedRightCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
-		//_flush();
+		System_printf("Testing dynamixelSetSpeedRightCmd dynamixel_id %d, speed %d\n", dynamixel_id, speed);
+		System_flush();
 
 		//get the uart
 		device_port = getDevicePort(dynamixel_id);
@@ -116,6 +120,8 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed)
 		buildDynamixelStructMessage(write_buffer, dynamixel_id, SET_SPEED_RIGHT_CMD, speed);
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
+
+		ms_delay(1);
 
 		//debugging only
 		//_printf("dynamixelSetSpeedRightCmd just wrote: \n");
@@ -156,6 +162,8 @@ int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t t
 		current_position = buildLinActuatorStructMessage(write_buffer, SET_LIN_ACTUATOR_CMD, current_position, target_increment);
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
+
+		ms_delay(1);
 
 		//debugging only
 		//_printf("dynamixelSetSpeedRightCmd just wrote: \n");

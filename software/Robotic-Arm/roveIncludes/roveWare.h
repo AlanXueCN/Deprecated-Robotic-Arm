@@ -73,15 +73,15 @@
 
 // speed scaling config
 #define SPEED_STEP_DOWN 1
-#define SPEED_MAX (1000/SPEED_STEP_DOWN)
-#define SPEED_MIN (-1000/SPEED_STEP_DOWN)
+#define SPEED_MAX (1023/SPEED_STEP_DOWN)
+#define SPEED_MIN (-1023/SPEED_STEP_DOWN)
 
 // tester values config
 #define FOREVER 1
 #define TEST_MAX_STRUCT_ID actuator_increment
 #define TEST_MIN_STRUCT_ID wrist_clock_wise
-#define TEST_MAX_SPEED 1000
-#define TEST_MIN_SPEED -1000
+#define TEST_MAX_SPEED 1023
+#define TEST_MIN_SPEED -1023
 #define TEST_STRUCT_INC 1
 #define TEST_SPEED_INC 350
 #define TEST_MS_DELAY 10

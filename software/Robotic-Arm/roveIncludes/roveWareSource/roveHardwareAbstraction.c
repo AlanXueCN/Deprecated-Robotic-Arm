@@ -219,6 +219,9 @@ void buildDynamixelStructMessage(char* write_buffer, uint8_t dynamixel_id, uint8
 	uint8_t speed_low_byte = (uint8_t)command_value;
 	uint8_t speed_high_byte = (uint8_t)(command_value >> 8);
 
+	//System_printf("Testing buildDynamixelStructMessage speed_high_byte %d, speed_low_byte %d\n", speed_high_byte, speed_low_byte);
+	//System_flush();
+
 	switch(struct_id)
 	{
 		case SET_ENDLESS_CMD:
@@ -235,8 +238,8 @@ void buildDynamixelStructMessage(char* write_buffer, uint8_t dynamixel_id, uint8
 
 			SET_ENDLESS_STRUCT->check_sum = ( ~(dynamixel_id + AX_GOAL_LENGTH + AX_WRITE_DATA + AX_CCW_ANGLE_LIMIT_L) ) & 0xFF;
 
-			System_printf("Testing buildDynamixelStructMessage SET_ENDLESS_CMD %d \n", SET_ENDLESS_STRUCT->check_sum);
-			System_flush();
+			//System_printf("Testing buildDynamixelStructMessage SET_ENDLESS_CMD %d \n", SET_ENDLESS_STRUCT->check_sum);
+			//System_flush();
 
 		break;
 
@@ -271,9 +274,18 @@ void buildDynamixelStructMessage(char* write_buffer, uint8_t dynamixel_id, uint8
 			SET_DYNA_SPEED_STRUCT ->speed_low_byte = speed_low_byte;
 			SET_DYNA_SPEED_STRUCT ->speed_high_byte = (speed_high_byte + 4);
 
-			SET_DYNA_SPEED_STRUCT->check_sum = ( ~(dynamixel_id + AX_SPEED_LENGTH + AX_WRITE_DATA + AX_GOAL_SPEED_L + speed_low_byte + speed_high_byte) ) & 0xFF;
+		/*	if(command_value == 0)
+			{
+			    SET_DYNA_SPEED_STRUCT ->speed_high_byte = speed_high_byte;
+			}
+			else
+			{
+			    SET_DYNA_SPEED_STRUCT ->speed_high_byte = (speed_high_byte + 4);
+			}
+*/
+			SET_DYNA_SPEED_STRUCT->check_sum = ( ~(dynamixel_id + AX_SPEED_LENGTH + AX_WRITE_DATA + AX_GOAL_SPEED_L + speed_low_byte + speed_high_byte + 4) ) & 0xFF;
 
-			//System_printf("Testing buildDynamixelStructMessage SET_SPEED_RIGHT_CMD\n");
+			//System_printf("TestingCASE SET_SPEED_RIGHT_CMD speed_high_byte %d, speed_low_byte %d\n", SET_DYNA_SPEED_STRUCT ->speed_high_byte, SET_DYNA_SPEED_STRUCT ->speed_low_byte);
 			//System_flush();
 
 		break;
@@ -284,6 +296,10 @@ void buildDynamixelStructMessage(char* write_buffer, uint8_t dynamixel_id, uint8
 		break;
 
 		}//endswitch
+
+	//System_printf("Testing %d speed_high_byte %d, speed_low_byte %d\n", SET_DYNA_SPEED_STRUCT ->speed_high_byte, SET_DYNA_SPEED_STRUCT ->speed_low_byte);
+	//System_flush();
+
 
 	//memcpy( write_buffer, buffer_struct, sizeof(set_dyna_speed_struct) );
 
