@@ -151,7 +151,7 @@ void roboticArm(UArg arg0, UArg arg1)
 
 				case actuator_increment:
 
-				    setLinActuatorCmd(LIN_ACT_ID, 0);
+				    setLinActuatorCmd(LIN_ACT_ID, speed);
 
 					////_printf("Actuator increment:  %d 	 lin_act_current_position: 		%d = setLinActuatorCmd();\n", lin_act_cur_posit, speed);
 					////_flush();
