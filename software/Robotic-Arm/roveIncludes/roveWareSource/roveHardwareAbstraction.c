@@ -203,7 +203,7 @@ int getStructSize(uint8_t struct_id)
 
 		case SET_LIN_ACTUATOR_CMD:
 
-			return (sizeof(linear_actuator_struct) - DONT_PRINT_LIN_BYTES);
+			return sizeof(linear_actuator_struct);
 
 		default:
 
@@ -311,7 +311,7 @@ void buildDynamixelStructMessage(char* write_buffer, uint8_t dynamixel_id, uint8
 
 //current_position = buildLinActuatorMessage((void*)(&buffer_struct), write_buffer, device_id, current_position, target_increment);
 
-int16_t buildLinActuatorStructMessage(char* write_buffer,  uint8_t struct_id, int16_t current_position, int16_t command_value)
+void buildLinActuatorStructMessage(char* write_buffer, uint8_t struct_id, int16_t speed)
 {
 
 	//System_printf("Testing buildLinActuatorStructMessage struct_id %d, \n", struct_id);
@@ -321,33 +321,28 @@ int16_t buildLinActuatorStructMessage(char* write_buffer,  uint8_t struct_id, in
 	{
 		case SET_LIN_ACTUATOR_CMD:
 
-			//target = current + command
-			SET_LIN_ACT_STRUCT->target_position = current_position + command_value;
+		    if (speed > MAX_LIN_ACT_SPEED)
+		    {
+		        speed = MAX_LIN_ACT_SPEED;
 
-			if (SET_LIN_ACT_STRUCT->target_position > MAX_LIN_ACT_POSITION)
-			{
-				SET_LIN_ACT_STRUCT->target_position = MAX_LIN_ACT_POSITION;
+		    }//endif
 
-			}//endif
+		    if (speed < MIN_LIN_ACT_SPEED)
+		    {
+		        speed = MIN_LIN_ACT_SPEED;
 
-			if (SET_LIN_ACT_STRUCT->target_position < MIN_LIN_ACT_POSITION)
-			{
-				SET_LIN_ACT_STRUCT->target_position = MIN_LIN_ACT_POSITION;
+		    }//endif
 
-			}//endif
+		    SET_LIN_ACT_STRUCT->command_byte = LIN_ACT_FORWARD;
 
-			current_position = SET_LIN_ACT_STRUCT->target_position;
+            if (speed < 0)
+            {
+                speed = -speed;
+                SET_LIN_ACT_STRUCT->command_byte = LIN_ACT_REVERSE;
 
-			//target_low_byte = 0xC0 + (target + 0x1F)
-			SET_LIN_ACT_STRUCT->target_low_byte = (uint8_t)(0xC0 + (SET_LIN_ACT_STRUCT->target_position & 0x1F) );
+            }//endif
 
-			//target_high_byte = (target >> 5) & 0x7F
-			SET_LIN_ACT_STRUCT->target_high_byte = (uint8_t)( (SET_LIN_ACT_STRUCT->target_position >> 5) & 0x7F);
-
-		//memcpy( write_buffer, buffer_struct, sizeof(linear_actuator_struct) );
-
-		return current_position;
-
+			SET_LIN_ACT_STRUCT->speed = (uint8_t)speed;
 		default:
 
 			//System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");

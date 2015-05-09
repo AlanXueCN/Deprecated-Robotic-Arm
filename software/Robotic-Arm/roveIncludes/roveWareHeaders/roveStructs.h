@@ -74,20 +74,14 @@ typedef struct set_dyna_endless_struct{
 }__attribute__((packed)) set_dyna_endless_struct;
 
 
-//min position is 0x000	max position is 0xFFF
+//forward is 0xE1, reverse is 0xE0, speed 0 for either is stop
 typedef struct linear_actuator_struct{
 
 	//address of low byte
-	uint8_t target_low_byte;
-	uint8_t target_high_byte;
-
-	//tracked
-	int16_t current_position;
-
-	// arg0
-	int16_t target_position;
+	uint8_t command_byte;
+	uint8_t speed;
 
 }__attribute__((packed)) linear_actuator_struct;
 
 
-#endif /* ROVESTRUCTS_H_ */
+#endif // ROVESTRUCTS_H_

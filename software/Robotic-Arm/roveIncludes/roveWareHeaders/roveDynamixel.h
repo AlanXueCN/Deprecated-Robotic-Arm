@@ -19,7 +19,7 @@ void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed);
 
 void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed);
 
-int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t target_increment);
+void setLinActuatorCmd(uint8_t device_id, int16_t speed);
 
 /* Owen
 // Sets a dynamixel to a specific speed

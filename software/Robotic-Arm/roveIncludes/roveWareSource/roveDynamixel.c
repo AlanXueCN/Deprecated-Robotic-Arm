@@ -139,7 +139,7 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed)
 }//endfnctn  dynamixelSetSpeedRightCmd
 
 
-int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t target_increment)
+void setLinActuatorCmd(uint8_t device_id, int16_t speed)
 {
 	    char write_buffer[BUFFER_SIZE];
 
@@ -158,7 +158,7 @@ int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t t
 		bytes_to_write = getStructSize(SET_LIN_ACTUATOR_CMD);
 
 		// populate the buffer_struct for dynamixel format frame
-		current_position = buildLinActuatorStructMessage(write_buffer, SET_LIN_ACTUATOR_CMD, current_position, target_increment);
+		buildLinActuatorStructMessage(write_buffer, SET_LIN_ACTUATOR_CMD, speed);
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
@@ -175,7 +175,7 @@ int16_t setLinActuatorCmd(uint8_t device_id, int16_t current_position, int16_t t
 		//	i++;
 		//}//end while
 
-		return current_position;
+		return;
 
 }//endfnctn  setActuatorCmd
 

@@ -40,7 +40,6 @@
 
 //TODO wtf uint8_t value[30]roveStructs.h ?
 #define BUFFER_SIZE 30
-#define DONT_PRINT_LIN_BYTES 4
 
 #define LOW 0
 #define HIGH 1
@@ -67,12 +66,13 @@
 #define GRIPPER_ID  0x08
 
 #define NULL_COMAND_VALUE 0
-#define LIN_ACT_POSITION_ZERO 0
-#define LIN_ACT_POSITION_MIDDLE 2048
 #define ZERO_SPEED 0
 
-#define MIN_LIN_ACT_POSITION 0
-#define MAX_LIN_ACT_POSITION 4095
+#define LIN_ACT_FORWARD 0xE1
+#define LIN_ACT_REVERSE 0xE0
+
+#define MIN_LIN_ACT_SPEED -127
+#define MAX_LIN_ACT_SPEED 127
 
 // speed scaling config
 #define SPEED_STEP_DOWN 2

@@ -50,7 +50,7 @@ void roboticArm(UArg arg0, UArg arg1)
 	dynamixelSetSpeedLeftCmd(BASE_ID, ZERO_SPEED);
 
 	//lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, LIN_ACT_POSITION_ZERO);
-	lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, LIN_ACT_POSITION_ZERO, LIN_ACT_POSITION_MIDDLE);
+	setLinActuatorCmd(LIN_ACT_ID, 0);
 
 	//_printf("Loop Forever: \n");
 	//_flush();
@@ -145,13 +145,13 @@ void roboticArm(UArg arg0, UArg arg1)
                     dynamixelSetSpeedRightCmd(ELBOW_B_ID, 0);
                     dynamixelSetSpeedRightCmd(BASE_ID, 0);
                     //lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, 0);
-                    lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, LIN_ACT_POSITION_ZERO, LIN_ACT_POSITION_MIDDLE);
+                    setLinActuatorCmd(LIN_ACT_ID, 0);
 
 				break;
 
 				case actuator_increment:
 
-					lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, speed);
+				    setLinActuatorCmd(LIN_ACT_ID, 0);
 
 					////_printf("Actuator increment:  %d 	 lin_act_current_position: 		%d = setLinActuatorCmd();\n", lin_act_cur_posit, speed);
 					////_flush();

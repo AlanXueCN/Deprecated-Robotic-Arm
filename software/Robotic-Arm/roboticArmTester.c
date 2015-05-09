@@ -53,7 +53,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 	dynamixelSetSpeedRightCmd(ELBOW_B_ID, ZERO_SPEED);
 	dynamixelSetSpeedLeftCmd(BASE_ID, 0);
 
-	lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, LIN_ACT_POSITION_ZERO);
+	setLinActuatorCmd(LIN_ACT_ID, 0);
 
 	System_printf("Loop Forever: \n");
 	System_flush();
@@ -122,7 +122,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 						dynamixelSetSpeedLeftCmd(ELBOW_A_ID, 0);
 						dynamixelSetSpeedRightCmd(ELBOW_B_ID, 0);
 						dynamixelSetSpeedLeftCmd(BASE_ID, 0);
-						lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, 0);
+						setLinActuatorCmd(LIN_ACT_ID, 0);
 
 					//TODO Gripper and Drill e_stop_arm case actions
 
@@ -130,7 +130,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 
 					case actuator_increment:
 
-						lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, speed);
+						setLinActuatorCmd(LIN_ACT_ID, speed);
 
 						System_printf("Actuator increment:  %d 	 lin_act_current_position: 		%d = setLinActuatorCmd();\n", lin_act_cur_posit, speed);
 						System_flush();
@@ -217,7 +217,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 						dynamixelSetSpeedLeftCmd(ELBOW_A_ID, 0);
 						dynamixelSetSpeedRightCmd(ELBOW_B_ID, 0);
 						dynamixelSetSpeedLeftCmd(BASE_ID, 0);
-						lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, 0);
+						setLinActuatorCmd(LIN_ACT_ID, 0);
 
 					//TODO Gripper and Drill e_stop_arm case actions
 
@@ -225,7 +225,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 
 					case actuator_increment:
 
-						lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, speed);
+					    setLinActuatorCmd(LIN_ACT_ID, 0);
 
 						System_printf("Actuator increment:  %d 	 lin_act_current_position: 		%d = setLinActuatorCmd();\n", lin_act_cur_posit, speed);
 						System_flush();
