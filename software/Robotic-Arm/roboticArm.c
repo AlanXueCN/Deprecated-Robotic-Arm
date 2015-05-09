@@ -42,12 +42,14 @@ void roboticArm(UArg arg0, UArg arg1)
 	dynamixelSetEndlessCmd(ELBOW_A_ID);
 	dynamixelSetEndlessCmd(ELBOW_B_ID);
 	dynamixelSetEndlessCmd(BASE_ID);
+	dynamixelSetEndlessCmd(GRIPPER_ID);
 
 	dynamixelSetSpeedLeftCmd(WRIST_A_ID, ZERO_SPEED);
 	dynamixelSetSpeedLeftCmd(WRIST_B_ID, ZERO_SPEED);
 	dynamixelSetSpeedLeftCmd(ELBOW_A_ID, ZERO_SPEED);
 	dynamixelSetSpeedLeftCmd(ELBOW_B_ID, ZERO_SPEED);
 	dynamixelSetSpeedLeftCmd(BASE_ID, ZERO_SPEED);
+	dynamixelSetEndlessCmd(GRIPPER_ID, ZERO_SPEED);
 
 	//lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, LIN_ACT_POSITION_ZERO);
 	setLinActuatorCmd(LIN_ACT_ID, 0);
