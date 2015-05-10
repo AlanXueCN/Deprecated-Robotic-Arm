@@ -6134,11 +6134,18 @@ B340A  3A 40V SMA &lt;br&gt;</description>
 <label x="147.32" y="12.7" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="RX_7" class="0">
+<net name="TX_7" class="0">
 <segment>
 <pinref part="U$1" gate="G$1" pin="RX"/>
 <wire x1="208.28" y1="12.7" x2="213.36" y2="12.7" width="0.1524" layer="91"/>
 <label x="208.28" y="12.7" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="RX_7" class="0">
+<segment>
+<pinref part="U$1" gate="G$1" pin="TX"/>
+<wire x1="208.28" y1="10.16" x2="213.36" y2="10.16" width="0.1524" layer="91"/>
+<label x="208.28" y="10.16" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
