@@ -47,7 +47,7 @@ int main(void)
 	System_printf("Assigned UART 2\n");
 	System_flush();
 
-	uart3 = (UART_Handle)init_uart( 3, 9600 );
+	uart3 = (UART_Handle)init_uart( 3, 57600 );
 	System_printf("Assigned UART 3\n");
 	System_flush();
 

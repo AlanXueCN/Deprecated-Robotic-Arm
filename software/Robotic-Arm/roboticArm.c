@@ -11,7 +11,7 @@
 
 //roveWare.h :: #define SPEED_STRUCT ((speed_struct*)(&buffer_struct))
 
-void roboticArm(UArg arg0, UArg arg1)
+Void roboticArm(UArg arg0, UArg arg1)
 {
 	//_printf("roboticArmTask init \n\n\n");
 	//_flush();
