@@ -50,6 +50,7 @@ Void roboticArm(UArg arg0, UArg arg1)
 	dynamixelSetSpeedLeftCmd(ELBOW_B_ID, ZERO_SPEED);
 	dynamixelSetSpeedLeftCmd(BASE_ID, ZERO_SPEED);
 	dynamixelSetSpeedLeftCmd(GRIPPER_ID, ZERO_SPEED);
+	setDrillCmd(DRILL_ID, 0);
 
 	//lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, LIN_ACT_POSITION_ZERO);
 	setLinActuatorCmd(LIN_ACT_ID, 0);
@@ -148,7 +149,7 @@ Void roboticArm(UArg arg0, UArg arg1)
                     dynamixelSetSpeedRightCmd(BASE_ID, 0);
                     //lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, 0);
                     setLinActuatorCmd(LIN_ACT_ID, 0);
-                    setDrillCmd(buffer_struct.struct_id, 0);
+                    setDrillCmd(DRILL_ID, 0);
 
 				break;
 
@@ -177,10 +178,7 @@ Void roboticArm(UArg arg0, UArg arg1)
 
 				case drill_forward:
 
-				    setDrillCmd(buffer_struct.struct_id, speed);
-
-					//_printf("What? Not ready for drill");
-					//_flush();
+				    setDrillCmd(DRILL_ID, speed);
 
 				break;
 
