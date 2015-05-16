@@ -36,6 +36,7 @@
 #define SET_ENDLESS_STRUCT 		((set_dyna_endless_struct*)write_buffer)
 #define SET_DYNA_SPEED_STRUCT 	((set_dyna_speed_struct*)write_buffer)
 #define SET_LIN_ACT_STRUCT 		((linear_actuator_struct*)write_buffer)
+#define SET_DRILL_STRUCT        ((drill_struct*)write_buffer)
 
 
 //TODO wtf uint8_t value[30]roveStructs.h ?
@@ -55,6 +56,7 @@
 #define SET_SPEED_LEFT_CMD	1
 #define SET_SPEED_RIGHT_CMD	2
 #define SET_LIN_ACTUATOR_CMD 3
+#define GET_DRILL_CMD 4
 
 #define WRIST_A_ID  0x01
 #define WRIST_B_ID	0x02
@@ -64,6 +66,7 @@
 #define LIN_ACT_ID  0x06
 #define MOB_ID 		0x07
 #define GRIPPER_ID  0x08
+#define DRILL_ID    0x09
 
 #define NULL_COMAND_VALUE 0
 #define ZERO_SPEED 0
@@ -112,7 +115,12 @@
 #define gripper_open 208
 
 //drill
-#define drill 221
+#define drill_forward 209
+
+//drill values
+#define DRILL_STOP 0x00
+#define DRILL_FORWARD 0x01
+#define DRILL_REVERSE 0x02
 
 // telem_device_id
 #define	telem_req_id 254

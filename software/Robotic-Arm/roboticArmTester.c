@@ -146,7 +146,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 
 					break;
 
-					case drill:
+					case drill_forward:
 
 						//TODO Drill
 
@@ -218,6 +218,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 						dynamixelSetSpeedRightCmd(ELBOW_B_ID, 0);
 						dynamixelSetSpeedLeftCmd(BASE_ID, 0);
 						setLinActuatorCmd(LIN_ACT_ID, 0);
+						setDrillCmd(buffer_struct.struct_id, 0);
 
 					//TODO Gripper and Drill e_stop_arm case actions
 
@@ -241,12 +242,10 @@ void roboticArmTester(UArg arg0, UArg arg1)
 
 					break;
 
-					case drill:
+					case drill_forward:
 
 						//TODO Drill
-
-						System_printf("What? Not ready for drill");
-						System_flush();
+					    setDrillCmd(buffer_struct.struct_id, speed);
 
 					break;
 

@@ -179,6 +179,10 @@ int getDevicePort(uint8_t device_id)
 
 		return END_EFFECTOR_UART;
 
+		case DRILL_ID:
+
+		return END_EFFECTOR_UART;
+
 		default:
 
 			//System_printf("getDevicePort passed invalid device_id %d\n", device_id);
@@ -204,6 +208,10 @@ int getStructSize(uint8_t struct_id)
 		case SET_LIN_ACTUATOR_CMD:
 
 			return sizeof(linear_actuator_struct);
+
+		case GET_DRILL_CMD:
+
+		    return sizeof(drill_struct);
 
 		default:
 

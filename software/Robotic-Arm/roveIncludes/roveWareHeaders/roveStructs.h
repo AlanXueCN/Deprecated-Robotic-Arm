@@ -83,5 +83,13 @@ typedef struct linear_actuator_struct{
 
 }__attribute__((packed)) linear_actuator_struct;
 
+//
+typedef struct drill_struct{
+
+    //address of low byte
+    uint8_t command_byte;
+
+}__attribute__((packed)) drill_struct;
+
 
 #endif // ROVESTRUCTS_H_
