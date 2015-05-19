@@ -315,6 +315,8 @@ void buildDynamixelStructMessage(char* write_buffer, uint8_t dynamixel_id, uint8
 
 	//memcpy( write_buffer, buffer_struct, sizeof(set_dyna_speed_struct) );
 
+	return;
+
 }//end fnctn buildDynamixelStructMessage
 
 //current_position = buildLinActuatorMessage((void*)(&buffer_struct), write_buffer, device_id, current_position, target_increment);
@@ -356,9 +358,11 @@ void buildLinActuatorStructMessage(char* write_buffer, uint8_t struct_id, int16_
 			//System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");
 			//System_flush();
 
-		return -1;
+		return;
 
 	}//endswitch
+
+	return;
 
 }//end fnctn buildLinActuatorStructMessage
 

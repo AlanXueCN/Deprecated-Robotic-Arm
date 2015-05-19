@@ -25,7 +25,7 @@ Void roboticArm(UArg arg0, UArg arg1)
 	message_struct buffer_struct;
 
 	//alloc task variable to continously track the linear actuators position for cmd ref
-	int16_t lin_act_cur_posit = 0;
+	//int16_t lin_act_cur_posit = 0;
 
 	//not tracked, alloc reuseable task variable
 	int16_t speed = 0;
@@ -79,7 +79,7 @@ Void roboticArm(UArg arg0, UArg arg1)
 				case wrist_clock_wise...elbow_up:
 
 					//Scale and Cap speed from roveWare.h
-					speed = (speed/SPEED_STEP_DOWN);
+					//speed = (speed/SPEED_STEP_DOWN);
 
 					if(speed < SPEED_MIN)
 					{
@@ -107,7 +107,7 @@ Void roboticArm(UArg arg0, UArg arg1)
 				case base_clock_wise:
 
                     //Scale and Cap speed from roveWare.h
-                    speed = (speed/BASE_SPEED_STEP_DOWN);
+                   // speed = (speed/BASE_SPEED_STEP_DOWN);
 
                     if(speed < BASE_SPEED_MIN)
                     {

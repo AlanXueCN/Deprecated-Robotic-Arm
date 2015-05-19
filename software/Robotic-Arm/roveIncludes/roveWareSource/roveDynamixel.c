@@ -33,7 +33,7 @@ void dynamixelSetEndlessCmd(uint8_t dynamixel_id)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		ms_delay(1);
+		//ms_delay(1);
 
 		//debugging only:
 		//_printf("dynamixelSetEndlessCmd just wrote: \n");
@@ -48,6 +48,8 @@ void dynamixelSetEndlessCmd(uint8_t dynamixel_id)
 
 		// set tri state buffer back for read
 		//digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
+
+		return;
 
 }//endfnctn  dynamixelSetEndless
 
@@ -77,7 +79,7 @@ void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		ms_delay(1);
+		//ms_delay(1);
 
 		//debugging only
 		//_printf("dynamixelSetSpeedLeftCmd just wrote: \n");
@@ -92,6 +94,8 @@ void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed)
 
 		//set tri state buffer back for read
 		//digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
+
+		return;
 
 }//endfnctn  dynamixelSetSpeedLeftCmd
 
@@ -120,7 +124,7 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		ms_delay(1);
+		//ms_delay(1);
 
 		//debugging only
 		//_printf("dynamixelSetSpeedRightCmd just wrote: \n");
@@ -135,6 +139,8 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed)
 
 		//set tri state buffer back for read
 		//digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
+
+		return;
 
 }//endfnctn  dynamixelSetSpeedRightCmd
 
@@ -162,7 +168,7 @@ void setLinActuatorCmd(uint8_t device_id, int16_t speed)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		ms_delay(1);
+		//ms_delay(1);
 
 		//debugging only
 		//_printf("dynamixelSetSpeedRightCmd just wrote: \n");
@@ -201,7 +207,7 @@ void setDrillCmd(uint8_t device_id, int16_t command)
         SET_DRILL_STRUCT->command_byte = command;
 
         bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
-
+/*
         ms_delay(1);
 
         //debugging only
@@ -212,7 +218,7 @@ void setDrillCmd(uint8_t device_id, int16_t command)
         printf(" : %d\n", write_buffer[i]);
         i++;
         }//end while
-
+*/
         return;
 
 }//endfnctn  setActuatorCmd
