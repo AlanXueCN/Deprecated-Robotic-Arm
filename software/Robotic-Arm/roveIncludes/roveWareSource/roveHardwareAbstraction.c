@@ -353,12 +353,13 @@ void buildLinActuatorStructMessage(char* write_buffer, uint8_t struct_id, int16_
             }//endif
 
 			SET_LIN_ACT_STRUCT->speed = (uint8_t)speed;
+		break;
 		default:
 
 			//System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");
 			//System_flush();
 
-		return;
+		break;
 
 	}//endswitch
 
