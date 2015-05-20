@@ -89,8 +89,8 @@
 //#define BASE_SPEED_MAX (1023/BASE_SPEED_STEP_DOWN)
 //#define BASE_SPEED_MIN (-1023/BASE_SPEED_STEP_DOWN)
 
-#define BASE_SPEED_MAX 1022
-#define BASE_SPEED_MIN -1022
+#define BASE_SPEED_MAX 100
+#define BASE_SPEED_MIN -100
 
 // tester values config
 #define FOREVER 1
