@@ -183,8 +183,8 @@ Void roboticArm(UArg arg0, UArg arg1)
 				default:
 
 				    ms_delay(2);
-					//_printf("\nERROR in RoboticArm.c! struct_id %d cannot be handled \n", buffer_struct.struct_id);
-					//_flush();
+					System_printf("\nERROR in RoboticArm.c! struct_id %d cannot be handled \n", buffer_struct.struct_id);
+					System_flush();
 				break;
 
 			}//endswitch buffer_struct.struct_id

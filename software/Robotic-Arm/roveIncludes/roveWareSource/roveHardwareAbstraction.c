@@ -150,8 +150,8 @@ int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 
 		default:
 			//Tried to write to invalid device
-			//System_printf("DeviceRead passed invalid device %d\n", device_port);
-			//System_flush();
+			System_printf("DeviceRead passed invalid device %d\n", device_port);
+			System_flush();
 		return -1;
 
 	}//endswitch(device_port)
@@ -307,8 +307,8 @@ void buildDynamixelStructMessage(char* write_buffer, uint8_t dynamixel_id, uint8
 		default:
 
 		    return;
-				//System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid\n");
-				//System_flush();
+				System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid\n");
+				System_flush();
 
 		}//endswitch
 
@@ -360,8 +360,8 @@ void buildLinActuatorStructMessage(char* write_buffer, uint8_t struct_id, int16_
 		default:
 
 		    return;
-			//System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");
-			//System_flush();
+			System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");
+			System_flush();
 
 	}//endswitch
 
@@ -410,15 +410,15 @@ int deviceWrite(int device_port, char* write_buffer,  int bytes_to_write)
 		default:
 
 		    return -1;
-			//System_printf("DeviceWrite passed invalid device %d\n", device_port);
-			//System_flush();
+			System_printf("DeviceWrite passed invalid device %d\n", device_port);
+			System_flush();
 
 		//etc.
 	}//end switch(jack)
 
 	// make sure the message is fully written before leaving the function
 
-	//ms_delay(1);
+	ms_delay(1);
 
 	return bytes_wrote;
 
@@ -440,8 +440,8 @@ void digitalWrite(int pin_number, int set_pin)
 
 			default:
 
-				//System_printf("DigitalWrite passed invalid pin %d\n", pin);
-				//System_flush();
+				System_printf("DigitalWrite passed invalid pin %d\n", set_pin);
+				System_flush();
 
 			return;
 
@@ -461,8 +461,8 @@ void digitalWrite(int pin_number, int set_pin)
 
 			default:
 
-				//System_printf("DigitalWrite passed invalid pin %d\n", set_pin);
-				//System_flush();
+				System_printf("DigitalWrite passed invalid pin %d\n", set_pin);
+				System_flush();
 
 			return;
 
