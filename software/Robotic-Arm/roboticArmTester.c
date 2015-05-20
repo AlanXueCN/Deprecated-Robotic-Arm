@@ -90,7 +90,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 					case wrist_clock_wise...base_clock_wise:
 
 						//Scale and Cap speed from roveWare.h
-						speed = (speed/SPEED_STEP_DOWN);
+						//speed = (speed/SPEED_STEP_DOWN);
 
 						if(speed < SPEED_MIN)
 						{
@@ -185,7 +185,7 @@ void roboticArmTester(UArg arg0, UArg arg1)
 					case wrist_clock_wise...base_clock_wise:
 
 						//Scale and Cap speed from roveWare.h
-						speed = (speed/SPEED_STEP_DOWN);
+						//speed = (speed/SPEED_STEP_DOWN);
 
 						if(speed < SPEED_MIN)
 						{

@@ -50,10 +50,8 @@ Void roboticArm(UArg arg0, UArg arg1)
 	dynamixelSetSpeedLeftCmd(ELBOW_B_ID, ZERO_SPEED);
 	dynamixelSetSpeedLeftCmd(BASE_ID, ZERO_SPEED);
 	dynamixelSetSpeedLeftCmd(GRIPPER_ID, ZERO_SPEED);
-	setDrillCmd(DRILL_ID, 0);
-
-	//lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, LIN_ACT_POSITION_ZERO);
-	setLinActuatorCmd(LIN_ACT_ID, 0);
+	//setDrillCmd(DRILL_ID, ZERO_SPEED);
+	setLinActuatorCmd(LIN_ACT_ID, ZERO_SPEED);
 
 	//_printf("Loop Forever: \n");
 	//_flush();
@@ -142,14 +140,14 @@ Void roboticArm(UArg arg0, UArg arg1)
 					//dynamixelSetSpeedLeftCmd(ELBOW_B_ID, 0);
 					//dynamixelSetSpeedLeftCmd(BASE_ID, 0);
 					//lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, 0);
-				    dynamixelSetSpeedRightCmd(WRIST_A_ID, 0);
-                    dynamixelSetSpeedRightCmd(WRIST_B_ID, 0);
-                    dynamixelSetSpeedRightCmd(ELBOW_A_ID, 0);
-                    dynamixelSetSpeedRightCmd(ELBOW_B_ID, 0);
-                    dynamixelSetSpeedRightCmd(BASE_ID, 0);
-                    //lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, 0);
-                    setLinActuatorCmd(LIN_ACT_ID, 0);
-                    setDrillCmd(DRILL_ID, 0);
+				    dynamixelSetSpeedRightCmd(WRIST_A_ID, ZERO_SPEED);
+                    dynamixelSetSpeedRightCmd(WRIST_B_ID, ZERO_SPEED);
+                    dynamixelSetSpeedRightCmd(ELBOW_A_ID, ZERO_SPEED);
+                    dynamixelSetSpeedRightCmd(ELBOW_B_ID, ZERO_SPEED);
+                    dynamixelSetSpeedRightCmd(BASE_ID, ZERO_SPEED);
+                    dynamixelSetSpeedRightCmd(GRIPPER_ID, ZERO_SPEED);
+                    setLinActuatorCmd(LIN_ACT_ID, ZERO_SPEED);
+                    //setDrillCmd(DRILL_ID, ZERO_SPEED);
 
 				break;
 
@@ -176,13 +174,15 @@ Void roboticArm(UArg arg0, UArg arg1)
 
 				break;
 
-				case drill_forward:
+		//		case drill_forward:
 
-				    setDrillCmd(DRILL_ID, speed);
+		//		    setDrillCmd(DRILL_ID, speed);
 
-				break;
+		//		break;
 
 				default:
+
+				    ms_delay(2);
 					//_printf("\nERROR in RoboticArm.c! struct_id %d cannot be handled \n", buffer_struct.struct_id);
 					//_flush();
 				break;
@@ -269,11 +269,16 @@ void roboArmForwardCmd(uint8_t struct_id, int16_t speed)
 		break;
 
 		default:
+
+		    ms_delay(2);
+
+		    return;
 			//_printf("\nERROR in RoboticArm.c!   roboArmForwardCmd struct_id %d cannot be handled \n", struct_id);
 			//_flush();
-		break;
 
 	}//endswitch struct_id
+
+	return;
 
 }//endfnctn roboArmForwardCmd
 
@@ -355,10 +360,15 @@ void roboArmReverseCmd(uint8_t struct_id, int16_t speed)
         break;
 
 		default:
+
+		    ms_delay(2);
+
+		    return;
 			//_printf("\nERROR in RoboticArm.c!  roboArmReverseCmd  struct_id %d cannot be handled \n", struct_id);
 			//_flush();
-		break;
 
 	}//endswitch struct_id
+
+	return;
 
 }//endfnctn roboArmReverseCmd

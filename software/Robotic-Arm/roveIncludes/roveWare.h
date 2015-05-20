@@ -78,16 +78,19 @@
 #define MAX_LIN_ACT_SPEED 127
 
 // speed scaling config
-#define SPEED_STEP_DOWN 2
+//#define SPEED_STEP_DOWN 2
 //#define SPEED_MAX (1023/SPEED_STEP_DOWN)
 //#define SPEED_MIN (-1023/SPEED_STEP_DOWN)
 
-#define SPEED_MAX 1022
 #define SPEED_MIN -1022
+#define SPEED_MAX 1022
 // speed scaling config
-#define BASE_SPEED_STEP_DOWN 10
-#define BASE_SPEED_MAX (1023/BASE_SPEED_STEP_DOWN)
-#define BASE_SPEED_MIN (-1023/BASE_SPEED_STEP_DOWN)
+//#define BASE_SPEED_STEP_DOWN 10
+//#define BASE_SPEED_MAX (1023/BASE_SPEED_STEP_DOWN)
+//#define BASE_SPEED_MIN (-1023/BASE_SPEED_STEP_DOWN)
+
+#define BASE_SPEED_MAX 1022
+#define BASE_SPEED_MIN -1022
 
 // tester values config
 #define FOREVER 1

@@ -115,7 +115,7 @@ bool recvSerialStructMessage(int device_port, void* buffer_struct)
 
 int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 
-	int bytes_read =0;
+	int bytes_read;
 
 	// give us access to the uart handles defined at the global scope in main
 
@@ -133,9 +133,11 @@ int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 	switch(device_port){
 		//case 0:
 		case 0:
-		break;
+		    //just bytes_read = -1?
+		    return -1;
 		case 1:
-		break;
+		    //just bytes_read = -1?
+		                return -1;
 		case MOTHERBOARD_UART:
 			//System_printf("deviceRead case: %d, bytes_to_read %d\n", MOTHERBOARD_UART, bytes_to_read);
 			//System_flush();
@@ -303,9 +305,10 @@ void buildDynamixelStructMessage(char* write_buffer, uint8_t dynamixel_id, uint8
 		break;
 
 		default:
+
+		    return;
 				//System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid\n");
 				//System_flush();
-		break;
 
 		}//endswitch
 
@@ -356,10 +359,9 @@ void buildLinActuatorStructMessage(char* write_buffer, uint8_t struct_id, int16_
 		break;
 		default:
 
+		    return;
 			//System_printf("Error in function: buildDynamixelStructMessage() - struct_id is not valid");
 			//System_flush();
-
-		break;
 
 	}//endswitch
 
@@ -380,6 +382,11 @@ int deviceWrite(int device_port, char* write_buffer,  int bytes_to_write)
 
 	//System_printf("deviceWrite called\n");
 	//System_flush();
+
+    if(bytes_to_write < 0)
+    {
+        return -1;
+    }//end if
 
 	switch(device_port)
 	{
@@ -402,10 +409,10 @@ int deviceWrite(int device_port, char* write_buffer,  int bytes_to_write)
 
 		default:
 
+		    return -1;
 			//System_printf("DeviceWrite passed invalid device %d\n", device_port);
 			//System_flush();
 
-		break;
 		//etc.
 	}//end switch(jack)
 
