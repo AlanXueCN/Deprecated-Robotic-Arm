@@ -50,7 +50,7 @@ Void roboticArm(UArg arg0, UArg arg1)
 	dynamixelSetSpeedLeftCmd(ELBOW_B_ID, ZERO_SPEED);
 	dynamixelSetSpeedLeftCmd(BASE_ID, ZERO_SPEED);
 	dynamixelSetSpeedLeftCmd(GRIPPER_ID, ZERO_SPEED);
-	//setDrillCmd(DRILL_ID, ZERO_SPEED);
+	setDrillCmd(DRILL_ID, ZERO_SPEED);
 	setLinActuatorCmd(LIN_ACT_ID, ZERO_SPEED);
 
 	//_printf("Loop Forever: \n");
@@ -147,7 +147,7 @@ Void roboticArm(UArg arg0, UArg arg1)
                     dynamixelSetSpeedRightCmd(BASE_ID, ZERO_SPEED);
                     dynamixelSetSpeedRightCmd(GRIPPER_ID, ZERO_SPEED);
                     setLinActuatorCmd(LIN_ACT_ID, ZERO_SPEED);
-                    //setDrillCmd(DRILL_ID, ZERO_SPEED);
+                    setDrillCmd(DRILL_ID, ZERO_SPEED);
 
 				break;
 
