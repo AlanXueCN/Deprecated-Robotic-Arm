@@ -174,11 +174,11 @@ Void roboticArm(UArg arg0, UArg arg1)
 
 				break;
 
-		//		case drill_forward:
+				case drill_forward:
 
-		//		    setDrillCmd(DRILL_ID, speed);
+				    setDrillCmd(DRILL_ID, speed);
 
-		//		break;
+				break;
 
 				default:
 
