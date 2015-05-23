@@ -9,7 +9,6 @@
 
 #include "roveWareHeaders/roveDynamixel.h"
 #include "roveWareHeaders/roveHardwareAbstraction.h"
-#include "roveWareHeaders/rovePinMap.h"
 #include "roveWareHeaders/roveStructs.h"
 #include "roveWareHeaders/roveTiming.h"
 #include "roveWareHeaders/roveUarts.h"

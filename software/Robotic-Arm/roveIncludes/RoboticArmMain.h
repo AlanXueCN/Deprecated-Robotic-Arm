@@ -45,6 +45,7 @@
 #include <ti/drivers/GPIO.h>
 #include <ti/drivers/UART.h>
 //#include <ti/drivers/PWM.h>
+#include <ti/drivers/Watchdog.h>
 
 
 //TI BIOS hardware drivers
@@ -52,6 +53,7 @@
 #include "driverlib/gpio.h"
 #include "driverlib/pwm.h"
 #include "inc/hw_memmap.h"
+#include "driverlib/watchdog.h"
 
 //defines target device
 

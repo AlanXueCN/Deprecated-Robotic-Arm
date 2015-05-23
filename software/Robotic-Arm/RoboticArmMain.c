@@ -27,6 +27,10 @@
     UART_Handle uart4;		//PC5 DYNAMIXEL_UART 57600
     UART_Handle uart7;		//PE1 LINEAR_ACTUATOR_UART 115200
 
+// globally create watchdog handle
+
+    Watchdog_Handle arm_watchdog_handle;
+
 int main(void)
 {
 
@@ -34,10 +38,20 @@ int main(void)
     Board_initGeneral();
     Board_initGPIO();
 
+    System_printf("Init Watchdog\n");
+    System_flush();
+
+    Board_initWatchdog();
+
     System_printf("Init uarts\n");
     System_flush();
 
     Board_initUART();
+
+    System_printf("Assign Watchdog\n");
+    System_flush();
+
+    arm_watchdog_handle = init_watchdog(0);
 
     //init UARTS
 	System_printf("Assign UARTS\n");

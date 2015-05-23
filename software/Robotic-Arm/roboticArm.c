@@ -21,6 +21,8 @@ Void roboticArm(UArg arg0, UArg arg1)
 	extern UART_Handle uart4;
 	extern UART_Handle uart7;
 
+	extern Watchdog_Handle arm_watchdog_handle;
+
 	//task scope buffer alloc
 	message_struct buffer_struct;
 
@@ -189,7 +191,13 @@ Void roboticArm(UArg arg0, UArg arg1)
 
 			}//endswitch buffer_struct.struct_id
 
+		//Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
+
 		}//endwhile recvSerialStructMessage
+
+	Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
+	System_printf("\nFed the Dog!\n");
+	System_flush();
 
 	}//endwhile FOREVER
 
