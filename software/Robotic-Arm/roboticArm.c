@@ -102,6 +102,8 @@ Void roboticArm(UArg arg0, UArg arg1)
 
 					}//endif
 
+					Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
+
 				break;
 
 				case base_clock_wise:
@@ -129,6 +131,8 @@ Void roboticArm(UArg arg0, UArg arg1)
 
                     }//endif
 
+                    Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
+
                     break;
 
 				case e_stop_arm:
@@ -151,11 +155,15 @@ Void roboticArm(UArg arg0, UArg arg1)
                     setLinActuatorCmd(LIN_ACT_ID, ZERO_SPEED);
                     setDrillCmd(DRILL_ID, ZERO_SPEED);
 
+                    Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
+
 				break;
 
 				case actuator_increment:
 
 				    setLinActuatorCmd(LIN_ACT_ID, speed);
+
+				    Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
 
 					////_printf("Actuator increment:  %d 	 lin_act_current_position: 		%d = setLinActuatorCmd();\n", lin_act_cur_posit, speed);
 					////_flush();
@@ -174,30 +182,35 @@ Void roboticArm(UArg arg0, UArg arg1)
 
                     }//endif
 
+                    Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
+
 				break;
 
 				case drill_forward:
 
 				    setDrillCmd(DRILL_ID, speed);
+				    Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
 
 				break;
 
 				default:
 
-				    ms_delay(2);
-					System_printf("\nERROR in RoboticArm.c! struct_id %d cannot be handled \n", buffer_struct.struct_id);
-					System_flush();
+				    //ms_delay(2);
+					//System_printf("\nERROR in RoboticArm.c! struct_id %d cannot be handled \n", buffer_struct.struct_id);
+					//System_flush();
 				break;
 
 			}//endswitch buffer_struct.struct_id
 
 		//Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
+		//System_printf("\nFed the Dog!\n");
+		//System_flush();
 
 		}//endwhile recvSerialStructMessage
 
-	Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
-	System_printf("\nFed the Dog!\n");
-	System_flush();
+	//Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
+	//System_printf("\nFed the Dog!\n");
+	//System_flush();
 
 	}//endwhile FOREVER
 
@@ -278,7 +291,7 @@ void roboArmForwardCmd(uint8_t struct_id, int16_t speed)
 
 		default:
 
-		    ms_delay(2);
+		    //ms_delay(2);
 
 		    return;
 			//_printf("\nERROR in RoboticArm.c!   roboArmForwardCmd struct_id %d cannot be handled \n", struct_id);
@@ -369,7 +382,7 @@ void roboArmReverseCmd(uint8_t struct_id, int16_t speed)
 
 		default:
 
-		    ms_delay(2);
+		    //ms_delay(2);
 
 		    return;
 			//_printf("\nERROR in RoboticArm.c!  roboArmReverseCmd  struct_id %d cannot be handled \n", struct_id);
