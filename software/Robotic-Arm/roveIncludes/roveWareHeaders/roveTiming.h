@@ -15,4 +15,6 @@
 
 void ms_delay(int milliseconds);
 
+void us_delay(int microseconds);
+
 #endif //ROVETIMING_H_

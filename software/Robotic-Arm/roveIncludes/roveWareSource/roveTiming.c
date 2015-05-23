@@ -9,3 +9,10 @@ void ms_delay(int milliseconds){
 	SysCtlDelay( milliseconds*(SysCtlClockGet() / 100) );
 
 }//endfnctn ms_delay( int milliseconds )
+
+void us_delay(int microseconds){
+
+    SysCtlDelay(  microseconds*( SysCtlClockGet() ) );
+
+}//endfnctn ms_delay( int milliseconds )
+
