@@ -9,7 +9,7 @@
 //TODO change value of timer in EK.C
 
 #include "../roveWareHeaders/roveWatchdog.h"
-
+/*
 Watchdog_Handle init_watchdog(UInt watchdog_hardware_index) {
 
     Watchdog_Handle watchdog_handle;
@@ -50,3 +50,4 @@ Void roveWatchdogCallback(UArg watchdog_handle) {
     Watchdog_clear( (Watchdog_Handle) watchdog_handle);
 
 } //endfnctn roveWatchdogCallback
+*/

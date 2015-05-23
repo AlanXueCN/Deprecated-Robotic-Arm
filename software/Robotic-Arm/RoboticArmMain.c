@@ -29,7 +29,7 @@
 
 // globally create watchdog handle
 
-    Watchdog_Handle arm_watchdog_handle;
+   // Watchdog_Handle arm_watchdog_handle;
 
 int main(void)
 {
@@ -38,20 +38,20 @@ int main(void)
     Board_initGeneral();
     Board_initGPIO();
 
-    System_printf("Init Watchdog\n");
-    System_flush();
+    //System_printf("Init Watchdog\n");
+    //System_flush();
 
-    Board_initWatchdog();
+    //Board_initWatchdog();
 
     System_printf("Init uarts\n");
     System_flush();
 
     Board_initUART();
 
-    System_printf("Assign Watchdog\n");
-    System_flush();
+    //System_printf("Assign Watchdog\n");
+    //System_flush();
 
-    arm_watchdog_handle = init_watchdog(0);
+    //arm_watchdog_handle = init_watchdog(0);
 
     //init UARTS
 	System_printf("Assign UARTS\n");

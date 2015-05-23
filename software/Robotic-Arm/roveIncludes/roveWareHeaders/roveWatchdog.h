@@ -12,9 +12,9 @@
 // MRDesign Team::roveWare::        roveCom and RoveNet services headers
 
 #include "../roveWare.h"
-
+/*
 Void roveWatchdogCallback(UArg watchdog_handle);
 
 Watchdog_Handle init_watchdog(UInt watchdog_hardware_index);
-
+*/
 #endif // ROVEWATCHDOG_H_

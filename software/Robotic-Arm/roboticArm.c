@@ -11,6 +11,11 @@
 
 //roveWare.h :: #define SPEED_STRUCT ((speed_struct*)(&buffer_struct))
 
+#define DO_NOTHING_CNT 20000
+
+void do_nothing();
+
+
 Void roboticArm(UArg arg0, UArg arg1)
 {
 	//_printf("roboticArmTask init \n\n\n");
@@ -21,9 +26,9 @@ Void roboticArm(UArg arg0, UArg arg1)
 	extern UART_Handle uart4;
 	extern UART_Handle uart7;
 
-	extern Watchdog_Handle arm_watchdog_handle;
+	//extern Watchdog_Handle arm_watchdog_handle;
 
-	int failed_recieve_cnt = 0;
+	//int failed_recieve_cnt = 0;
 
 	//task scope buffer alloc
 	message_struct buffer_struct;
@@ -42,38 +47,38 @@ Void roboticArm(UArg arg0, UArg arg1)
 
 	//init all motors to zero
 	dynamixelSetEndlessCmd(WRIST_A_ID);
-	us_delay(250);
+	do_nothing();
 	dynamixelSetEndlessCmd(WRIST_B_ID);
-	us_delay(250);
+	do_nothing();
 	dynamixelSetEndlessCmd(ELBOW_A_ID);
-	us_delay(250);
+	do_nothing();
 	dynamixelSetEndlessCmd(ELBOW_B_ID);
-	us_delay(250);
+	do_nothing();
 	dynamixelSetEndlessCmd(BASE_ID);
-	us_delay(250);
+	do_nothing();
 	dynamixelSetEndlessCmd(GRIPPER_ID);
-	us_delay(250);
+	do_nothing();
 
 	dynamixelSetSpeedLeftCmd(WRIST_A_ID, ZERO_SPEED);
-    us_delay(250);
+    do_nothing();
     dynamixelSetSpeedLeftCmd(WRIST_B_ID, ZERO_SPEED);
-    us_delay(250);
+    do_nothing();
     dynamixelSetSpeedLeftCmd(ELBOW_A_ID, ZERO_SPEED);
-    us_delay(250);
+    do_nothing();
     dynamixelSetSpeedLeftCmd(ELBOW_B_ID, ZERO_SPEED);
-    us_delay(250);
+    do_nothing();
     dynamixelSetSpeedLeftCmd(BASE_ID, ZERO_SPEED);
-    us_delay(250);
+    do_nothing();
     dynamixelSetSpeedLeftCmd(GRIPPER_ID, ZERO_SPEED);
-    us_delay(250);
+    do_nothing();
     setDrillCmd(DRILL_ID, ZERO_SPEED);
-    us_delay(250);
+    do_nothing();
     setLinActuatorCmd(LIN_ACT_ID, ZERO_SPEED);
 
 	//_printf("Loop Forever: \n");
 	//_flush();
 
-
+    //Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
 	//hack for unreachable statement warnings
 	//const uint8_t FOREVER = 1;
 	while(FOREVER)
@@ -118,7 +123,7 @@ Void roboticArm(UArg arg0, UArg arg1)
 
 					}//endif
 
-					Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
+					//Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
 
 				break;
 
@@ -147,7 +152,7 @@ Void roboticArm(UArg arg0, UArg arg1)
 
                     }//endif
 
-                    Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
+                    //Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
 
                     break;
 
@@ -163,22 +168,22 @@ Void roboticArm(UArg arg0, UArg arg1)
 					//dynamixelSetSpeedLeftCmd(BASE_ID, 0);
 					//lin_act_cur_posit = setLinActuatorCmd(LIN_ACT_ID, lin_act_cur_posit, 0);
 				    dynamixelSetSpeedLeftCmd(WRIST_A_ID, ZERO_SPEED);
-				    us_delay(250);
+				    do_nothing();
 				    dynamixelSetSpeedLeftCmd(WRIST_B_ID, ZERO_SPEED);
-				    us_delay(250);
+				    do_nothing();
 				    dynamixelSetSpeedLeftCmd(ELBOW_A_ID, ZERO_SPEED);
-				    us_delay(250);
+				    do_nothing();
 				    dynamixelSetSpeedLeftCmd(ELBOW_B_ID, ZERO_SPEED);
-				    us_delay(250);
+				    do_nothing();
 				    dynamixelSetSpeedLeftCmd(BASE_ID, ZERO_SPEED);
-				    us_delay(250);
+				    do_nothing();
 				    dynamixelSetSpeedLeftCmd(GRIPPER_ID, ZERO_SPEED);
-				    us_delay(250);
+				    do_nothing();
                     setDrillCmd(DRILL_ID, ZERO_SPEED);
-                    us_delay(250);
+                    do_nothing();
                     setLinActuatorCmd(LIN_ACT_ID, ZERO_SPEED);
 
-                    Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
+                    //Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
 
 				break;
 
@@ -186,7 +191,7 @@ Void roboticArm(UArg arg0, UArg arg1)
 
 				    setLinActuatorCmd(LIN_ACT_ID, speed);
 
-				    Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
+				    //Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
 
 					////_printf("Actuator increment:  %d 	 lin_act_current_position: 		%d = setLinActuatorCmd();\n", lin_act_cur_posit, speed);
 					////_flush();
@@ -205,14 +210,14 @@ Void roboticArm(UArg arg0, UArg arg1)
 
                     }//endif
 
-                    Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
+                    //Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
 
 				break;
 
 				case drill_forward:
 
 				    setDrillCmd(DRILL_ID, speed);
-				    Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
+				    //Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
 
 				break;
 
@@ -231,14 +236,16 @@ Void roboticArm(UArg arg0, UArg arg1)
 
 		}//endwhile recvSerialStructMessage
 
-        failed_recieve_cnt++;
+    /*    failed_recieve_cnt++;
 
         if (failed_recieve_cnt > RECIEVE_RESET_CNT){
 
             Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
             failed_recieve_cnt = 0;
 
-        }//end if
+        }//end if*/
+
+		//Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
 
 	//System_printf("\nFed the Dog!\n");
 	//System_flush();
@@ -262,7 +269,7 @@ void roboArmForwardCmd(uint8_t struct_id, int16_t speed)
 
 			dynamixelSetSpeedRightCmd(WRIST_A_ID, speed);
 			//dynamixelSetSpeedLeftCmd(WRIST_B_ID, speed);
-			us_delay(250);
+			do_nothing();
 			dynamixelSetSpeedRightCmd(WRIST_B_ID, speed);
 
 		break;
@@ -274,7 +281,7 @@ void roboArmForwardCmd(uint8_t struct_id, int16_t speed)
 
 			dynamixelSetSpeedRightCmd(WRIST_A_ID, speed);
 			//dynamixelSetSpeedRightCmd(WRIST_B_ID, speed);
-			us_delay(250);
+			do_nothing();
 			dynamixelSetSpeedLeftCmd(WRIST_B_ID, speed);
 
 		break;
@@ -289,7 +296,7 @@ void roboArmForwardCmd(uint8_t struct_id, int16_t speed)
 			    //dynamixelSetSpeedRightCmd(ELBOW_B_ID, speed);
 
 			dynamixelSetSpeedLeftCmd(ELBOW_A_ID, speed);
-			us_delay(250);
+			do_nothing();
 			dynamixelSetSpeedLeftCmd(ELBOW_B_ID, speed);
 
 		break;
@@ -304,7 +311,7 @@ void roboArmForwardCmd(uint8_t struct_id, int16_t speed)
 			    //dynamixelSetSpeedLeftCmd(ELBOW_B_ID, speed);
 
 			dynamixelSetSpeedLeftCmd(ELBOW_A_ID, speed);
-			us_delay(250);
+			do_nothing();
 			dynamixelSetSpeedRightCmd(ELBOW_B_ID, speed);
 
 		break;
@@ -353,6 +360,7 @@ void roboArmReverseCmd(uint8_t struct_id, int16_t speed)
 
 			dynamixelSetSpeedLeftCmd(WRIST_A_ID, speed);
 			//dynamixelSetSpeedRightCmd(WRIST_B_ID, speed);
+			do_nothing();
 			dynamixelSetSpeedLeftCmd(WRIST_B_ID, speed);
 
 		break;
@@ -365,6 +373,7 @@ void roboArmReverseCmd(uint8_t struct_id, int16_t speed)
 
 			dynamixelSetSpeedLeftCmd(WRIST_A_ID, speed);
 			//dynamixelSetSpeedLeftCmd(WRIST_B_ID, speed);
+			do_nothing();
 			dynamixelSetSpeedRightCmd(WRIST_B_ID, speed);
 
 		break;
@@ -380,6 +389,7 @@ void roboArmReverseCmd(uint8_t struct_id, int16_t speed)
 			    //dynamixelSetSpeedLeftCmd(ELBOW_B_ID, speed);
 
 			dynamixelSetSpeedRightCmd(ELBOW_A_ID, speed);
+			do_nothing();
 			dynamixelSetSpeedRightCmd(ELBOW_B_ID, speed);
 
 		break;
@@ -395,6 +405,7 @@ void roboArmReverseCmd(uint8_t struct_id, int16_t speed)
 			    //dynamixelSetSpeedRightCmd(ELBOW_B_ID, speed);
 
 			dynamixelSetSpeedRightCmd(ELBOW_A_ID, speed);
+			do_nothing();
 			dynamixelSetSpeedLeftCmd(ELBOW_B_ID, speed);
 
 		break;
@@ -428,3 +439,17 @@ void roboArmReverseCmd(uint8_t struct_id, int16_t speed)
 	return;
 
 }//endfnctn roboArmReverseCmd
+
+void do_nothing(){
+
+    int i = 0;
+
+    while(i < DO_NOTHING_CNT){
+
+        i++;
+
+    }//endwhile
+
+    return;
+
+}//end fnctn

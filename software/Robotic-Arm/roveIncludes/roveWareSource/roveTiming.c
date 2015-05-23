@@ -12,7 +12,7 @@ void ms_delay(int milliseconds){
 
 void us_delay(int microseconds){
 
-    SysCtlDelay(  microseconds*( SysCtlClockGet() ) );
+    SysCtlDelay(  microseconds*( SysCtlClockGet() / 100000 ) );
 
 }//endfnctn ms_delay( int milliseconds )
 
