@@ -84,11 +84,12 @@ Void roboticArm(UArg arg0, UArg arg1)
 	while(FOREVER)
 	{
 
-		while( recvSerialStructMessage(MOTHERBOARD_UART, (void*)&buffer_struct ))
-		{
+		//while( recvSerialStructMessage(MOTHERBOARD_UART, (void*)&buffer_struct ))
+		//{
 			//_printf("recvSerialStructMessage struct_id: %d", buffer_struct.struct_id);
 			//_printf("speed: %d\n", SPEED_STRUCT->speed);
 			//_flush();
+	    Mailbox_pend(fromMobMailbox, &buffer_struct, BIOS_WAIT_FOREVER);
 
 			speed = SPEED_STRUCT->speed;
 
@@ -233,8 +234,6 @@ Void roboticArm(UArg arg0, UArg arg1)
 		//Watchdog_clear( (Watchdog_Handle) arm_watchdog_handle);
 		//System_printf("\nFed the Dog!\n");
 		//System_flush();
-
-		}//endwhile recvSerialStructMessage
 
     /*    failed_recieve_cnt++;
 
