@@ -15,4 +15,3 @@ void us_delay(int microseconds){
     SysCtlDelay(  microseconds*( SysCtlClockGet() / 100000 ) );
 
 }//endfnctn ms_delay( int milliseconds )
-

@@ -7,9 +7,6 @@
 //this is a roboticArm.cfg object::roboticArmTask::priority 1,
 //768 persistent private stack, vital_flag = t,
 
-#define MAX_COMMAND_SIZE 40
-
-#define FOREVER 1
 
 void roboticArmBufferRead(UArg arg0, UArg arg1)
 {

@@ -33,7 +33,7 @@ void dynamixelSetEndlessCmd(uint8_t dynamixel_id)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		//ms_delay(1);
+		ms_delay(1);
 
 		//debugging only:
 		//_printf("dynamixelSetEndlessCmd just wrote: \n");
@@ -79,7 +79,7 @@ void dynamixelSetSpeedLeftCmd(uint8_t dynamixel_id, int16_t speed)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		//ms_delay(1);
+		ms_delay(1);
 
 		//debugging only
 		//_printf("dynamixelSetSpeedLeftCmd just wrote: \n");
@@ -124,7 +124,7 @@ void dynamixelSetSpeedRightCmd(uint8_t dynamixel_id, int16_t speed)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		//ms_delay(1);
+		ms_delay(1);
 
 		//debugging only
 		//_printf("dynamixelSetSpeedRightCmd just wrote: \n");
@@ -154,7 +154,7 @@ void setLinActuatorCmd(uint8_t device_id, int16_t speed)
 		int bytes_wrote;
 
 		//_printf("Testing setLinActuatorCmd dynamixel_id %d, current_position %d, target_increment %d\n"
-						//, device_id, current_position, target_increment);
+		//, device_id, current_position, target_increment);
 		//_flush();
 
 		// get the uart
@@ -168,7 +168,7 @@ void setLinActuatorCmd(uint8_t device_id, int16_t speed)
 
 		bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-		//ms_delay(1);
+		ms_delay(1);
 
 		//debugging only
 		//_printf("dynamixelSetSpeedRightCmd just wrote: \n");
@@ -194,7 +194,7 @@ void setDrillCmd(uint8_t device_id, int16_t command)
         int bytes_wrote;
 
         //_printf("Testing setLinActuatorCmd dynamixel_id %d, current_position %d, target_increment %d\n"
-                        //, device_id, current_position, target_increment);
+        //, device_id, current_position, target_increment);
         //_flush();
 
         // get the uart
@@ -208,7 +208,7 @@ void setDrillCmd(uint8_t device_id, int16_t command)
 
         bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
 
-        //ms_delay(1);
+        ms_delay(1);
 /*
         //debugging only
         printf("setDrillCmd just wrote: \n");

@@ -41,6 +41,8 @@
 //TODO wtf uint8_t value[30]roveStructs.h ?
 #define BUFFER_SIZE 30
 
+#define MAX_COMMAND_SIZE 30
+
 #define LOW 0
 #define HIGH 1
 
