@@ -12,6 +12,6 @@ void ms_delay(int milliseconds){
 
 void us_delay(int microseconds){
 
-    SysCtlDelay(  microseconds*( SysCtlClockGet() / 100000 ) );
+    Task_sleep(microseconds);
 
 }//endfnctn ms_delay( int milliseconds )
