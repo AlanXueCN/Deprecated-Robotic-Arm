@@ -24,7 +24,8 @@ void roboticArmBufferRead(UArg arg0, UArg arg1)
 
         recvSerialStructMessage(MOTHERBOARD_UART, messageBuffer);
 
-        Mailbox_post(fromMobMailbox, messageBuffer, BIOS_WAIT_FOREVER);
+        //Throw out messages we can't deal with immediately
+        Mailbox_post(fromMobMailbox, messageBuffer, BIOS_NO_WAIT);
 
     }//endwhile FOREVER
 
