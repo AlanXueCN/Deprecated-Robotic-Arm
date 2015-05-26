@@ -143,6 +143,16 @@ Void roboticArm(UArg arg0, UArg arg1)
 
 				case gripper_open:
 
+				    if(speed < SPEED_MIN)
+                    {
+                        speed = SPEED_MIN;
+                    }//end if
+
+                    if(speed > SPEED_MAX)
+                    {
+                        speed = SPEED_MAX;
+                    }//end if
+
                     if(speed < 0)
                     {
                         roboArmReverseCmd(buffer_struct.struct_id, (-speed));
