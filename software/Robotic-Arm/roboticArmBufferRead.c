@@ -8,7 +8,7 @@
 //768 persistent private stack, vital_flag = t,
 
 
-void roboticArmBufferRead(UArg arg0, UArg arg1)
+Void roboticArmBufferRead(UArg arg0, UArg arg1)
 {
     System_printf("roboticArmBufferRead init \n\n\n");
     System_flush();

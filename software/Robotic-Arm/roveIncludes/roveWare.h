@@ -13,6 +13,18 @@
 #include "roveWareHeaders/roveTiming.h"
 #include "roveWareHeaders/roveUarts.h"
 
+
+// 1 'rtos event' clock tick = 250 microseconds
+
+// 500 microseconds
+#define DYNA_WRITE_DELAY_TICKS 2
+
+// 1/16 second
+#define MAILBOX_TIMEOUT_TICKS 500
+
+// 1 second
+#define UART_CANCEL_DELAY_TICKS 4000
+
 // GPIO: SET_TRI_ST_BUF_Tx 					PB3
 // GPIO: MOTOR_CONTROLLER_ENABLE			PD2
 // GPIO: MOTOR_CONTROLLER_INPUT_1			PD3
@@ -49,8 +61,6 @@
 #define SET_TRI_ST_BUF_Tx 0
 
 #define RECIEVE_RESET_CNT 800000
-
-#define DYNA_WRITE_DELAY 30
 
 #define DYNAMIXEL_UART 0
 #define LINEAR_ACTUATOR_UART 1

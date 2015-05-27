@@ -1,9 +1,9 @@
-// roboticArmBufferRead.h
+// roboticArmUartCancel.h
 
 #pragma once
 
-#ifndef ROBOTICARMBUFFERREAD_H_
-#define ROBOTICARMBUFFERREAD_H_
+#ifndef ROBOTICARMUARTCANCEL_H_
+#define ROBOTICARMUARTCANCEL_H_
 
 // globally scoped Texas Instruments (TI) headers
 
@@ -13,6 +13,6 @@
 
 #include "../roveWare.h"
 
-Void roboticArmBufferRead(UArg arg0, UArg arg1);
+Void roboticArmUartCancel(UArg arg0, UArg arg1);
 
-#endif // ROBOTICARMBUFFERREAD_H_
+#endif // ROBOTICARMUARTCANCEL_H_

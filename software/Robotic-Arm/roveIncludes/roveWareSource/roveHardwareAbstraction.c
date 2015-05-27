@@ -115,8 +115,6 @@ bool recvSerialStructMessage(int device_port, void* buffer_struct)
 
 int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 
-	int bytes_read;
-
 	// give us access to the uart handles defined at the global scope in main
 
 	//System_printf("Entered deviceRead\n");
@@ -127,6 +125,9 @@ int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 	extern UART_Handle uart4;
 	extern UART_Handle uart7;
 
+	extern uint32_t UART_READ_RETURNED_FLAG;
+
+    int bytes_read;
 
 	// we have to include case 0 to get TI's compiler to build a jump table
 	// if we leave this out, mux performance goes from O(1) to O(n) (That's bad)
@@ -144,6 +145,8 @@ int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 
 			bytes_read = UART_read(uart2, read_buffer, bytes_to_read);
 
+			UART_READ_RETURNED_FLAG++;
+
 			//System_printf("totally passed UART_read with bytes_read: %d\n", bytes_read);
 			//System_flush();
 		break;
@@ -152,6 +155,7 @@ int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 			//Tried to write to invalid device
 			//System_printf("DeviceRead passed invalid device %d\n", device_port);
 			//System_flush();
+		    UART_READ_RETURNED_FLAG++;
 		return -1;
 
 	}//endswitch(device_port)
