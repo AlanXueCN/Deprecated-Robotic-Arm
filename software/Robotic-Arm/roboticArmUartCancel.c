@@ -17,16 +17,16 @@ void roboticArmUartCancel(UArg arg0, UArg arg1)
     extern UART_Handle uart4;
     extern UART_Handle uart7;
 
-    extern uint32_t UART_READ_RETURNED_FLAG;
+    //extern uint32_t UART_READ_RETURNED_FLAG;
 
     while(FOREVER){
 
-        UART_READ_RETURNED_FLAG = 0;
+        //UART_READ_RETURNED_FLAG = 0;
 
         Task_sleep(UART_CANCEL_DELAY_TICKS);
 
-        if(UART_READ_RETURNED_FLAG == 0)
-        {
+        //if(UART_READ_RETURNED_FLAG == 0)
+        //{
             UART_readCancel(uart2);
 
             dynamixelSetSpeedLeftCmd(WRIST_A_ID, ZERO_SPEED);
@@ -38,7 +38,7 @@ void roboticArmUartCancel(UArg arg0, UArg arg1)
             setDrillCmd(DRILL_ID, ZERO_SPEED);
             setLinActuatorCmd(LIN_ACT_ID, ZERO_SPEED);
 
-        }//end if
+       // }//end if
 
     }//endwhile FOREVER
 

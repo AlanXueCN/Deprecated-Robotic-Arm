@@ -27,7 +27,7 @@
     UART_Handle uart4;		//PC5 DYNAMIXEL_UART 57600
     UART_Handle uart7;		//PE1 LINEAR_ACTUATOR_UART 115200
 
-    uint32_t UART_NOT_HANGING_FLAG;
+    //uint32_t UART_NOT_HANGING_FLAG;
 
 // globally create watchdog handle
 

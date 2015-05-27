@@ -125,7 +125,7 @@ int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 	extern UART_Handle uart4;
 	extern UART_Handle uart7;
 
-	extern uint32_t UART_READ_RETURNED_FLAG;
+	//extern uint32_t UART_READ_RETURNED_FLAG;
 
     int bytes_read;
 
@@ -145,7 +145,7 @@ int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 
 			bytes_read = UART_read(uart2, read_buffer, bytes_to_read);
 
-			UART_READ_RETURNED_FLAG++;
+			//UART_READ_RETURNED_FLAG++;
 
 			//System_printf("totally passed UART_read with bytes_read: %d\n", bytes_read);
 			//System_flush();
@@ -155,7 +155,7 @@ int deviceRead(int device_port, char* read_buffer, int bytes_to_read){
 			//Tried to write to invalid device
 			//System_printf("DeviceRead passed invalid device %d\n", device_port);
 			//System_flush();
-		    UART_READ_RETURNED_FLAG++;
+		    //UART_READ_RETURNED_FLAG++;
 		return -1;
 
 	}//endswitch(device_port)
