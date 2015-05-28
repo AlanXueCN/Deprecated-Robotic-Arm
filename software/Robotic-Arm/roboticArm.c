@@ -20,6 +20,7 @@ Void roboticArm(UArg arg0, UArg arg1)
 	extern UART_Handle uart3;
 	extern UART_Handle uart4;
 	extern UART_Handle uart7;
+	extern Watchdog_Handle watchdog;
 
 	//extern Watchdog_Handle arm_watchdog_handle;
 
@@ -65,6 +66,7 @@ Void roboticArm(UArg arg0, UArg arg1)
 			//_printf("speed: %d\n", SPEED_STRUCT->speed);
 			//_flush();
 	    Mailbox_pend(fromMobMailbox, &buffer_struct, BIOS_WAIT_FOREVER);
+	    Watchdog_clear(watchdog);
 
 			speed = SPEED_STRUCT->speed;
 

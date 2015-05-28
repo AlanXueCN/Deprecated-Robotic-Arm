@@ -29,7 +29,7 @@
 
 // globally create watchdog handle
 
-   // Watchdog_Handle arm_watchdog_handle;
+Watchdog_Handle watchdog;
 
 int main(void)
 {
@@ -41,42 +41,42 @@ int main(void)
     //System_printf("Init Watchdog\n");
     //System_flush();
 
-    //Board_initWatchdog();
+    Board_initWatchdog();
 
-    System_printf("Init uarts\n");
-    System_flush();
+//    System_printf("Init uarts\n");
+//    System_flush();
 
     Board_initUART();
 
     //System_printf("Assign Watchdog\n");
     //System_flush();
 
-    //arm_watchdog_handle = init_watchdog(0);
+    watchdog = (Watchdog_Handle) init_watchdog(Board_WATCHDOG0);
 
     //init UARTS
-	System_printf("Assign UARTS\n");
-	System_flush();
+//	System_printf("Assign UARTS\n");
+//	System_flush();
 
 	uart2 = (UART_Handle)init_uart( 2, 115200 );
-	System_printf("Assigned UART 2\n");
-	System_flush();
+//	System_printf("Assigned UART 2\n");
+//	System_flush();
 
 	uart3 = (UART_Handle)init_uart( 3, 57600 );
-	System_printf("Assigned UART 3\n");
-	System_flush();
+//	System_printf("Assigned UART 3\n");
+//	System_flush();
 
 	uart4 = (UART_Handle)init_uart( 4, 57600 );
-	System_printf("Assigned UART 4\n");
-	System_flush();
+//	System_printf("Assigned UART 4\n");
+//	System_flush();
 
 
 	uart7 = (UART_Handle)init_uart( 7, 115200 );
-	System_printf("Assigned UART 7\n");
-	System_flush();
+//	System_printf("Assigned UART 7\n");
+//	System_flush();
 
 	// start TI BIOS
-	System_printf("roboticArmMain init \n\n\n");
-	System_flush();
+//	System_printf("roboticArmMain init \n\n\n");
+//	System_flush();
 
     BIOS_start();
 

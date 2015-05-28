@@ -668,7 +668,7 @@ WatchdogTiva_Object watchdogTivaObjects[EK_TM4C123GXL_WATCHDOGCOUNT];
 /* Watchdog configuration structure */
 const WatchdogTiva_HWAttrs watchdogTivaHWAttrs[EK_TM4C123GXL_WATCHDOGCOUNT] = {
     /* EK_TM4C123GXL_WATCHDOG0 with 1 sec period at default CPU clock freq */
-    {WATCHDOG0_BASE, INT_WATCHDOG, 80000000},
+    {WATCHDOG0_BASE, INT_WATCHDOG, 400000000},
 };
 
 const Watchdog_Config Watchdog_config[] = {
