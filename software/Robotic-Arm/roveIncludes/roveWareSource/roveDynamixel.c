@@ -240,7 +240,58 @@ void dynamixelSetTorqueLimitCmd(uint8_t dynamixel_id, int16_t dyna_torque_limit)
 
 }//endfnctn  dynamixelSetEndless
 
+//#define AX_ALARM_SHUTDOWN           18??
+//unsigned char SALARM
+//AX_SALARM_LENGTH
 
+//AX_TORQUE_ENABLE
+//AX_TORQUE_LENGTH
+
+void dynamixelSetTorqueModeCmd(uint8_t dynamixel_id, uint8_t torque_mode)
+{
+        char write_buffer[BUFFER_SIZE];
+
+        int device_port;
+        int bytes_to_write;
+        int bytes_wrote;
+
+        //_printf("Testing dynamixelSetEndlessCmd dynamixel_id %d\n", dynamixel_id);
+        //_flush();
+
+        // get the uart
+        device_port = getDevicePort(dynamixel_id);
+
+        // size of message
+        bytes_to_write = getStructSize(SET_TORQUE_MODE_CMD);
+
+        // populate the buffer_struct for dynamixel format frame, command_value not used
+        buildDynamixelStructMessage(write_buffer, dynamixel_id, SET_TORQUE_MODE_CMD, torque_mode);
+
+        // set tristate buffer to transmit
+        //digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
+
+        bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
+
+        //ms_delay(1);
+        us_delay(DYNA_WRITE_DELAY);
+
+        //debugging only:
+        //_printf("dynamixelSetEndlessCmd just wrote: \n");
+        //int i = 0;
+        //while( i <( bytes_wrote ) )
+        //{
+        //  System_printf(" : %d\n", write_buffer[i]);
+        //  System_flush();
+//
+        //  i++;
+        //}//end while
+
+        // set tri state buffer back for read
+        //digitalWrite(SET_TRI_ST_BUF_Tx, LOW);
+
+        return;
+
+}//endfnctn  dynamixelSetEndless
 
 void setLinActuatorCmd(uint8_t device_id, int16_t speed)
 {
