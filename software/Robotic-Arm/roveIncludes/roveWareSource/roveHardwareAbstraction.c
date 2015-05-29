@@ -304,6 +304,69 @@ void buildDynamixelStructMessage(char* write_buffer, uint8_t dynamixel_id, uint8
 
 		break;
 
+		case SET_MAX_TORQUE_CMD:
+
+            // macro casting the buffer_struct instance see roveWare.h and roveStruct.h
+            SET_DYNA_SPEED_STRUCT ->start_byte1 = AX_START;
+            SET_DYNA_SPEED_STRUCT ->start_byte2 = AX_START;
+            SET_DYNA_SPEED_STRUCT ->dynamixel_id = dynamixel_id;
+            SET_DYNA_SPEED_STRUCT ->msg_size = AX_MT_LENGTH;
+            SET_DYNA_SPEED_STRUCT ->read_write_flag = AX_WRITE_DATA;
+            SET_DYNA_SPEED_STRUCT ->speed_low_byte_reg_addr = AX_MAX_TORQUE_L;
+            SET_DYNA_SPEED_STRUCT ->speed_low_byte = speed_low_byte;
+            SET_DYNA_SPEED_STRUCT ->speed_high_byte = speed_high_byte;
+
+            SET_DYNA_SPEED_STRUCT->check_sum = ( ~(dynamixel_id + AX_MT_LENGTH + AX_WRITE_DATA + AX_MAX_TORQUE_L + speed_low_byte + speed_high_byte) ) & 0xFF;
+
+            //System_printf("TestingCASE SET_SPEED_RIGHT_CMD speed_high_byte %d, speed_low_byte %d\n", SET_DYNA_SPEED_STRUCT ->speed_high_byte, SET_DYNA_SPEED_STRUCT ->speed_low_byte);
+            //System_flush();
+
+        break;
+
+		case SET_TORQUE_LIMIT_CMD:
+
+            // macro casting the buffer_struct instance see roveWare.h and roveStruct.h
+            SET_DYNA_SPEED_STRUCT ->start_byte1 = AX_START;
+            SET_DYNA_SPEED_STRUCT ->start_byte2 = AX_START;
+            SET_DYNA_SPEED_STRUCT ->dynamixel_id = dynamixel_id;
+            SET_DYNA_SPEED_STRUCT ->msg_size = AX_MT_LENGTH;
+            SET_DYNA_SPEED_STRUCT ->read_write_flag = AX_WRITE_DATA;
+            SET_DYNA_SPEED_STRUCT ->speed_low_byte_reg_addr = AX_TORQUE_LIMIT_L;
+            SET_DYNA_SPEED_STRUCT ->speed_low_byte = speed_low_byte;
+            SET_DYNA_SPEED_STRUCT ->speed_high_byte = speed_high_byte;
+
+            SET_DYNA_SPEED_STRUCT->check_sum = ( ~(dynamixel_id + AX_MT_LENGTH + AX_WRITE_DATA + AX_TORQUE_LIMIT_L + speed_low_byte + speed_high_byte) ) & 0xFF;
+
+            //System_printf("TestingCASE SET_SPEED_RIGHT_CMD speed_high_byte %d, speed_low_byte %d\n", SET_DYNA_SPEED_STRUCT ->speed_high_byte, SET_DYNA_SPEED_STRUCT ->speed_low_byte);
+            //System_flush();
+
+        break;
+
+/*
+ int DynamixelClass::setMaxTorque(unsigned char ID, int MaxTorque)
+		{
+		    char MaxTorque_H,MaxTorque_L;
+		    MaxTorque_H = MaxTorque >> 8;           // 16 bits - 2 x 8 bits variables
+		    MaxTorque_L = MaxTorque;
+		    Checksum = (~(ID + AX_MT_LENGTH + AX_WRITE_DATA + AX_MAX_TORQUE_L + MaxTorque_L + MaxTorque_H))&0xFF;
+
+		    switchCom(Direction_Pin,Tx_MODE);
+		    sendData(AX_START);                 // Send Instructions over Serial
+		    sendData(AX_START);
+		    sendData(ID);
+		    sendData(AX_MT_LENGTH);
+		    sendData(AX_WRITE_DATA);
+		    sendData(AX_MAX_TORQUE_L);
+		    sendData(MaxTorque_L);
+		    sendData(MaxTorque_H);
+		    sendData(Checksum);
+		    delayus(TX_DELAY_TIME);
+		    switchCom(Direction_Pin,Rx_MODE);
+
+		    return (read_error());                 // Return the read error
+		}
+
+*/
 		default:
 
 		    return;

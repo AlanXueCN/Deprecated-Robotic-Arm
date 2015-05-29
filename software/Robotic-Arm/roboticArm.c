@@ -126,14 +126,34 @@ Void roboticArm(UArg arg0, UArg arg1)
 
 				case e_stop_arm:
 
-				    dynamixelSetSpeedLeftCmd(WRIST_A_ID, ZERO_SPEED);
-				    dynamixelSetSpeedLeftCmd(WRIST_B_ID, ZERO_SPEED);
-				    dynamixelSetSpeedLeftCmd(ELBOW_A_ID, ZERO_SPEED);
-				    dynamixelSetSpeedLeftCmd(ELBOW_B_ID, ZERO_SPEED);
-				    dynamixelSetSpeedLeftCmd(BASE_ID, ZERO_SPEED);
-				    dynamixelSetSpeedLeftCmd(GRIPPER_ID, ZERO_SPEED);
-                    setDrillCmd(DRILL_ID, ZERO_SPEED);
-                    setLinActuatorCmd(LIN_ACT_ID, ZERO_SPEED);
+				    dynamixelSetMaxTorqueCmd(WRIST_A_ID, ZERO_TORQUE);
+				    dynamixelSetMaxTorqueCmd(WRIST_B_ID, ZERO_TORQUE);
+				    dynamixelSetMaxTorqueCmd(ELBOW_A_ID, ZERO_TORQUE);
+				    dynamixelSetMaxTorqueCmd(ELBOW_B_ID, ZERO_TORQUE);
+				    dynamixelSetMaxTorqueCmd(BASE_ID, ZERO_TORQUE);
+				    dynamixelSetMaxTorqueCmd(GRIPPER_ID, ZERO_TORQUE);
+
+				    dynamixelSetTorqueLimitCmd(WRIST_A_ID, ZERO_TORQUE);
+				    dynamixelSetTorqueLimitCmd(WRIST_B_ID, ZERO_TORQUE);
+				    dynamixelSetTorqueLimitCmd(ELBOW_A_ID, ZERO_TORQUE);
+				    dynamixelSetTorqueLimitCmd(ELBOW_B_ID, ZERO_TORQUE);
+				    dynamixelSetTorqueLimitCmd(BASE_ID, ZERO_TORQUE);
+				    dynamixelSetTorqueLimitCmd(GRIPPER_ID, ZERO_TORQUE);
+
+				    dynamixelSetMaxTorqueCmd(WRIST_A_ID, MAX_TORQUE);
+                    dynamixelSetMaxTorqueCmd(WRIST_B_ID, MAX_TORQUE);
+                    dynamixelSetMaxTorqueCmd(ELBOW_A_ID, MAX_TORQUE);
+                    dynamixelSetMaxTorqueCmd(ELBOW_B_ID, MAX_TORQUE);
+                    dynamixelSetMaxTorqueCmd(BASE_ID, MAX_TORQUE);
+                    dynamixelSetMaxTorqueCmd(GRIPPER_ID, MAX_TORQUE);
+
+                    dynamixelSetTorqueLimitCmd(WRIST_A_ID, MAX_TORQUE);
+                    dynamixelSetTorqueLimitCmd(WRIST_B_ID, MAX_TORQUE);
+                    dynamixelSetTorqueLimitCmd(ELBOW_A_ID, MAX_TORQUE);
+                    dynamixelSetTorqueLimitCmd(ELBOW_B_ID, MAX_TORQUE);
+                    dynamixelSetTorqueLimitCmd(BASE_ID, MAX_TORQUE);
+                    dynamixelSetTorqueLimitCmd(GRIPPER_ID, MAX_TORQUE);
+
 
 				break;
 

@@ -62,6 +62,8 @@
 #define SET_SPEED_RIGHT_CMD	2
 #define SET_LIN_ACTUATOR_CMD 3
 #define GET_DRILL_CMD 4
+#define SET_MAX_TORQUE_CMD 5
+#define SET_TORQUE_LIMIT_CMD 6
 
 #define WRIST_A_ID  0x01
 #define WRIST_B_ID	0x02
@@ -75,6 +77,8 @@
 
 #define NULL_COMAND_VALUE 0
 #define ZERO_SPEED 0
+#define ZERO_TORQUE 0
+#define MAX_TORQUE 1023
 
 #define LIN_ACT_FORWARD 0xE1
 #define LIN_ACT_REVERSE 0xE0
