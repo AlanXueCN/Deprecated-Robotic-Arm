@@ -34,6 +34,7 @@
 #define MESSAGE_STRUCT 			((message_struct*)write_buffer)
 #define SET_ENDLESS_STRUCT 		((set_dyna_endless_struct*)write_buffer)
 #define SET_DYNA_SPEED_STRUCT 	((set_dyna_speed_struct*)write_buffer)
+#define SET_DYNA_CMD_STRUCT     ((set_dyna_command_struct*)write_buffer)
 #define SET_LIN_ACT_STRUCT 		((linear_actuator_struct*)write_buffer)
 #define SET_DRILL_STRUCT        ((drill_struct*)write_buffer)
 
@@ -80,6 +81,7 @@
 #define ZERO_SPEED 0
 #define ZERO_TORQUE 0
 #define MAX_TORQUE 1023
+#define TEST_TORQUE 100
 #define TORQUE_OFF 0
 #define TORQUE_ON 1
 

@@ -35,6 +35,17 @@ Void roboticArm(UArg arg0, UArg arg1)
 
 	digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
 
+	/*
+
+	dynamixelSetTorqueLimitCmd(WRIST_A_ID, TEST_TORQUE);
+    dynamixelSetTorqueLimitCmd(WRIST_B_ID, TEST_TORQUE);
+    dynamixelSetTorqueLimitCmd(ELBOW_A_ID, TEST_TORQUE);
+    dynamixelSetTorqueLimitCmd(ELBOW_B_ID, TEST_TORQUE);
+    dynamixelSetTorqueLimitCmd(BASE_ID, TEST_TORQUE);
+    dynamixelSetTorqueLimitCmd(GRIPPER_ID, TEST_TORQUE);
+
+    */
+
 	//init all motors to zero
 	dynamixelSetEndlessCmd(WRIST_A_ID);
 	dynamixelSetEndlessCmd(WRIST_B_ID);

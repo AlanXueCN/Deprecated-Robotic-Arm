@@ -215,6 +215,18 @@ int getStructSize(uint8_t struct_id)
 
 		    return sizeof(drill_struct);
 
+		case SET_TORQUE_LIMIT_CMD:
+
+		    return sizeof(set_dyna_speed_struct);
+
+		case SET_MAX_TORQUE_CMD:
+
+		     return sizeof(set_dyna_speed_struct);
+
+		case SET_TORQUE_MODE_CMD:
+
+		    return sizeof(set_dyna_command_struct);
+
 		default:
 
 			//System_printf("getStructSize passed invalid struct_id %d\n", struct_id);
@@ -345,15 +357,15 @@ void buildDynamixelStructMessage(char* write_buffer, uint8_t dynamixel_id, uint8
         case SET_TORQUE_MODE_CMD:
 
             // macro casting the buffer_struct instance see roveWare.h and roveStruct.h
-            SET_DYNA_SPEED_STRUCT ->start_byte1 = AX_START;
-            SET_DYNA_SPEED_STRUCT ->start_byte2 = AX_START;
-            SET_DYNA_SPEED_STRUCT ->dynamixel_id = dynamixel_id;
-            SET_DYNA_SPEED_STRUCT ->msg_size = AX_TORQUE_LENGTH;
-            SET_DYNA_SPEED_STRUCT ->read_write_flag = AX_WRITE_DATA;
-            SET_DYNA_SPEED_STRUCT ->speed_low_byte_reg_addr = AX_TORQUE_ENABLE;
-            SET_DYNA_SPEED_STRUCT ->speed_low_byte = speed_low_byte;
+            SET_DYNA_CMD_STRUCT ->start_byte1 = AX_START;
+            SET_DYNA_CMD_STRUCT ->start_byte2 = AX_START;
+            SET_DYNA_CMD_STRUCT ->dynamixel_id = dynamixel_id;
+            SET_DYNA_CMD_STRUCT ->msg_size = AX_TORQUE_LENGTH;
+            SET_DYNA_CMD_STRUCT ->read_write_flag = AX_WRITE_DATA;
+            SET_DYNA_CMD_STRUCT ->speed_low_byte_reg_addr = AX_TORQUE_ENABLE;
+            SET_DYNA_CMD_STRUCT ->speed_low_byte = speed_low_byte;
 
-            SET_DYNA_SPEED_STRUCT->check_sum = ( ~(dynamixel_id + AX_TORQUE_LENGTH + AX_WRITE_DATA + AX_TORQUE_ENABLE + speed_low_byte) ) & 0xFF;
+            SET_DYNA_CMD_STRUCT->check_sum = ( ~(dynamixel_id + AX_TORQUE_LENGTH + AX_WRITE_DATA + AX_TORQUE_ENABLE + speed_low_byte) ) & 0xFF;
 
             //System_printf("TestingCASE SET_SPEED_RIGHT_CMD speed_high_byte %d, speed_low_byte %d\n", SET_DYNA_SPEED_STRUCT ->speed_high_byte, SET_DYNA_SPEED_STRUCT ->speed_low_byte);
             //System_flush();
