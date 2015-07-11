@@ -223,7 +223,7 @@ int getStructSize(uint8_t struct_id)
 
 		     return sizeof(set_dyna_speed_struct);
 
-		case SET_TORQUE_MODE_CMD:
+		case SET_TORQUE_ENABLE_CMD:
 
 		    return sizeof(set_dyna_command_struct);
 
@@ -354,7 +354,7 @@ void buildDynamixelStructMessage(char* write_buffer, uint8_t dynamixel_id, uint8
 
         break;
 
-        case SET_TORQUE_MODE_CMD:
+        case SET_TORQUE_ENABLE_CMD:
 
             // macro casting the buffer_struct instance see roveWare.h and roveStruct.h
             SET_DYNA_CMD_STRUCT ->start_byte1 = AX_START;
@@ -371,7 +371,6 @@ void buildDynamixelStructMessage(char* write_buffer, uint8_t dynamixel_id, uint8
             //System_flush();
 
         break;
-
 
 		default:
 

@@ -247,7 +247,8 @@ void dynamixelSetTorqueLimitCmd(uint8_t dynamixel_id, int16_t dyna_torque_limit)
 //AX_TORQUE_ENABLE
 //AX_TORQUE_LENGTH
 
-void dynamixelSetTorqueModeCmd(uint8_t dynamixel_id, uint8_t torque_mode)
+
+void dynamixelSetTorqueEnableCmd(uint8_t dynamixel_id, int16_t dyna_torque_enable_flag)
 {
         char write_buffer[BUFFER_SIZE];
 
@@ -262,10 +263,10 @@ void dynamixelSetTorqueModeCmd(uint8_t dynamixel_id, uint8_t torque_mode)
         device_port = getDevicePort(dynamixel_id);
 
         // size of message
-        bytes_to_write = getStructSize(SET_TORQUE_MODE_CMD);
+        bytes_to_write = getStructSize(SET_TORQUE_ENABLE_CMD);
 
         // populate the buffer_struct for dynamixel format frame, command_value not used
-        buildDynamixelStructMessage(write_buffer, dynamixel_id, SET_TORQUE_MODE_CMD, torque_mode);
+        buildDynamixelStructMessage(write_buffer, dynamixel_id, SET_TORQUE_ENABLE_CMD, dyna_torque_enable_flag);
 
         // set tristate buffer to transmit
         //digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);

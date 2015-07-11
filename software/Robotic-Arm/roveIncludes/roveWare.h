@@ -65,7 +65,7 @@
 #define GET_DRILL_CMD 4
 #define SET_MAX_TORQUE_CMD 5
 #define SET_TORQUE_LIMIT_CMD 6
-#define SET_TORQUE_MODE_CMD 7
+#define SET_TORQUE_ENABLE_CMD 7
 
 #define WRIST_A_ID  0x01
 #define WRIST_B_ID	0x02

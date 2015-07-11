@@ -23,7 +23,7 @@ void dynamixelSetMaxTorqueCmd(uint8_t dynamixel_id, int16_t dyna_max_torque);
 
 void dynamixelSetTorqueLimitCmd(uint8_t dynamixel_id, int16_t dyna_torque_limit);
 
-void dynamixelSetTorqueModeCmd(uint8_t dynamixel_id, uint8_t torque_mode);
+void dynamixelSetTorqueEnableCmd(uint8_t dynamixel_id, int16_t dyna_torque_enable_flag);
 
 void setLinActuatorCmd(uint8_t device_id, int16_t speed);
 
