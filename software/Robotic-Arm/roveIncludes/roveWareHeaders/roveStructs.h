@@ -111,5 +111,12 @@ typedef struct drill_struct{
 
 }__attribute__((packed)) drill_struct;
 
+typedef struct erc_drill_actuator_robot_arm_command{
+
+    uint8_t struct_id;
+    int16_t drill_cmd;
+    int16_t actuator_cmd;
+
+}__attribute__((packed)) erc_drill_actuator_robot_arm_command;
 
 #endif // ROVESTRUCTS_H_

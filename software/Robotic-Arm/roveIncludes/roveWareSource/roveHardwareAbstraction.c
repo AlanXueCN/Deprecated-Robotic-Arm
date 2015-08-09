@@ -227,6 +227,10 @@ int getStructSize(uint8_t struct_id)
 
 		    return sizeof(set_dyna_command_struct);
 
+		case GET_ERC_DRILL_ACT_CMD:
+
+		            return sizeof(erc_drill_actuator_robot_arm_command);
+
 		default:
 
 			//System_printf("getStructSize passed invalid struct_id %d\n", struct_id);

@@ -32,6 +32,9 @@ Void roboticArm(UArg arg0, UArg arg1)
 	//not tracked, alloc reuseable task variable
 	int16_t speed = 0;
 
+	int16_t erc_drill_cmd = 0;
+	int16_t erc_act_cmd = 0;
+
 
 	digitalWrite(SET_TRI_ST_BUF_Tx, HIGH);
 
@@ -50,7 +53,8 @@ Void roboticArm(UArg arg0, UArg arg1)
     dynamixelSetSpeedLeftCmd(ELBOW_B_ID, ZERO_SPEED);
     dynamixelSetSpeedLeftCmd(BASE_ID, ZERO_SPEED);
     dynamixelSetSpeedLeftCmd(GRIPPER_ID, ZERO_SPEED);
-    setDrillCmd(DRILL_ID, ZERO_SPEED);
+    //setDrillCmd(DRILL_ID, ZERO_SPEED);
+    setErcDrillCmd(DRILL_ID, ZERO_SPEED, ZERO_SPEED);
     setLinActuatorCmd(LIN_ACT_ID, ZERO_SPEED);
 
 	//_printf("Loop Forever: \n");
@@ -187,9 +191,17 @@ Void roboticArm(UArg arg0, UArg arg1)
 
 				break;
 
-				case drill_forward:
+				//case drill_forward:
 
-				    setDrillCmd(DRILL_ID, speed);
+				    //setDrillCmd(DRILL_ID, speed);
+
+				case erc_drill_actuator:
+
+				    erc_drill_cmd = ERC_STRUCT->drill_cmd;
+
+				    erc_act_cmd = ERC_STRUCT->actuator_cmd;
+
+				    setErcDrillCmd(DRILL_ID, erc_drill_cmd, erc_act_cmd );
 
 				break;
 

@@ -29,6 +29,8 @@ void setLinActuatorCmd(uint8_t device_id, int16_t speed);
 
 void setDrillCmd(uint8_t device_id, int16_t command);
 
+void setErcDrillCmd(uint8_t device_id, int16_t drill_command, int16_t actuator_command);
+
 /* Owen
 // Sets a dynamixel to a specific speed
 void DynamixelSetSpeed(UART_Handle uart, uint8_t id, int side, int16_t speed);

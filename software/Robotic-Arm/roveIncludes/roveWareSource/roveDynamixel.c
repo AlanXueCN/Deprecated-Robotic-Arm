@@ -374,6 +374,46 @@ void setDrillCmd(uint8_t device_id, int16_t command)
 
 }//endfnctn  setActuatorCmd
 
+void setErcDrillCmd(uint8_t device_id, int16_t drill_command, int16_t actuator_command)
+{
+        char write_buffer[BUFFER_SIZE];
+
+        int device_port;
+        int bytes_to_write;
+        int bytes_wrote;
+
+        //_printf("Testing setLinActuatorCmd dynamixel_id %d, current_position %d, target_increment %d\n"
+        //, device_id, current_position, target_increment);
+        //_flush();
+
+        // get the uart
+        device_port = getDevicePort(device_id);
+
+        // size of message
+        bytes_to_write = getStructSize(GET_ERC_DRILL_ACT_CMD);
+
+        //populate message stop = 0x00, forward = 0x01, reverse = 0x02
+        SET_ERC_DRILL_ACT_STRUCT->drill_cmd = drill_command;
+        SET_ERC_DRILL_ACT_STRUCT->actuator_cmd = actuator_command;
+
+        bytes_wrote = deviceWrite(device_port, write_buffer, bytes_to_write);
+
+        //ms_delay(1);
+        //us_delay(DYNA_WRITE_DELAY);
+/*
+        //debugging only
+        printf("setDrillCmd just wrote: \n");
+        int i = 0;
+        while( i <( bytes_wrote ) )
+        {
+        printf(" : %d\n", write_buffer[i]);
+        i++;
+        }//end while
+*/
+        return;
+
+}//endfnctn  setActuatorCmd
+
 //Todo Functions to Add
 
 ////Todo Judah Savage Electronics port lib

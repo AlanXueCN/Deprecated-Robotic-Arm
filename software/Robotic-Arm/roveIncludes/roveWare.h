@@ -29,6 +29,7 @@
 //typecasting shorthand for void* buffer_struct at RoboticArm Task scope
 #define SPEED_STRUCT			((speed_struct*)(&buffer_struct))
 #define TEST_STRUCT				((speed_struct*)(&buffer_struct))
+#define ERC_STRUCT              ((erc_drill_actuator_robot_arm_command*)(&buffer_struct))
 
 //typecasting shorthand for void* buffer_struct at fnctn arg scope
 #define MESSAGE_STRUCT 			((message_struct*)write_buffer)
@@ -37,7 +38,7 @@
 #define SET_DYNA_CMD_STRUCT     ((set_dyna_command_struct*)write_buffer)
 #define SET_LIN_ACT_STRUCT 		((linear_actuator_struct*)write_buffer)
 #define SET_DRILL_STRUCT        ((drill_struct*)write_buffer)
-
+#define SET_ERC_DRILL_ACT_STRUCT        ((erc_drill_actuator_robot_arm_command*)write_buffer)
 
 //TODO wtf uint8_t value[30]roveStructs.h ?
 #define BUFFER_SIZE 30
@@ -66,6 +67,7 @@
 #define SET_MAX_TORQUE_CMD 5
 #define SET_TORQUE_LIMIT_CMD 6
 #define SET_TORQUE_ENABLE_CMD 7
+#define GET_ERC_DRILL_ACT_CMD 8
 
 #define WRIST_A_ID  0x01
 #define WRIST_B_ID	0x02
@@ -135,6 +137,10 @@
 
 //drill
 #define drill_forward 209
+
+// erc drill and actuator
+
+#define erc_drill_actuator 210
 
 //drill values
 #define DRILL_STOP 0x00
