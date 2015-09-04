@@ -15,11 +15,11 @@ const int pin_M1INA = 2;
 const int pin_M1INB = 4;
 const int pin_M1PWM = 9;
 const int pin_M1CS = A0;
-const int pin_M2EN = 0;
-const int pin_M2INA = 0;
-const int pin_M2INB = 0;
-const int pin_M2PWM = 0;
-const int pin_M2CS = 0;
+const int pin_M2EN = 12;
+const int pin_M2INA = 7;
+const int pin_M2INB = 8;
+const int pin_M2PWM = 10;
+const int pin_M2CS = A1;
 
 SoftwareSerial moboSerial(0, 1); // (Rx, Tx)
 
@@ -41,8 +41,7 @@ bool linactCmd_PWM = 0;
 
 void setup() {
   // Serial with xbee
-  Serial.begin(9600);
-  moboSerial.begin(57600);
+  Serial.begin(57600);
   
   // config motor driver select pins
   pinMode(pin_M1EN, OUTPUT);
@@ -58,14 +57,17 @@ void setup() {
 }
 
 void loop() {
-  // read in command from xbee
-  if(moboSerial.available() > 0){
-    cmd = moboSerial.read();
-    if( cmd != DATA_ID && cmd == moboSerial.read() ){;
-      linactCmd = cmd >> 4;
-      drillCmd = 0x0F & cmd;
-    }
-  }
+  
+  //Wait for command ID
+  while(Serial.read() != DATA_ID);  
+  Serial.println("Got data ID");
+  
+  //wait for data
+  while(!Serial.available());
+  cmd = Serial.read();
+
+  linactCmd = cmd >> 4;
+  drillCmd = 0x0F & cmd;
   
   // command drill
   if(drillCmd == FORW){ // drill forward
@@ -120,9 +122,10 @@ void loop() {
   digitalWrite(pin_M2INB, linactCmd_INB);
   digitalWrite(pin_M2PWM, linactCmd_PWM);
   
-  if(PRINT){
+  if(PRINT )
+  {
     Serial.print("Rx'ed: "); 
-    Serial.write(cmd);
+    Serial.print(cmd, HEX);
     Serial.print("  ");
     Serial.print("drill: ");
     print_cmd(drillCmd);
@@ -131,8 +134,7 @@ void loop() {
     print_cmd(linactCmd);
     Serial.println();
   }
-  
-  delay(20);
+
 }
 
 void print_cmd(char bite){
@@ -149,3 +151,5 @@ void print_cmd(char bite){
   }
   return;
 }
+
+
